@@ -1,0 +1,681 @@
+﻿@page
+@model ARMTIS_Capstone_Project.Pages.TenantPortal.Billing.IndexModel
+
+@{
+    ViewData["Title"] = "My Bills";
+    Layout = "/Pages/TenantPortal/_TenantLayout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <!-- PAGE HEADER -->
+    <div class="mb-4">
+
+        <h2 class="fw-bold">
+            <i class="bi bi-receipt me-2"></i>
+            My Bills
+        </h2>
+
+        <p class="text-muted mb-0">
+            View your billing statements and outstanding balances.
+        </p>
+
+    </div>
+
+
+    <!-- SUMMARY CARDS -->
+
+    <div class="row g-4 mb-4">
+
+        <!-- TOTAL OUTSTANDING -->
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <p class="text-muted mb-1">
+                                Total Outstanding
+                            </p>
+
+                            <h3 class="fw-bold text-danger mb-0">
+                                ₱@Model.TotalOutstanding.ToString("N2")
+                            </h3>
+
+                        </div>
+
+                        <div class="bg-danger-subtle rounded-circle p-3">
+
+                            <i class="bi bi-exclamation-circle text-danger fs-3"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- UNPAID BILLS -->
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <p class="text-muted mb-1">
+                                Unpaid Bills
+                            </p>
+
+                            <h3 class="fw-bold mb-0">
+                                @Model.UnpaidBills
+                            </h3>
+
+                        </div>
+
+                        <div class="bg-warning-subtle rounded-circle p-3">
+
+                            <i class="bi bi-clock-history text-warning fs-3"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PAID BILLS -->
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <p class="text-muted mb-1">
+                                Paid Bills
+                            </p>
+
+                            <h3 class="fw-bold text-success mb-0">
+                                @Model.PaidBills
+                            </h3>
+
+                        </div>
+
+                        <div class="bg-success-subtle rounded-circle p-3">
+
+                            <i class="bi bi-check-circle text-success fs-3"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BILLING STATEMENTS -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-white py-3">
+
+            <h5 class="fw-bold mb-0">
+                <i class="bi bi-file-earmark-text me-2"></i>
+                Billing Statements
+            </h5>
+
+        </div>
+
+
+        <div class="card-body">
+
+            @if (Model.BillingStatements.Count == 0)
+            {
+                <!-- NO BILL -->
+
+                <div class="text-center py-5">
+
+                    <i class="bi bi-receipt text-muted"
+                       style="font-size: 4rem;"></i>
+
+                    <h4 class="fw-bold mt-3">
+                        No Billing Statements
+                    </h4>
+
+                    <p class="text-muted mb-0">
+                        You currently have no billing statements.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>Billing No.</th>
+
+                                <th>Billing Month</th>
+
+                                <th>Unit</th>
+
+                                <th>Due Date</th>
+
+                                <th>Total Amount</th>
+
+                                <th>Balance</th>
+
+                                <th>Status</th>
+
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var bill in Model.BillingStatements)
+                            {
+                                decimal paidAmount = Model.PaidAmounts
+                                    .GetValueOrDefault(bill.BillingStatementID, 0);
+
+                                decimal balance = bill.TotalAmountDue - paidAmount;
+
+                                if (balance < 0)
+                                {
+                                    balance = 0;
+                                }
+
+                                <tr>
+                                    <td>@bill.BillingNo</td>
+
+                                    <td>
+                                        @bill.BillingMonth.ToString("MMMM yyyy")
+                                    </td>
+
+                                    <td>
+                                        @(bill.Unit?.UnitNumber ?? "N/A")
+                                    </td>
+
+                                    <td>
+                                        @bill.DueDate.ToString("MMMM dd, yyyy")
+                                    </td>
+
+                                    <td>
+                                        ₱@bill.TotalAmountDue.ToString("N2")
+                                    </td>
+
+                                    <td>
+                                        @if (balance > 0)
+                                        {
+                                            <span class="text-danger fw-bold">
+                                                ₱@balance.ToString("N2")
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-success fw-bold">
+                                                ₱0.00
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @if (balance <= 0)
+                                        {
+                                            <span class="badge bg-success">Paid</span>
+                                        }
+                                        else if (bill.BillingStatus == "Overdue")
+                                        {
+                                            <span class="badge bg-danger">Overdue</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                @bill.BillingStatus
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        <button type="button"
+                                                class="btn btn-outline-primary btn-sm"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#billModal-@bill.BillingStatementID">
+                                            <i class="bi bi-eye"></i> View
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- BILL DETAILS MODALS -->
+@if (Model.BillingStatements.Count > 0)
+{
+    @foreach (var bill in Model.BillingStatements)
+    {
+        <div class="modal fade"
+             id="billModal-@bill.BillingStatementID"
+             tabindex="-1"
+             aria-hidden="true">
+
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+
+                <div class="modal-content">
+
+
+                    <!-- HEADER -->
+
+                    <div class="modal-header">
+
+                        <div>
+
+                            <h5 class="modal-title fw-bold">
+
+                                <i class="bi bi-receipt me-2"></i>
+
+                                Billing Statement
+
+                            </h5>
+
+                            <small class="text-muted">
+                                @bill.BillingNo
+                            </small>
+
+                        </div>
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal">
+                        </button>
+
+                    </div>
+
+
+                    <!-- BODY -->
+
+                    <div class="modal-body">
+
+                        <!-- BASIC INFORMATION -->
+
+                        <div class="card border-0 bg-light mb-4">
+
+                            <div class="card-body">
+
+                                <div class="row g-3">
+
+                                    <div class="col-md-6">
+
+                                        <small class="text-muted">
+                                            Billing Month
+                                        </small>
+
+                                        <div class="fw-semibold">
+                                            @bill.BillingMonth.ToString("MMMM yyyy")
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-md-6">
+
+                                        <small class="text-muted">
+                                            Due Date
+                                        </small>
+
+                                        <div class="fw-semibold">
+                                            @bill.DueDate.ToString("MMMM dd, yyyy")
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-md-6">
+
+                                        <small class="text-muted">
+                                            Unit
+                                        </small>
+
+                                        <div class="fw-semibold">
+                                            @(bill.Unit?.UnitNumber ?? "N/A")
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-md-6">
+
+                                        <small class="text-muted">
+                                            Date Generated
+                                        </small>
+
+                                        <div class="fw-semibold">
+                                            @bill.DateGenerated.ToString("MMMM dd, yyyy")
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- RENT -->
+
+                        <div class="card mb-3">
+
+                            <div class="card-header fw-bold">
+
+                                <i class="bi bi-house me-2"></i>
+                                Rental Charge
+
+                            </div>
+
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between">
+
+                                    <span>
+                                        Monthly Rent
+                                    </span>
+
+                                    <span class="fw-bold">
+                                        ₱@bill.MonthlyRent.ToString("N2")
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- UTILITIES -->
+
+                        <div class="card mb-3">
+
+                            <div class="card-header fw-bold">
+
+                                <i class="bi bi-lightning-charge me-2"></i>
+                                Utility Charges
+
+                            </div>
+
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between mb-2">
+
+                                    <span>
+                                        Electricity
+                                    </span>
+
+                                    <span>
+                                        ₱@bill.Electricity.ToString("N2")
+                                    </span>
+
+                                </div>
+
+
+                                <div class="d-flex justify-content-between mb-2">
+
+                                    <span>
+                                        Water
+                                    </span>
+
+                                    <span>
+                                        ₱@bill.Water.ToString("N2")
+                                    </span>
+
+                                </div>
+
+
+                                <div class="d-flex justify-content-between mb-2">
+
+                                    <span>
+                                        Internet
+                                    </span>
+
+                                    <span>
+                                        ₱@bill.Internet.ToString("N2")
+                                    </span>
+
+                                </div>
+
+
+                                <hr />
+
+
+                                <div class="d-flex justify-content-between">
+
+                                    <span class="fw-semibold">
+                                        Total Utilities
+                                    </span>
+
+                                    <span class="fw-bold">
+                                        ₱@bill.UtilityCharges.ToString("N2")
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PENALTY -->
+                        @if (bill.PenaltyAmount > 0)
+                        {
+                            <div class="card mb-3 border-danger">
+
+                                <div class="card-body">
+
+                                    <div class="d-flex justify-content-between">
+
+                                        <span class="text-danger fw-semibold">
+
+                                            <i class="bi bi-exclamation-triangle me-1"></i>
+                                            Penalty
+
+                                        </span>
+
+                                        <span class="text-danger fw-bold">
+
+                                            ₱@bill.PenaltyAmount.ToString("N2")
+
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        }
+
+
+                        <!-- CREDIT -->
+                        @if (bill.CreditApplied > 0)
+                        {
+                            <div class="card mb-3 border-success">
+
+                                <div class="card-body">
+
+                                    <div class="d-flex justify-content-between">
+
+                                        <span class="text-success fw-semibold">
+
+                                            <i class="bi bi-wallet2 me-1"></i>
+                                            Credit Applied
+
+                                        </span>
+
+                                        <span class="text-success fw-bold">
+
+                                            -₱@bill.CreditApplied.ToString("N2")
+
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        }
+
+
+                        <!-- TOTAL -->
+
+                        <div class="card bg-light border-0 mt-4">
+
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <span class="fs-5 fw-bold">
+                                        Total Amount Due
+                                    </span>
+
+                                    <span class="fs-4 fw-bold text-primary">
+                                        ₱@bill.TotalAmountDue.ToString("N2")
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- STATUS -->
+
+                        <div class="text-center mt-4">
+
+                            @if (bill.BillingStatus == "Paid")
+                            {
+                                <span class="badge bg-success fs-6 px-3 py-2">
+
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    PAID
+
+                                </span>
+                            }
+                            else if (bill.BillingStatus == "Overdue")
+                            {
+                                <span class="badge bg-danger fs-6 px-3 py-2">
+
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+                                    OVERDUE
+
+                                </span>
+                            }
+                            else if (bill.BillingStatus == "Partially Paid")
+                            {
+                                <span class="badge bg-info text-dark fs-6 px-3 py-2">
+
+                                    <i class="bi bi-hourglass-split me-1"></i>
+                                    PARTIALLY PAID
+
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark fs-6 px-3 py-2">
+
+                                    <i class="bi bi-clock me-1"></i>
+                                    @bill.BillingStatus.ToUpper()
+
+                                </span>
+                            }
+
+                        </div>
+
+
+                        <!-- REMARKS -->
+                        @if (!string.IsNullOrWhiteSpace(bill.Remarks))
+                        {
+                            <div class="alert alert-secondary mt-4">
+
+                                <strong>
+                                    <i class="bi bi-chat-left-text me-1"></i>
+                                    Remarks:
+                                </strong>
+
+                                <div class="mt-1">
+                                    @bill.Remarks
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+
+
+                    <!-- FOOTER -->
+
+                    <div class="modal-footer">
+
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+
+                            Close
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+}

@@ -1,0 +1,362 @@
+﻿@page "{id:int}"
+@model ARMTIS_Capstone_Project.Pages.Maintenance.DetailsModel
+
+@{
+    ViewData["Title"] = "Maintenance Request Details";
+}
+
+<div class="container-fluid">
+
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1">
+                Maintenance Request Details
+            </h2>
+
+            <p class="text-muted mb-0">
+                Review the maintenance request submitted by the tenant.
+            </p>
+        </div>
+
+        <div>
+            <a asp-page="./MaintenanceIndex"
+               class="btn btn-outline-secondary">
+
+                <i class="bi bi-arrow-left"></i>
+                Back to Maintenance
+
+            </a>
+        </div>
+
+    </div>
+
+
+    <!-- REQUEST INFORMATION -->
+    <div class="row g-4">
+
+        <!-- LEFT SIDE -->
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-white py-3">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <h5 class="fw-bold mb-0">
+                            Request #@Model.MaintenanceRequest.MaintenanceRequestID
+                        </h5>
+
+                        @if (Model.MaintenanceRequest.Status == "Pending")
+                        {
+                            <span class="badge bg-warning text-dark">
+                                Pending
+                            </span>
+                        }
+                        else if (Model.MaintenanceRequest.Status == "In Progress")
+                        {
+                            <span class="badge bg-primary">
+                                In Progress
+                            </span>
+                        }
+                        else if (Model.MaintenanceRequest.Status == "Completed")
+                        {
+                            <span class="badge bg-success">
+                                Completed
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">
+                                @Model.MaintenanceRequest.Status
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <!-- REQUEST TITLE -->
+                    <div class="mb-4">
+
+                        <label class="form-label text-muted">
+                            Request Title
+                        </label>
+
+                        <h4 class="fw-bold">
+                            @Model.MaintenanceRequest.RequestTitle
+                        </h4>
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+                    <div class="mb-4">
+
+                        <label class="form-label text-muted">
+                            Description
+                        </label>
+
+                        <div class="border rounded p-3 bg-light">
+
+                            @Model.MaintenanceRequest.Description
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CATEGORY / PRIORITY -->
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label text-muted">
+                                Category
+                            </label>
+
+                            <div class="fw-semibold">
+                                @(string.IsNullOrWhiteSpace(
+                                    Model.MaintenanceRequest.Category)
+                                    ? "Not specified"
+                                    : Model.MaintenanceRequest.Category)
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label text-muted">
+                                Priority
+                            </label>
+
+                            <div>
+
+                                @if (Model.MaintenanceRequest.Priority == "High")
+                                {
+                                    <span class="badge bg-danger">
+                                        High
+                                    </span>
+                                }
+                                else if (Model.MaintenanceRequest.Priority == "Medium")
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        Medium
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">
+                                        Low
+                                    </span>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- REQUEST DATE -->
+                    <div class="mb-3">
+
+                        <label class="form-label text-muted">
+                            Request Date
+                        </label>
+
+                        <div class="fw-semibold">
+                            @(Model.MaintenanceRequest.RequestDate.ToString("MMMM dd, yyyy hh:mm tt"))
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ADMIN REMARKS -->
+            <div class="card shadow-sm border-0 mt-4">
+
+                <div class="card-header bg-white py-3">
+
+                    <h5 class="fw-bold mb-0">
+                        Admin Remarks
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    @if (string.IsNullOrWhiteSpace(
+                        Model.MaintenanceRequest.AdminRemarks))
+                    {
+                        <p class="text-muted mb-0">
+                            No admin remarks have been added yet.
+                        </p>
+                    }
+                    else
+                    {
+                        <div class="border rounded p-3 bg-light">
+                            @Model.MaintenanceRequest.AdminRemarks
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+        <div class="col-lg-4">
+
+            <!-- TENANT INFORMATION -->
+            <div class="card shadow-sm border-0 mb-4">
+
+                <div class="card-header bg-white py-3">
+
+                    <h5 class="fw-bold mb-0">
+                        Tenant Information
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="mb-3">
+
+                        <label class="form-label text-muted">
+                            Tenant Name
+                        </label>
+
+                        <div class="fw-semibold">
+                            @Model.MaintenanceRequest.Tenant.FirstName
+                            @Model.MaintenanceRequest.Tenant.LastName
+                        </div>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label text-muted">
+                            Contact Number
+                        </label>
+
+                        <div class="fw-semibold">
+                            @Model.MaintenanceRequest.Tenant.ContactNo
+                        </div>
+
+                    </div>
+
+
+                    <div class="mb-0">
+
+                        <label class="form-label text-muted">
+                            Email
+                        </label>
+
+                        <div class="fw-semibold">
+                            @Model.MaintenanceRequest.Tenant.Email
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- UNIT INFORMATION -->
+            <div class="card shadow-sm border-0 mb-4">
+
+                <div class="card-header bg-white py-3">
+
+                    <h5 class="fw-bold mb-0">
+                        Unit Information
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="mb-0">
+
+                        <label class="form-label text-muted">
+                            Unit Number
+                        </label>
+
+                        <div class="fw-bold fs-5">
+                            @Model.MaintenanceRequest.Unit.UnitNumber
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- COMPLETION INFORMATION -->
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-white py-3">
+
+                    <h5 class="fw-bold mb-0">
+                        Completion Information
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <label class="form-label text-muted">
+                        Completed Date
+                    </label>
+
+                    @if (Model.MaintenanceRequest.CompletedDate.HasValue)
+                    {
+                        <div class="fw-semibold">
+                            @(Model.MaintenanceRequest.CompletedDate.Value.ToString("MMMM dd, yyyy hh:mm tt"))
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-muted">
+                            Not yet completed
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+
+            <!-- UPDATE BUTTON -->
+            <div class="mt-4">
+
+                <a asp-page="./Edit"
+                   asp-route-id="@Model.MaintenanceRequest.MaintenanceRequestID"
+                   class="btn btn-primary w-100">
+
+                    <i class="bi bi-pencil-square"></i>
+                    Update Request
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,292 @@
+﻿@page
+@model ARMTIS_Capstone_Project.Pages.TenantPortal.Maintenance.CreateModel
+
+@{
+    Layout = "/Pages/TenantPortal/_TenantLayout.cshtml";
+    ViewData["Title"] = "New Maintenance Request";
+}
+
+<div class="container-fluid py-4">
+
+    <!-- PAGE HEADER -->
+    <div class="mb-4">
+
+        <div class="d-flex align-items-center mb-2">
+
+            <a asp-page="./Index"
+               class="btn btn-outline-secondary btn-sm me-3">
+
+                <i class="bi bi-arrow-left"></i>
+
+            </a>
+
+            <h2 class="fw-bold mb-0">
+                Submit Maintenance Request
+            </h2>
+
+        </div>
+
+        <p class="text-muted mb-0">
+            Tell us about the maintenance problem in your unit.
+        </p>
+
+    </div>
+
+
+    <!-- ERROR MESSAGE -->
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+            Please correct the errors below before submitting.
+
+        </div>
+    }
+
+
+    <!-- FORM -->
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-header bg-white py-3">
+
+                    <h5 class="fw-bold mb-0">
+
+                        <i class="bi bi-tools me-2"></i>
+
+                        Maintenance Request Details
+
+                    </h5>
+
+                </div>
+
+
+                <div class="card-body p-4">
+
+                    <form method="post">
+
+                        @Html.AntiForgeryToken()
+
+
+                        <!-- UNIT -->
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Unit
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   value="@Model.UnitNumber"
+                                   readonly />
+
+                            <div class="form-text">
+                                This request will automatically be assigned
+                                to your registered unit.
+                            </div>
+
+                        </div>
+
+
+                        <!-- REQUEST TITLE -->
+                        <div class="mb-4">
+
+                            <label asp-for="MaintenanceRequest.RequestTitle"
+                                   class="form-label fw-semibold">
+
+                                Request Title
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            <input asp-for="MaintenanceRequest.RequestTitle"
+                                   class="form-control"
+                                   placeholder="Example: Leaking bathroom faucet" />
+
+                            <span asp-validation-for="MaintenanceRequest.RequestTitle"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- CATEGORY -->
+                        <div class="mb-4">
+
+                            <label asp-for="MaintenanceRequest.Category"
+                                   class="form-label fw-semibold">
+
+                                Category
+
+                            </label>
+
+                            <select asp-for="MaintenanceRequest.Category"
+                                    class="form-select">
+
+                                <option value="">
+                                    -- Select Category --
+                                </option>
+
+                                <option value="Plumbing">
+                                    Plumbing
+                                </option>
+
+                                <option value="Electrical">
+                                    Electrical
+                                </option>
+
+                                <option value="Air Conditioning">
+                                    Air Conditioning
+                                </option>
+
+                                <option value="Water">
+                                    Water
+                                </option>
+
+                                <option value="Appliance">
+                                    Appliance
+                                </option>
+
+                                <option value="Structural">
+                                    Structural
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- PRIORITY -->
+                        <div class="mb-4">
+
+                            <label asp-for="MaintenanceRequest.Priority"
+                                   class="form-label fw-semibold">
+
+                                Priority
+
+                            </label>
+
+                            <select asp-for="MaintenanceRequest.Priority"
+                                    class="form-select">
+
+                                <option value="Low">
+                                    Low
+                                </option>
+
+                                <option value="Medium">
+                                    Medium
+                                </option>
+
+                                <option value="High">
+                                    High
+                                </option>
+
+                            </select>
+
+                            <div class="form-text">
+                                Select High only when the issue requires
+                                urgent attention.
+                            </div>
+
+                        </div>
+
+
+                        <!-- DESCRIPTION -->
+                        <div class="mb-4">
+
+                            <label asp-for="MaintenanceRequest.Description"
+                                   class="form-label fw-semibold">
+
+                                Description
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            <textarea asp-for="MaintenanceRequest.Description"
+                                      class="form-control"
+                                      rows="6"
+                                      placeholder="Please describe the problem, where it is located, and any other useful details."></textarea>
+
+                            <span asp-validation-for="MaintenanceRequest.Description"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- INFORMATION -->
+                        <div class="alert alert-light border">
+
+                            <div class="d-flex">
+
+                                <i class="bi bi-info-circle-fill text-primary me-2"></i>
+
+                                <div>
+
+                                    <strong>What happens next?</strong>
+
+                                    <p class="mb-0 mt-1 text-muted">
+
+                                        Your request will initially be marked
+                                        as <strong>Pending</strong>. The
+                                        administrator will review your request
+                                        and update its status as work
+                                        progresses.
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- BUTTONS -->
+                        <div class="d-flex justify-content-end gap-2">
+
+                            <a asp-page="./Index"
+                               class="btn btn-outline-secondary">
+
+                                Cancel
+
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                <i class="bi bi-send me-1"></i>
+
+                                Submit Request
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

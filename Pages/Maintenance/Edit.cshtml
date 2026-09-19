@@ -1,0 +1,285 @@
+﻿@page
+@model ARMTIS_Capstone_Project.Pages.Maintenance.EditModel
+
+@{
+    ViewData["Title"] = "Update Maintenance Request";
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Update Maintenance Request</h2>
+            <p class="text-muted mb-0">
+                Update the status, priority, and admin remarks.
+            </p>
+        </div>
+
+        <a asp-page="./Details"
+           asp-route-id="@Model.MaintenanceRequest.MaintenanceRequestID"
+           class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
+    </div>
+
+
+    <!-- Request Information -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-white py-3">
+            <h5 class="fw-bold mb-0">
+                Request Information
+            </h5>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        Request #
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.MaintenanceRequest.MaintenanceRequestID"
+                           readonly />
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        Request Date
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@(Model.MaintenanceRequest.RequestDate.ToString("MMMM dd, yyyy hh:mm tt"))"
+                           readonly />
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        Tenant
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.MaintenanceRequest.Tenant.FirstName @Model.MaintenanceRequest.Tenant.LastName"
+                           readonly />
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        Unit
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.MaintenanceRequest.Unit.UnitNumber"
+                           readonly />
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        Request Title
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.MaintenanceRequest.RequestTitle"
+                           readonly />
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        Category
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.MaintenanceRequest.Category"
+                           readonly />
+
+                </div>
+
+
+                <div class="col-12">
+
+                    <label class="form-label fw-semibold">
+                        Description
+                    </label>
+
+                    <textarea class="form-control"
+                              rows="4"
+                              readonly>@Model.MaintenanceRequest.Description</textarea>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Update Section -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-white py-3">
+            <h5 class="fw-bold mb-0">
+                Update Request
+            </h5>
+        </div>
+
+        <div class="card-body">
+
+            <form method="post">
+
+                <input type="hidden"
+                       asp-for="MaintenanceRequest.MaintenanceRequestID" />
+
+
+                <div class="row g-3">
+
+                    <!-- Priority -->
+
+                    <div class="col-md-6">
+
+                        <label asp-for="Priority"
+                               class="form-label fw-semibold">
+                            Priority
+                        </label>
+
+                        <select asp-for="Priority"
+                                class="form-select">
+
+                            <option value="Low">
+                                Low
+                            </option>
+
+                            <option value="Medium">
+                                Medium
+                            </option>
+
+                            <option value="High">
+                                High
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="Priority"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Status -->
+
+                    <div class="col-md-6">
+
+                        <label asp-for="Status"
+                               class="form-label fw-semibold">
+                            Status
+                        </label>
+
+                        <select asp-for="Status"
+                                class="form-select">
+
+                            <option value="Pending">
+                                Pending
+                            </option>
+
+                            <option value="In Progress">
+                                In Progress
+                            </option>
+
+                            <option value="Completed">
+                                Completed
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="Status"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Admin Remarks -->
+
+                    <div class="col-12">
+
+                        <label asp-for="AdminRemarks"
+                               class="form-label fw-semibold">
+                            Admin Remarks
+                        </label>
+
+                        <textarea asp-for="AdminRemarks"
+                                  class="form-control"
+                                  rows="5"
+                                  placeholder="Enter remarks or updates regarding this maintenance request...">
+                        </textarea>
+
+                        <span asp-validation-for="AdminRemarks"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Buttons -->
+
+                    <div class="col-12 mt-4">
+
+                        <div class="d-flex gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i>
+                                Save Changes
+                            </button>
+
+                            <a asp-page="./Details"
+                               asp-route-id="@Model.MaintenanceRequest.MaintenanceRequestID"
+                               class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}   

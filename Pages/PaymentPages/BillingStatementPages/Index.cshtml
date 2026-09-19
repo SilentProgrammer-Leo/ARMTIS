@@ -1,0 +1,2438 @@
+@page
+@model ARMTIS_Capstone_Project.Pages.BillingStatementPages.IndexModel
+
+@{
+    ViewData["Title"] = "Billing Statement";
+}
+
+<h1>Billing Statements</h1>
+
+    <p>
+        <a asp-page="/PaymentPages/BillingStatementPages/Generate" class="btn btn-success">
+        <i class="bi bi-receipt"></i>
+        Generate Billing
+            </a>
+    </p>
+    @if (TempData["SuccessMessage"] != null) 
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["SuccessMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            @TempData["ErrorMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+    <form id="antiForgeryForm" class="d-none">
+        @Html.AntiForgeryToken()
+    </form>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Unit</th>
+            <th>Tenant</th>
+             <th>Billing Month</th>
+            @* <th>Total Amount Due</th> *@
+            <th>Due Date</th>
+            @* <th>Penalty</th> *@
+            <th>Status</th>
+            <th>Billing Statement</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.BillingStatement)
+        {
+             var utility =
+             Model.UtilityReadingsByBillingId
+            .GetValueOrDefault(item.BillingStatementID);
+
+            <tr class="@(item.BillingStatus == "Overdue" ? "table-danger" : "")">
+
+                <!-- UNIT -->
+                <td>
+                    @(item.Unit?.UnitNumber ?? "N/A")
+                </td>
+
+
+                <!-- TENANT -->
+                <td>
+                    @if (item.Tenant != null)
+                    {
+                        @($"{item.Tenant.FirstName} {item.Tenant.LastName}")
+                    }
+                    else
+                    {
+                        <span>N/A</span>
+                    }
+                </td>
+
+                <!-- BILLING MONTH-->
+                <td>
+                    <span class="badge bg-primary">
+                        @item.BillingMonth.ToString("MMMM yyyy")
+                    </span> 
+                </td>   
+
+                @* <!-- TOTAL AMOUNT DUE -->
+                <td class="fw-bold">
+                    ₱@item.TotalAmountDue.ToString("N2")
+                </td> *@
+
+
+                <!-- DUE DATE -->
+                <td>
+                    @item.DueDate.ToString("MMMM dd, yyyy")
+                </td>
+
+
+               @*  <!-- PENALTY -->
+                <td>
+                    @if (item.PenaltyAmount > 0)
+                    {
+                        <span class="text-danger fw-bold">
+                            ₱@item.PenaltyAmount.ToString("N2")
+                        </span>
+                    }
+                    else
+                    {
+                        <span>₱0.00</span>
+                    }
+                </td> *@
+
+
+                <!-- STATUS -->
+                <td>
+                    @if (item.BillingStatus == "Paid")
+                    {
+                        <span class="badge bg-success">
+                            Paid
+                        </span>
+                    }
+                    else if (item.BillingStatus == "Overdue")
+                    {
+                        <span class="badge bg-danger">
+                            Overdue
+                        </span>
+                    }
+                    else if (item.BillingStatus == "Unpaid")
+                    {
+                        <span class="badge bg-warning text-dark">
+                            Unpaid
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">
+                            Pending
+                        </span>
+                    }
+                </td>
+
+
+                <!-- VIEW BILLING STATEMENT -->
+                <td>
+                    <button type="button"
+                            class="btn btn-outline-success btn-sm viewBillingBtn"
+                            data-billingid="@item.BillingStatementID"
+                            data-billingno="@item.BillingNo"
+                            data-tenant="@(item.Tenant != null
+                                        ? item.Tenant.FirstName + " " + item.Tenant.LastName
+                                        : "N/A")"
+                            data-unit="@(item.Unit?.UnitNumber ?? "N/A")"
+                            data-billingmonth="@item.BillingMonth.ToString("MMMM yyyy")"
+                            data-duedate="@item.DueDate.ToString("MMMM dd, yyyy")"
+                            data-monthlyrent="@item.MonthlyRent.ToString(
+                                        "0.00",
+                                        System.Globalization.CultureInfo.InvariantCulture
+                                    )"
+                            data-previouselectric="@(utility?.PreviousElectricReading.ToString(
+                                        "0.00",
+                                        System.Globalization.CultureInfo.InvariantCulture
+                                    ) ?? "0.00")"
+                            data-currentelectric="@(utility?.CurrentElectricReading.ToString(
+                                        "0.00",
+                                        System.Globalization.CultureInfo.InvariantCulture
+                                    ) ?? "0.00")"
+                            data-electricconsumption="@(utility?.ElectricConsumption.ToString(
+                                        "0.00",
+                                        System.Globalization.CultureInfo.InvariantCulture
+                                    ) ?? "0.00")"
+                            data-electricrate="@(utility?.ElectricRate.ToString(
+                                        "0.00",
+                                        System.Globalization.CultureInfo.InvariantCulture
+                                    ) ?? "0.00")"
+                            data-previouswater="@(utility?.PreviousWaterReading.ToString(
+                                        "0.00",
+                                        System.Globalization.CultureInfo.InvariantCulture
+                                    ) ?? "0.00")"
+                            data-currentwater="@(utility?.CurrentWaterReading.ToString(
+                                        "0.00",
+                                        System.Globalization.CultureInfo.InvariantCulture
+                                    ) ?? "0.00")"
+                            data-waterconsumption="@(utility?.WaterConsumption.ToString(
+                                        "0.00",
+                                        System.Globalization.CultureInfo.InvariantCulture
+                                    ) ?? "0.00")"
+                            data-waterrate="@(utility?.WaterRate.ToString(
+                                                                "0.00",
+                                                                System.Globalization.CultureInfo.InvariantCulture
+                                                            ) ?? "0.00")"
+                            data-water="@item.Water.ToString(
+                                        "0.00",
+                                        System.Globalization.CultureInfo.InvariantCulture
+                                    )"
+                            data-electricity="@item.Electricity.ToString(
+                                        "0.00",
+                                        System.Globalization.CultureInfo.InvariantCulture
+                                    )"
+                            data-internet="@item.Internet.ToString(
+                                        "0.00",
+                                        System.Globalization.CultureInfo.InvariantCulture
+                                    )"
+                            data-utilities="@item.UtilityCharges.ToString(
+                                        "0.00",
+                                        System.Globalization.CultureInfo.InvariantCulture
+                                    )"
+                            data-penalty="@item.PenaltyAmount.ToString(
+                                        "0.00",
+                                        System.Globalization.CultureInfo.InvariantCulture
+                                    )"
+                            data-total="@item.TotalAmountDue.ToString(
+                                        "0.00",
+                                        System.Globalization.CultureInfo.InvariantCulture
+                                    )"
+                            data-status="@item.BillingStatus"
+                            data-remarks="@(item.Remarks ?? "None")"
+                            data-generated="@item.DateGenerated.ToString("MMMM dd, yyyy")">
+
+                        <i class="bi bi-receipt"></i>
+                        View
+
+                    </button>
+                </td>
+
+
+                <!-- ACTIONS -->
+                <td>
+                    <div class="d-flex flex-wrap gap-1">
+
+                        @if (item.BillingStatus != "Paid")
+                        {
+                            <!-- RECORD PAYMENT -->
+                            <button type="button"
+                                    class="btn btn-success btn-sm paymentBtn"
+                                    data-billingid="@item.BillingStatementID"
+                                    data-billingno="@item.BillingNo"
+                                    data-tenantid="@item.TenantID"
+                                    data-tenant="@(item.Tenant != null
+                                                                    ? item.Tenant.FirstName + " " + item.Tenant.LastName
+                                                                    : "N/A")"
+                                    data-total="@item.TotalAmountDue.ToString(
+                                                                    "0.00",
+                                                                    System.Globalization.CultureInfo.InvariantCulture
+                                                                )"
+                                    data-penalty="@item.PenaltyAmount.ToString(
+                                                                    "0.00",
+                                                                    System.Globalization.CultureInfo.InvariantCulture
+                                                                )"
+                                    data-status="@item.BillingStatus">
+
+                                <i class="bi bi-cash-stack"></i>
+                                Record Payment
+                            </button>
+                        }
+
+
+                        @if (item.BillingStatus == "Paid" || item.BillingStatus == "Partially Paid")
+                        {
+                            <button type="button"
+                                    class="btn btn-outline-primary btn-sm viewPaymentBtn"
+                                    data-billingid="@item.BillingStatementID"
+                                    data-billingno="@item.BillingNo">
+
+                                <i class="bi bi-eye"></i>
+                                View Payment
+
+                            </button>
+                        }
+
+
+                        <!-- DELETE -->
+                        <a asp-page="./Delete"
+                           asp-route-billingstatementid="@item.BillingStatementID"
+                           class="btn btn-outline-danger btn-sm">
+
+                            <i class="bi bi-trash"></i>
+                            Delete
+                        </a>
+
+                    </div>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+@* Billing Statement Modal *@
+
+@Html.AntiForgeryToken()
+
+<div class="modal fade"
+     id="billingStatementModal"
+     tabindex="-1"
+     aria-labelledby="billingStatementModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+
+                <h5 class="modal-title"
+                    id="billingStatementModalLabel">
+                    Billing Statement
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+
+            </div>
+
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <div id="billingPrintArea"
+                     class="billing-statement">
+
+                    <!-- BUSINESS HEADER -->
+                    <div class="text-center mb-4">
+
+                        <h2 class="mb-1">
+                            Tressing Residency
+                        </h2>
+
+                        <h5 class="mb-1">
+                            Apartment Rental Management System
+                        </h5>
+
+                        <p class="mb-0">
+                            Billing Statement
+                        </p>
+
+                    </div>
+
+                    <hr />
+
+
+                    <!-- BILLING INFORMATION -->
+                    <div class="row mb-3">
+
+                        <div class="col-md-6">
+                            <strong>Billing Number:</strong>
+                            <span id="ModalBillingNo"></span>
+                        </div>
+
+                        <div class="col-md-6 text-md-end">
+                            <strong>Date Generated:</strong>
+                            <span id="ModalDateGenerated"></span>
+                        </div>
+
+                    </div>
+
+
+                    <!-- TENANT INFORMATION -->
+                    <div class="row mb-3">
+
+                        <div class="col-md-6">
+                            <strong>Tenant:</strong>
+                            <span id="ModalTenant"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Unit:</strong>
+                            <span id="ModalUnit"></span>
+                        </div>
+
+                    </div>
+
+
+                    <!-- BILLING PERIOD -->
+                    <div class="row mb-4">
+
+                        <div class="col-md-6">
+                            <strong>Billing Month:</strong>
+                            <span id="ModalBillingMonth"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Due Date:</strong>
+                            <span id="ModalDueDate"></span>
+                        </div>
+
+                    </div>
+
+                    @* <!-- UTILITY READING DETAILS --> *@
+
+                    <h5 class="mb-3">
+                        Utility Reading Details
+                    </h5>
+
+
+                    <!-- ELECTRICITY -->
+                    <div class="card mb-3">
+
+                        <div class="card-header fw-bold">
+                            Electricity
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="row mb-2">
+
+                                <div class="col-md-6">
+
+                                    <strong>
+                                        Previous Reading:
+                                    </strong>
+
+                                    <span id="ModalPreviousElectric">
+                                        0.00
+                                    </span>
+
+                                    kWh
+
+                                </div>
+
+                                <div class="col-md-6">
+
+                                    <strong>
+                                        Current Reading:
+                                    </strong>
+
+                                    <span id="ModalCurrentElectric">
+                                        0.00
+                                    </span>
+
+                                    kWh
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="row mb-2">
+
+                                <div class="col-md-6">
+
+                                    <strong>
+                                        Consumption:
+                                    </strong>
+
+                                    <span id="ModalElectricConsumption">
+                                        0.00
+                                    </span>
+
+                                    kWh
+
+                                </div>
+
+                            <div class="col-md-6">
+
+                                    <strong>
+                                        Rate:
+                                    </strong>
+
+                                    ₱<span id="ModalElectricRate">
+                                    00.00
+                                    
+                                </span>
+
+                                / kWh
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+
+                                <strong>
+                                    Electricity Bill:
+                                </strong>
+
+                                ₱<span id="ModalElectricity">
+                                0.00
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            @* <!-- WATER --> *@
+            <div class="card mb-4">
+
+                <div class="card-header fw-bold">
+                    Water
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row mb-2">
+
+                        <div class="col-md-6">
+
+                            <strong>
+                                Previous Reading:
+                            </strong>
+
+                            <span id="ModalPreviousWater">
+                                0.00
+                            </span>
+
+                            m³
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <strong>
+                                Current Reading:
+                            </strong>
+
+                            <span id="ModalCurrentWater">
+                                0.00
+                            </span>
+
+                            m³
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row mb-2">
+
+                        <div class="col-md-6">
+
+                            <strong>
+                                Consumption:
+                            </strong>
+
+                            <span id="ModalWaterConsumption">
+                                0.00
+                            </span>
+
+                            m³
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <strong>
+                                Rate:
+                            </strong>
+
+                            ₱<span id="ModalWaterRate">
+                            00.00
+
+                        </span>
+
+                        / m3
+
+                    </div>
+
+                        <div class="col-md-6">
+
+                            <strong>
+                                Water Bill:
+                            </strong>
+
+                            ₱<span id="ModalWater">
+                            0.00
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        @* <!-- BILLING SUMMARY --> *@
+
+
+        <h5 class="mb-3">
+            Billing Summary
+        </h5>
+
+        <table class="table table-bordered">
+
+            <thead>
+
+                <tr>
+                    <th>Description</th>
+
+                    <th class="text-end">
+                        Amount
+                    </th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td>
+                        Monthly Rent
+                    </td>
+
+                    <td class="text-end fw-bold">
+                        ₱<span id="ModalMonthlyRent">
+                        0.00
+                    </span>
+                </td>
+
+            </tr>
+
+            <tr>
+                
+                <td class="text-center fw-bold">
+                    <span>
+                    Utilities
+                    </span>
+                </td>   
+                
+            </tr>
+            <tr>
+
+                <td>
+                    Water
+                </td>
+
+                <td class="text-end">
+                        ₱<span id="ModalWaterSummary">
+                        0.00
+                    </span>
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Electricity
+                </td>
+
+                    <td class="text-end">
+                        ₱<span id="ModalElectricitySummary">
+                        0.00
+                    </span>
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    Internet
+                </td>
+
+                    <td class="text-end">
+                        ₱<span id="ModalInternet">
+                        0.00
+                    </span>
+                </td>
+
+            </tr>
+
+
+            <tr class="table-light fw-bold">
+
+                <td>
+                    Total Utility Charges
+                </td>
+
+                <td class="text-end">
+                    ₱<span id="ModalUtilities">
+                    0.00
+                </span>
+            </td>
+
+            </tr>
+            <tr class="table-light fw-bold">
+                <td>
+                    Sub Total
+                </td>
+
+                <td class="text-end">
+                    ₱<span id="ModalBeforePenalty">
+                    0.00
+                </span>
+            </td>
+            </tr>
+
+            <tr>
+
+                <td>
+                    Penalty
+                </td>
+
+                <td class="text-end text-danger fw-bold">
+                    ₱<span id="ModalPenalty">
+                    0.00
+                </span>
+            </td>
+
+            </tr>
+
+
+            <tr class="table-primary fw-bold">
+
+                        <td>
+                                Total Amount Due
+                            </td>
+
+                        <td class="text-end">
+                             ₱<span id="ModalTotal">
+                                0.00
+                            </span>
+                        </td>
+
+             </tr>
+
+            </tbody>
+
+        </table>
+
+                @* <!-- STATUS --> *@
+                <div class="row mt-4">
+
+                    <div class="col-md-6">
+
+                        <strong>
+                            Status:
+                        </strong>
+
+                        <span id="ModalStatus"
+                              class="badge">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                @* <!-- REMARKS --> *@
+                <div class="mt-3">
+
+                    <strong>
+                        Remarks:
+                    </strong>
+
+                    <span id="ModalRemarks">
+                    </span>
+
+                </div>
+
+
+<!-- FOOTER -->
+                <div class="mt-5 text-center">
+
+                    <p class="mb-1">
+                        Please settle your account
+                        on or before the due date.
+                    </p>
+
+                    <small>
+                        Please keep this billing statement
+                        for your records.
+                    </small>
+
+                </div>  
+
+        </div>
+
+</div>
+
+
+@* <!-- FOOTER BUTTONS --> *@
+<div class="modal-footer">
+
+    <button type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal">
+
+        Close
+
+    </button>
+
+    <button type="button"
+            class="btn btn-primary"
+            id="printBillingStatement">
+
+        <i class="bi bi-printer"></i>
+        Print
+
+    </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@* View Payment Modal *@
+
+<div class="modal fade"
+     id="viewPaymentModal"
+     tabindex="-1"
+     aria-labelledby="viewPaymentModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title"
+                    id="viewPaymentModalLabel">
+
+                    Payment Details
+
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="row mb-3">
+
+                    <div class="col-md-6">
+
+                        <strong>
+                            Receipt Number:
+                        </strong>
+
+                        <span id="ViewReceiptNo">
+                            N/A
+                        </span>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <strong>
+                            Payment Date:
+                        </strong>
+
+                        <span id="ViewPaymentDate">
+                            N/A
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row mb-3">
+
+                    <div class="col-md-6">
+
+                        <strong>
+                            Tenant:
+                        </strong>
+
+                        <span id="ViewPaymentTenant">
+                            N/A
+                        </span>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <strong>
+                            Billing Number:
+                        </strong>
+
+                        <span id="ViewPaymentBillingNo">
+                            N/A
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row mb-3">
+
+                    <div class="col-md-6">
+
+                        <strong>
+                            Billing Month:
+                        </strong>
+
+                        <span id="ViewPaymentBillingMonth">
+                            N/A
+                        </span>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <strong>
+                            Payment For:
+                        </strong>
+
+                        <span id="ViewPaymentFor">
+                            N/A
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <hr />
+
+
+                <div class="row mb-3">
+
+                    <div class="col-md-6">
+
+                        <strong>
+                            Amount Paid:
+                        </strong>
+
+                        <span class="text-success fw-bold">
+                            ₱<span id="ViewAmountPaid">
+                            0.00
+                        </span>
+                    </span>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <strong>
+                        Payment Method:
+                    </strong>
+
+                    <span id="ViewPaymentMethod">
+                        N/A
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="row mb-3">
+
+                <div class="col-md-6">
+
+                    <strong>
+                        Status:
+                    </strong>
+
+                    <span id="ViewPaymentStatus"
+                          class="badge bg-success">
+
+                        Paid
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="mt-3">
+
+                <strong>
+                    Remarks:
+                </strong>
+
+                <span id="ViewPaymentRemarks">
+                    None
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="modal-footer">
+
+            <button type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+
+                Close
+
+            </button>
+
+            <button type="button"
+                    class="btn btn-primary"
+                    id="printReceiptBtn">
+
+                <i class="bi bi-printer"></i>
+                Print Receipt
+
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+<!--End of View Payment Modal-->
+
+<!--CSS for Billing Statement Modal Modal-->
+
+    <style>
+        .billing-statement {
+            background: white;
+            padding: 25px;
+        }
+
+        @@media print {
+            body * {
+                visibility: hidden !important;
+            }
+
+            #billingPrintArea,
+            #billingPrintArea * {
+                visibility: visible !important;
+            }
+
+            #billingPrintArea {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                padding: 30px;
+                background: white;
+            }
+
+                #billingPrintArea .table {
+                    border-collapse: collapse !important;
+                    width: 100% !important;
+                }
+
+                    #billingPrintArea .table th,
+                    #billingPrintArea .table td {
+                        border: 1px solid black !important;
+                        padding: 10px !important;
+                    }
+
+            @@page {
+                size: A4;
+                margin: 15mm;
+            }
+        }
+    </style>
+
+    @Html.AntiForgeryToken()
+
+    @*Modal for Recording Payment*@
+    <div class="modal fade"
+         id="paymentModal"
+         tabindex="-1"
+         aria-labelledby="paymentModalLabel"
+         aria-hidden="true">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title"
+                        id="paymentModalLabel">
+                        Record Payment
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <input type="hidden" id="PaymentBillingID" />
+                    <input type="hidden" id="PaymentTenantID" />
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Billing Number
+                        </label>
+
+                        <input type="text"
+                               id="PaymentBillingNo"
+                               class="form-control"
+                               readonly />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Tenant
+                        </label>
+
+                        <input type="text"
+                               id="PaymentTenant"
+                               class="form-control"
+                               readonly />
+                    </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Total Amount Due
+                    </label>
+
+                    <input type="number"
+                           id="PaymentTotal"
+                           class="form-control"
+                           readonly />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Already Paid
+                    </label>
+
+                    <input type="number"
+                           id="PaymentAlreadyPaid"
+                           class="form-control"
+                           readonly />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Remaining Balance
+                    </label>
+
+                    <input type="number"
+                           id="PaymentRemainingBalance"
+                           class="form-control fw-bold"
+                           readonly />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Amount to Pay
+                    </label>
+
+                    <input type="number"
+                           id="PaymentAmountPaid"
+                           min="0.01"
+                           step="0.01"
+                           class="form-control"
+                           required />
+                </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Payment Method
+                        </label>
+
+                        <select id="PaymentMethod"
+                                class="form-select"
+                                required>
+                            <option value="">-- Select Method --</option>
+                            <option value="Cash">Cash</option>
+                            <option value="GCash">GCash</option>
+                            <option value="Bank Transfer">
+                                Bank Transfer
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Payment Date
+                        </label>
+
+                        <input type="date"
+                               id="PaymentDate"
+                               class="form-control"
+                               value="@DateTime.Today.ToString("yyyy-MM-dd")"
+                               required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Remarks
+                        </label>
+
+                        <textarea id="PaymentRemarks"
+                                  class="form-control"
+                                  rows="3">
+                    </textarea>
+                    </div>
+
+                    <div id="paymentError"
+                         class="alert alert-danger d-none">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+
+                    <button type="button"
+                            class="btn btn-success"
+                            id="savePayment">
+
+                        <i class="bi bi-check-circle"></i>
+                        Record Payment
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+<style>
+    @@media print {
+
+        body * {
+            visibility: hidden !important;
+        }
+
+        #billingPrintArea,
+        #billingPrintArea * {
+            visibility: visible !important;
+        }
+
+        #billingPrintArea {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            padding: 20px 30px;
+            background: white !important;
+            color: black !important;
+        }
+
+        .modal,
+        .modal-dialog,
+        .modal-content,
+        .modal-body {
+            position: static !important;
+            width: 100% !important;
+            max-width: none !important;
+            overflow: visible !important;
+            height: auto !important;
+            max-height: none !important;
+            transform: none !important;
+        }
+
+        .modal-header,
+        .modal-footer,
+        .btn,
+        .no-print {
+            display: none !important;
+        }
+
+        .card {
+            break-inside: avoid;
+            box-shadow: none !important;
+        }
+
+        table {
+            width: 100% !important;
+        }
+
+        tr,
+        td,
+        th {
+            break-inside: avoid;
+        }
+
+        @@page {
+            size: A4;
+            margin: 12mm;
+        }
+    }
+</style>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            // BILLING STATEMENT MODAL    
+
+            const billingModalElement =
+                document.getElementById("billingStatementModal");
+
+            const billingModal =
+                billingModalElement
+                    ? bootstrap.Modal.getOrCreateInstance(billingModalElement)
+                    : null;
+
+            let currentBillingStatementId = null;
+            let currentPaymentId = 0;
+
+            // PAYMENT MODAL
+
+            const paymentModalElement =
+                document.getElementById("paymentModal");
+
+            const paymentModal =
+                paymentModalElement
+                    ? bootstrap.Modal.getOrCreateInstance(paymentModalElement)
+                    : null;
+
+
+            // VIEW PAYMENT MODAL
+
+            const viewPaymentModalElement =
+                document.getElementById("viewPaymentModal");
+
+            const viewPaymentModal =
+                viewPaymentModalElement
+                    ? bootstrap.Modal.getOrCreateInstance(viewPaymentModalElement)
+                    : null;
+
+
+            // HELPER FUNCTION
+
+            function setModalText(id, value, fallback = "N/A") {
+
+                const element = document.getElementById(id);
+
+                if (!element) {
+                    return;
+                }
+
+                if (
+                    value !== null &&
+                    value !== undefined &&
+                    String(value).trim() !== ""
+                ) {
+                    element.textContent = value;
+                }
+                else {
+                    element.textContent = fallback;
+                }
+            }
+
+            // VIEW BILLING STATEMENT
+
+            document.querySelectorAll(".viewBillingBtn")
+                .forEach(function(button) {
+
+                    button.addEventListener("click", function() {
+
+                        currentBillingStatementId =
+                            this.dataset.billingid;
+
+                        // BASIC INFORMATION
+
+                        setModalText(
+                            "ModalBillingNo",
+                            this.dataset.billingno
+                        );
+
+                        setModalText(
+                            "ModalTenant",
+                            this.dataset.tenant
+                        );
+
+                        setModalText(
+                            "ModalUnit",
+                            this.dataset.unit
+                        );
+
+                        setModalText(
+                            "ModalBillingMonth",
+                            this.dataset.billingmonth
+                        );
+
+                        setModalText(
+                            "ModalDueDate",
+                            this.dataset.duedate
+                        );
+
+                        setModalText(
+                            "ModalDateGenerated",
+                            this.dataset.generated
+                        );
+
+
+                        // MONTHLY RENT
+
+                        setModalText(
+                            "ModalMonthlyRent",
+                            this.dataset.monthlyrent,
+                            "0.00"
+                        );
+
+
+                        // ELECTRICITY
+
+                        setModalText(
+                            "ModalPreviousElectric",
+                            this.dataset.previouselectric,
+                            "0.00"
+                        );
+
+                        setModalText(
+                            "ModalCurrentElectric",
+                            this.dataset.currentelectric,
+                            "0.00"
+                        );
+
+                        setModalText(
+                            "ModalElectricConsumption",
+                            this.dataset.electricconsumption,
+                            "0.00"
+                        );
+
+                        setModalText(
+                            "ModalElectricRate",
+                            this.dataset.electricrate,
+                            "0.00"
+                        );
+
+                        setModalText(
+                            "ModalElectricity",
+                            this.dataset.electricity,
+                            "0.00"
+                        );
+
+                        setModalText(
+                            "ModalElectricitySummary",
+                            this.dataset.electricity,
+                            "0.00"
+                        );
+
+
+                        // WATER
+
+                        setModalText(
+                            "ModalPreviousWater",
+                            this.dataset.previouswater,
+                            "0.00"
+                        );
+
+                        setModalText(
+                            "ModalCurrentWater",
+                            this.dataset.currentwater,
+                            "0.00"
+                        );
+
+                        setModalText(
+                            "ModalWaterConsumption",
+                            this.dataset.waterconsumption,
+                            "0.00"
+                        );
+
+                        setModalText(
+                            "ModalWaterRate",
+                            this.dataset.waterrate,
+                            "0.00"
+                        );
+
+                        setModalText(
+                            "ModalWater",
+                            this.dataset.water,
+                            "0.00"
+                        );
+
+                        setModalText(
+                            "ModalWaterSummary",
+                            this.dataset.water,
+                            "0.00"
+                        );
+
+
+                        // INTERNET AND UTILITIES
+
+                        setModalText(
+                            "ModalInternet",
+                            this.dataset.internet,
+                            "0.00"
+                        );
+
+                        setModalText(
+                            "ModalUtilities",
+                            this.dataset.utilities,
+                            "0.00"
+                        );
+
+
+                        // BEFORE PENALTY
+
+                        const monthlyRent =
+                            parseFloat(this.dataset.monthlyrent) || 0;
+
+                        const utilityTotal =
+                            parseFloat(this.dataset.utilities) || 0;
+
+                        const amountBeforePenalty =
+                            monthlyRent + utilityTotal;
+
+                        setModalText(
+                            "ModalBeforePenalty",
+                            amountBeforePenalty.toFixed(2),
+                            "0.00"
+                        );
+
+
+                        // PENALTY
+
+                        setModalText(
+                            "ModalPenalty",
+                            this.dataset.penalty,
+                            "0.00"
+                        );
+
+
+                        // TOTAL
+
+                        setModalText(
+                            "ModalTotal",
+                            this.dataset.total,
+                            "0.00"
+                        );
+
+
+                        // REMARKS
+
+                        setModalText(
+                            "ModalRemarks",
+                            this.dataset.remarks,
+                            "None"
+                        );
+
+
+                        // STATUS
+
+                        const statusElement =
+                            document.getElementById("ModalStatus");
+
+                        const status =
+                            this.dataset.status || "Pending";
+
+                        if (statusElement) {
+
+                            statusElement.textContent = status;
+
+                            statusElement.classList.remove(
+                                "bg-success",
+                                "bg-warning",
+                                "bg-danger",
+                                "bg-secondary",
+                                "text-dark",
+                                "text-white"
+                            );
+
+                            switch (status.toLowerCase()) {
+
+                                case "paid":
+
+                                    statusElement.classList.add(
+                                        "bg-success",
+                                        "text-white"
+                                    );
+
+                                    break;
+
+                                case "pending":
+
+                                    statusElement.classList.add(
+                                        "bg-warning",
+                                        "text-dark"
+                                    );
+
+                                    break;
+
+                                case "overdue":
+
+                                    statusElement.classList.add(
+                                        "bg-danger",
+                                        "text-white"
+                                    );
+
+                                    break;
+
+                                case "unpaid":
+
+                                    statusElement.classList.add(
+                                        "bg-warning",
+                                        "text-dark"
+                                    );
+
+                                    break;
+
+                                case "partially paid":
+
+                                    statusElement.classList.add(
+                                        "bg-info",
+                                        "text-dark"
+                                    );
+
+                                    break;
+
+                                default:
+
+                                    statusElement.classList.add(
+                                        "bg-secondary",
+                                        "text-white"
+                                    );
+
+                                    break;
+                            }
+                        }
+
+
+                        // OPEN BILLING MODAL
+
+                        if (billingModal) {
+                            billingModal.show();
+                        }
+                        else {
+                            console.error(
+                                "Billing Statement modal was not initialized."
+                            );
+                        }
+
+                    });
+
+                });
+
+            // PRINT BILLING STATEMENT
+
+            const printBillingButton =
+                document.getElementById("printBillingStatement");
+
+            if (printBillingButton) {
+
+                printBillingButton.addEventListener(
+                    "click",
+                    function() {
+
+                        if (!currentBillingStatementId) {
+
+                            alert(
+                                "Unable to identify the billing statement."
+                            );
+
+                            return;
+                        }
+
+                        window.print();
+
+                    }
+                );
+            }
+
+            // RECORD PAYMENT
+
+            document.querySelectorAll(".paymentBtn")
+                .forEach(function(button) {
+
+                    button.addEventListener(
+                        "click",
+                        async function() {
+
+                            const billingID =
+                                this.dataset.billingid;
+
+                            const tenantID =
+                                this.dataset.tenantid;
+
+                            const billingNo =
+                                this.dataset.billingno;
+
+                            const tenantName =
+                                this.dataset.tenant;
+
+                            const totalAmount =
+                                this.dataset.total;
+
+                            const status =
+                                this.dataset.status || "";
+
+
+                            if (
+                                !billingID ||
+                                Number(billingID) <= 0
+                            ) {
+
+                                alert(
+                                    "Invalid billing statement ID."
+                                );
+
+                                return;
+                            }
+
+
+                            if (
+                                status.toLowerCase() === "paid"
+                            ) {
+
+                                alert(
+                                    "This billing statement is already paid."
+                                );
+
+                                return;
+                            }
+
+
+                            // GET MODAL ELEMENTS
+
+                            const billingIDInput = document.getElementById("PaymentBillingID");
+
+                            const tenantIDInput =
+                                document.getElementById(
+                                    "PaymentTenantID"
+                                );
+
+                            const billingNoInput =
+                                document.getElementById(
+                                    "PaymentBillingNo"
+                                );
+
+                            const tenantInput =
+                                document.getElementById(
+                                    "PaymentTenant"
+                                );
+
+                            const totalInput =
+                                document.getElementById(
+                                    "PaymentTotal"
+                                );
+
+                            const alreadyPaidInput =
+                                document.getElementById(
+                                    "PaymentAlreadyPaid"
+                                );
+
+                            const remainingInput =
+                                document.getElementById(
+                                    "PaymentRemainingBalance"
+                                );
+
+                            const amountInput =
+                                document.getElementById(
+                                    "PaymentAmountPaid"
+                                );
+
+                            const methodInput =
+                                document.getElementById(
+                                    "PaymentMethod"
+                                );
+
+                            const dateInput =
+                                document.getElementById(
+                                    "PaymentDate"
+                                );
+
+                            const remarksInput =
+                                document.getElementById(
+                                    "PaymentRemarks"
+                                );
+
+
+                            // CHECK ELEMENTS
+
+                            if (
+                                !billingIDInput ||
+                                !tenantIDInput ||
+                                !billingNoInput ||
+                                !tenantInput ||
+                                !totalInput ||
+                                !amountInput ||
+                                !methodInput
+                            ) {
+
+                                console.error(
+                                    "Payment modal elements are missing."
+                                );
+
+                                alert(
+                                    "Payment modal is not configured correctly."
+                                );
+
+                                return;
+                            }
+
+
+                            // SET INFORMATION
+
+                            billingIDInput.value =
+                                billingID;
+
+                            tenantIDInput.value =
+                                tenantID || "";
+
+                            billingNoInput.value =
+                                billingNo || "";
+
+                            tenantInput.value =
+                                tenantName || "N/A";
+
+                            totalInput.value =
+                                Number(totalAmount || 0)
+                                    .toFixed(2);
+
+                            amountInput.value = "";
+
+                            methodInput.value = "";
+
+
+                            if (remarksInput) {
+                                remarksInput.value = "";
+                            }
+
+
+                            if (dateInput) {
+
+                                const today =
+                                    new Date()
+                                        .toISOString()
+                                        .split("T")[0];
+
+                                dateInput.value = today;
+                            }
+
+
+                            // GET PAYMENT SUMMARY
+
+                            try {
+
+                                const response =
+                                    await fetch(
+                                        "?handler=PaymentSummary&billingStatementId=" +
+                                        encodeURIComponent(billingID)
+                                    );
+
+
+                                if (!response.ok) {
+
+                                    throw new Error(
+                                        "Unable to load payment summary."
+                                    );
+                                }
+
+
+                                const data =
+                                    await response.json();
+
+
+                                if (!data.success) {
+
+                                    throw new Error(
+                                        data.message ||
+                                        "Unable to load payment information."
+                                    );
+                                }
+
+
+                                if (alreadyPaidInput) {
+
+                                    alreadyPaidInput.value =
+                                        Number(
+                                            data.totalPaid || 0
+                                        ).toFixed(2);
+                                }
+
+
+                                if (remainingInput) {
+
+                                    remainingInput.value =
+                                        Number(
+                                            data.remainingBalance || 0
+                                        ).toFixed(2);
+                                }
+
+
+                                if (
+                                    Number(
+                                        data.remainingBalance || 0
+                                    ) <= 0
+                                ) {
+
+                                    alert(
+                                        "This billing statement has already been fully paid."
+                                    );
+
+                                    return;
+                                }
+
+
+                                // SHOW PAYMENT MODAL
+
+                                if (paymentModal) {
+
+                                    paymentModal.show();
+
+                                }
+                                else {
+
+                                    console.error(
+                                        "Payment modal was not initialized."
+                                    );
+
+                                    alert(
+                                        "Unable to open payment modal."
+                                    );
+                                }
+
+                            }
+                            catch (error) {
+
+                                console.error(
+                                    "Payment summary error:",
+                                    error
+                                );
+
+                                alert(
+                                    error.message ||
+                                    "An error occurred while loading payment information."
+                                );
+                            }
+
+                        }
+                    );
+
+                });
+
+                // SAVE / RECORD PAYMENT
+
+                const savePaymentBtn =
+    document.getElementById("savePayment");
+
+if (savePaymentBtn) {
+
+    savePaymentBtn.addEventListener("click", async function () {
+
+        // GET PAYMENT VALUES
+        const billingStatementID =
+            document.getElementById("PaymentBillingID")?.value;
+
+        const tenantID =
+            document.getElementById("PaymentTenantID")?.value;
+
+        const amountPaid =
+            document.getElementById("PaymentAmountPaid")?.value;
+
+        const paymentMethod =
+            document.getElementById("PaymentMethod")?.value;
+
+        const paymentDate =
+            document.getElementById("PaymentDate")?.value;
+
+        const remarks =
+            document.getElementById("PaymentRemarks")?.value || "";
+
+
+        // ==========================================
+        // VALIDATION
+        // ==========================================
+
+        if (!billingStatementID) {
+            alert("Billing statement ID is missing.");
+            return;
+        }
+
+        if (!amountPaid || Number(amountPaid) <= 0) {
+            alert("Please enter a valid payment amount.");
+            return;
+        }
+
+        if (!paymentMethod) {
+            alert("Please select a payment method.");
+            return;
+        }
+
+        if (!paymentDate) {
+            alert("Please select a payment date.");
+            return;
+        }
+
+
+        // ==========================================
+        // CONFIRM PAYMENT
+        // ==========================================
+
+        const confirmed = confirm(
+            "Are you sure you want to record this payment?"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        // ==========================================
+        // DISABLE BUTTON
+        // ==========================================
+
+        savePaymentBtn.disabled = true;
+
+        savePaymentBtn.innerHTML =
+            '<span class="spinner-border spinner-border-sm"></span> Recording...';
+
+
+        try {
+
+            // ==========================================
+            // GET ANTI-FORGERY TOKEN
+            // ==========================================
+
+            const token =
+                document.querySelector(
+                    'input[name="__RequestVerificationToken"]'
+                )?.value;
+
+
+            // ==========================================
+            // SEND PAYMENT TO SERVER
+            // ==========================================
+
+            const response = await fetch(
+                "?handler=RecordPayment",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+
+                        "RequestVerificationToken":
+                            token || ""
+                    },
+
+                    body: JSON.stringify({
+
+                        BillingStatementID:
+                            Number(billingStatementID),
+
+                        TenantID:
+                            Number(tenantID || 0),
+
+                        AmountPaid:
+                            Number(amountPaid),
+
+                        PaymentMethod:
+                            paymentMethod,
+
+                        PaymentDate:
+                            paymentDate,
+
+                        Remarks:
+                            remarks
+                    })
+                }
+            );
+
+
+            // ==========================================
+            // READ SERVER RESPONSE
+            // ==========================================
+
+            const data =
+                await response.json();
+
+
+            // ==========================================
+            // CHECK FOR SERVER ERROR
+            // ==========================================
+
+            if (!response.ok || !data.success) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to record payment."
+                );
+            }
+
+
+            // ==========================================
+            // SUCCESS MESSAGE
+            // ==========================================
+
+            let successMessage =
+                "Payment recorded successfully.\n\n" +
+                "Receipt No: " +
+                data.receiptNo;
+
+
+            // If there is excess payment
+            if (Number(data.excessPayment || 0) > 0) {
+
+                successMessage +=
+                    "\n\nExcess Payment: ₱" +
+                    Number(data.excessPayment)
+                        .toLocaleString("en-PH", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }) +
+                    "\n\nThis amount has been added to the tenant's credit.";
+            }
+
+
+            alert(successMessage);
+
+
+            // ==========================================
+            // CLOSE MODAL
+            // ==========================================
+
+            if (paymentModal) {
+                paymentModal.hide();
+            }
+
+
+            // ==========================================
+            // REFRESH BILLING STATEMENT LIST
+            // ==========================================
+
+            window.location.reload();
+
+        }
+        catch (error) {
+
+            console.error(
+                "Record payment error:",
+                error
+            );
+
+            alert(
+                error.message ||
+                "An error occurred while recording the payment."
+            );
+
+        }
+        finally {
+
+            // ==========================================
+            // RESTORE BUTTON
+            // ==========================================
+
+            savePaymentBtn.disabled = false;
+
+            savePaymentBtn.innerHTML =
+                '<i class="bi bi-check-circle"></i> Record Payment';
+        }
+
+    });
+
+}
+
+            // VIEW PAYMENT
+
+            document.querySelectorAll(".viewPaymentBtn")
+                .forEach(function(button) {
+
+                    button.addEventListener(
+                        "click",
+                        async function() {
+
+                            const billingID =
+                                this.dataset.billingid;
+
+                            const billingNo =
+                                this.dataset.billingno;
+                                    
+
+                            if (
+                                !billingID ||
+                                Number(billingID) <= 0
+                            ) {
+
+                                alert(
+                                    "Invalid billing statement."
+                                );
+
+                                return;
+                            }
+
+
+                            currentPaymentId = 0;
+
+
+                            setModalText(
+                                "ViewPaymentBillingNo",
+                                billingNo,
+                                "N/A"
+                            );
+
+
+                            try {
+
+                                const response =
+                                    await fetch(
+                                        "?handler=PaymentDetails&billingStatementId=" +
+                                        encodeURIComponent(billingID)
+                                    );
+
+
+                                if (!response.ok) {
+
+                                    throw new Error(
+                                        "Unable to load payment details."
+                                    );
+                                }
+
+
+                                const data =
+                                    await response.json();
+
+
+                                console.log(
+                                    "Payment Details:",
+                                    data
+                                );
+
+
+                                if (!data.success) {
+
+                                    throw new Error(
+                                        data.message ||
+                                        "No payment information found."
+                                    );
+                                }
+
+
+                                // SAVE PAYMENT ID
+
+                                currentPaymentId =
+                                    Number(
+                                        data.paymentID || 0
+                                    );
+
+
+                                // DISPLAY DETAILS
+
+                                setModalText(
+                                    "ViewReceiptNo",
+                                    data.receiptNo,
+                                    "N/A"
+                                );
+
+                                setModalText(
+                                    "ViewPaymentDate",
+                                    data.paymentDate,
+                                    "N/A"
+                                );
+
+                                setModalText(
+                                    "ViewPaymentTenant",
+                                    data.tenantName,
+                                    "N/A"
+                                );
+
+                                setModalText(
+                                    "ViewPaymentBillingNo",
+                                    data.billingNo || billingNo,
+                                    "N/A"
+                                );
+
+                                setModalText(
+                                    "ViewPaymentBillingMonth",
+                                    data.billingMonth,
+                                    "N/A"
+                                );
+
+                                setModalText(
+                                    "ViewPaymentFor",
+                                    data.paymentFor,
+                                    "N/A"
+                                );
+
+                                setModalText(
+                                    "ViewAmountPaid",
+                                    Number(
+                                        data.amountPaid || 0
+                                    ).toFixed(2),
+                                    "0.00"
+                                );
+
+                                setModalText(
+                                    "ViewPaymentMethod",
+                                    data.paymentMethod,
+                                    "N/A"
+                                );
+
+                                setModalText(
+                                    "ViewPaymentRemarks",
+                                    data.remarks,
+                                    "None"
+                                );
+
+
+                                // PAYMENT STATUS
+
+                                const statusElement =
+                                    document.getElementById(
+                                        "ViewPaymentStatus"
+                                    );
+
+                                const paymentStatus =
+                                    data.paymentStatus ||
+                                    "Completed";
+
+
+                                if (statusElement) {
+
+                                    statusElement.textContent =
+                                        paymentStatus;
+
+                                    statusElement.classList.remove(
+                                        "bg-success",
+                                        "bg-warning",
+                                        "bg-danger",
+                                        "bg-secondary",
+                                        "text-dark",
+                                        "text-white"
+                                    );
+
+
+                                    if (
+                                        paymentStatus.toLowerCase() ===
+                                        "completed"
+                                    ) {
+
+                                        statusElement.classList.add(
+                                            "bg-success",
+                                            "text-white"
+                                        );
+
+                                    }
+                                    else if (
+                                        paymentStatus.toLowerCase() ===
+                                        "pending"
+                                    ) {
+
+                                        statusElement.classList.add(
+                                            "bg-warning",
+                                            "text-dark"
+                                        );
+
+                                    }
+                                    else {
+
+                                        statusElement.classList.add(
+                                            "bg-secondary",
+                                            "text-white"
+                                        );
+                                    }
+
+                                }
+
+
+                                // SHOW VIEW PAYMENT MODAL
+
+                                if (viewPaymentModal) {
+
+                                    viewPaymentModal.show();
+
+                                }
+                                else {
+
+                                    console.error(
+                                        "View Payment modal was not initialized."
+                                    );
+
+                                    alert(
+                                        "Unable to open View Payment modal."
+                                    );
+                                }
+
+                            }
+                            catch (error) {
+
+                                console.error(
+                                    "View Payment error:",
+                                    error
+                                );
+
+                                alert(
+                                    error.message ||
+                                    "An error occurred while loading payment information."
+                                );
+                            }
+
+                        }
+                    );
+
+                });
+
+            // PRINT RECEIPT
+
+            const printReceiptBtn = document.getElementById("printReceiptBtn");
+
+            if (printReceiptBtn)
+            {
+
+                printReceiptBtn.addEventListener("click",function() 
+                     {
+                        if (!currentPaymentId ||currentPaymentId <= 0) 
+                            {
+                            alert("No payment selected.");
+                             return;
+                            }
+
+                        window.open("/PaymentPages/RentalPaymentPages/Receipt?paymentid=" +currentPaymentId,"_blank");
+
+                    }
+                );
+
+            }
+
+        });
+    </script>
+}

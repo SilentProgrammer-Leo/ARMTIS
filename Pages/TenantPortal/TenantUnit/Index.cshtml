@@ -1,0 +1,324 @@
+﻿@page
+@model ARMTIS_Capstone_Project.Pages.TenantPortal.TenantUnit.IndexModel
+
+@{
+    ViewData["Title"] = "My Unit";
+    Layout = "/Pages/TenantPortal/_TenantLayout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <!-- PAGE HEADER -->
+    <div class="mb-4">
+        <h2 class="fw-bold">
+            <i class="bi bi-house-door me-2"></i>
+            My Unit
+        </h2>
+
+        <p class="text-muted mb-0">
+            View the details of your assigned rental unit.
+        </p>
+    </div>
+
+
+    @if (Model.Unit == null)
+    {
+        <!-- NO UNIT ASSIGNED -->
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body text-center py-5">
+
+                <i class="bi bi-house-x text-muted"
+                   style="font-size: 4rem;"></i>
+
+                <h4 class="fw-bold mt-3">
+                    No Unit Assigned
+                </h4>
+
+                <p class="text-muted mb-0">
+                    You currently do not have a rental unit assigned
+                    to your tenant account.
+                </p>
+
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <!-- UNIT HEADER -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-body p-4">
+
+                <div class="d-flex align-items-center">
+
+                    <div class="bg-primary text-white rounded-circle
+                        d-flex align-items-center justify-content-center me-3"
+                         style="width:70px; height:70px;">
+
+                        <i class="bi bi-house-fill fs-2"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h4 class="fw-bold mb-1">
+                            Unit @Model.Unit.UnitNumber
+                        </h4>
+
+                        <p class="text-muted mb-0">
+                            Your assigned rental unit
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- UNIT DETAILS -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-header bg-white py-3">
+
+                <h5 class="fw-bold mb-0">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Unit Information
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="row g-4">
+
+                    <!-- UNIT NUMBER -->
+
+                    <div class="col-md-6">
+
+                        <label class="text-muted small">
+                            Unit Number
+                        </label>
+
+                        <div class="fw-semibold fs-5">
+                            @Model.Unit.UnitNumber
+                        </div>
+
+                    </div>
+
+
+                    <!-- UNIT STATUS -->
+
+                    <div class="col-md-6">
+
+                        <label class="text-muted small">
+                            Unit Status
+                        </label>
+
+                        <div>
+
+                            @if (Model.Unit.UnitStatus == "Occupied")
+                            {
+                                <span class="badge bg-success fs-6">
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    Occupied
+                                </span>
+                            }
+                            else if (Model.Unit.UnitStatus == "Vacant")
+                            {
+                                <span class="badge bg-warning text-dark fs-6">
+                                    <i class="bi bi-house me-1"></i>
+                                    Vacant
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary fs-6">
+                                    @Model.Unit.UnitStatus
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MONTHLY RENT -->
+
+                    <div class="col-md-6">
+
+                        <label class="text-muted small">
+                            Monthly Rent
+                        </label>
+
+                        <div class="fw-bold fs-4">
+                            ₱@Model.Unit.MonthlyRent.ToString("N2")
+                        </div>
+
+                    </div>
+
+
+                    <!-- TENANT -->
+
+                    <div class="col-md-6">
+
+                        <label class="text-muted small">
+                            Current Tenant
+                        </label>
+
+                        <div class="fw-semibold">
+
+                            @if (Model.Tenant != null)
+                            {
+                                @Model.Tenant.FirstName @Model.Tenant.LastName
+                            }
+                            else
+                            {
+                                <span>Not available</span>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- LEASE INFORMATION -->
+        @if (Model.Tenant != null)
+        {
+            <div class="card shadow-sm border-0 mb-4">
+
+                <div class="card-header bg-white py-3">
+
+                    <h5 class="fw-bold mb-0">
+                        <i class="bi bi-calendar-check me-2"></i>
+                        Lease Information
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row g-4">
+
+                        <!-- LEASE START -->
+
+                        <div class="col-md-6">
+
+                            <label class="text-muted small">
+                                Lease Start Date
+                            </label>
+
+                            <div class="fw-semibold">
+                                @Model.Tenant.LeaseStartDate.ToString("MMMM dd, yyyy")
+                            </div>
+
+                        </div>
+
+
+                        <!-- LEASE END -->
+
+                        <div class="col-md-6">
+
+                            <label class="text-muted small">
+                                Lease End Date
+                            </label>
+
+                            <div class="fw-semibold">
+                                @Model.Tenant.LeaseEndDate.ToString("MMMM dd, yyyy")
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+
+        <!-- QUICK ACTIONS -->
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-header bg-white py-3">
+
+                <h5 class="fw-bold mb-0">
+                    <i class="bi bi-grid me-2"></i>
+                    Related Information
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    <!-- BILLS -->
+
+                    <div class="col-md-4">
+
+                        <a href="/TenantPortal/Billing"
+                           class="btn btn-outline-primary w-100 py-3">
+
+                            <i class="bi bi-receipt fs-4 d-block mb-1"></i>
+
+                            My Bills
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- UTILITIES -->
+
+                    <div class="col-md-4">
+
+                        <a href="/TenantPortal/Utilities"
+                           class="btn btn-outline-warning w-100 py-3">
+
+                            <i class="bi bi-lightning-charge fs-4 d-block mb-1"></i>
+
+                            Utilities
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- MAINTENANCE -->
+
+                    <div class="col-md-4">
+
+                        <a href="/TenantPortal/Maintenance"
+                           class="btn btn-outline-danger w-100 py-3">
+
+                            <i class="bi bi-tools fs-4 d-block mb-1"></i>
+
+                            Maintenance
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>

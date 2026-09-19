@@ -1,0 +1,788 @@
+﻿@page
+@model ARMTIS_Capstone_Project.Pages.TenantPages.Account.IndexModel
+
+@{
+    ViewData["Title"] = "Tenant Accounts";
+
+    var totalTenants = Model.TenantAccounts?.Count ?? 0;
+
+    var accountsCreated = Model.TenantAccounts?.Count(t =>
+        t.HasAccount) ?? 0;
+
+    var accountsMissing = totalTenants - accountsCreated;
+}
+
+<div class="tenant-accounts-page">
+
+    <!-- ========================================= -->
+    <!-- PAGE HEADER -->
+    <!-- ========================================= -->
+
+    <div class="accounts-header">
+
+        <div>
+            <h2 class="accounts-title">
+                <i class="bi bi-person-lock me-2"></i>
+                Tenant Accounts
+            </h2>
+
+            <p class="accounts-subtitle">
+                Manage login accounts for registered tenants.
+            </p>
+        </div>
+
+
+        <a asp-page="/TenantPages/Account/Create"
+           class="btn create-account-btn">
+
+            <i class="bi bi-person-plus-fill me-1"></i>
+            Create Tenant Account
+
+        </a>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- SUMMARY CARDS -->
+    <!-- ========================================= -->
+
+    <div class="row g-3 mb-4">
+
+        <!-- TOTAL TENANTS -->
+
+        <div class="col-sm-6 col-lg-4">
+
+            <div class="account-summary-card">
+
+                <div class="summary-icon">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+
+                <div>
+
+                    <div class="summary-label">
+                        Total Tenants
+                    </div>
+
+                    <div class="summary-value">
+                        @totalTenants
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACCOUNTS CREATED -->
+
+        <div class="col-sm-6 col-lg-4">
+
+            <div class="account-summary-card">
+
+                <div class="summary-icon">
+                    <i class="bi bi-person-check-fill"></i>
+                </div>
+
+                <div>
+
+                    <div class="summary-label">
+                        Accounts Created
+                    </div>
+
+                    <div class="summary-value">
+                        @accountsCreated
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- NO ACCOUNT -->
+
+        <div class="col-sm-6 col-lg-4">
+
+            <div class="account-summary-card">
+
+                <div class="summary-icon">
+                    <i class="bi bi-person-x-fill"></i>
+                </div>
+
+                <div>
+
+                    <div class="summary-label">
+                        Without Account
+                    </div>
+
+                    <div class="summary-value">
+                        @accountsMissing
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- ACCOUNT TABLE -->
+    <!-- ========================================= -->
+
+    <div class="accounts-card">
+
+        <!-- CARD HEADER -->
+
+        <div class="accounts-card-header">
+
+            <div>
+
+                <h5>
+                    Tenant Login Accounts
+                </h5>
+
+                <small>
+                    View account status and login information
+                </small>
+
+            </div>
+
+
+            <span class="account-count-badge">
+
+                @totalTenants Tenant(s)
+
+            </span>
+
+        </div>
+
+
+        <!-- CARD BODY -->
+
+        <div class="accounts-card-body">
+
+            @if (Model.TenantAccounts != null &&
+                 Model.TenantAccounts.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table accounts-table align-middle mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th class="text-center">
+                                    #
+                                </th>
+
+                                <th>
+                                    Tenant
+                                </th>
+
+                                <th>
+                                    Username
+                                </th>
+
+                                <th>
+                                    Account Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @{
+                                int counter = 1;
+                            }
+
+                            @foreach (var tenant in Model.TenantAccounts)
+                            {
+                                <tr>
+
+                                    <!-- NUMBER -->
+
+                                    <td class="text-center">
+
+                                        <span class="row-number">
+                                            @counter
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- TENANT -->
+
+                                    <td>
+
+                                        <div class="tenant-name-cell">
+
+                                            <div class="tenant-avatar">
+                                                <i class="bi bi-person-fill"></i>
+                                            </div>
+
+                                            <div>
+
+                                                <strong>
+                                                    @tenant.FullName
+                                                </strong>
+
+                                                <small>
+                                                    Registered Tenant
+                                                </small>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- USERNAME -->
+
+                                    <td>
+
+                                        @if (tenant.HasAccount)
+                                        {
+                                            <span class="username-badge">
+
+                                                <i class="bi bi-person-circle me-1"></i>
+
+                                                @tenant.Username
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="no-username">
+                                                No login account
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- STATUS -->
+
+                                    <td>
+
+                                        @if (tenant.HasAccount)
+                                        {
+                                            <span class="account-status active">
+
+                                                <i class="bi bi-check-circle-fill me-1"></i>
+
+                                                Active
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <a asp-page="/TenantPages/Account/Create"
+                                               class="account-status missing">
+
+                                                <i class="bi bi-plus-circle-fill me-1"></i>
+
+                                                Create Account
+
+                                            </a>
+                                        }
+
+                                    </td>
+
+                                </tr>
+
+                                counter++;
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <!-- ================================= -->
+                <!-- EMPTY STATE -->
+                <!-- ================================= -->
+
+                <div class="accounts-empty-state">
+
+                    <div class="empty-icon">
+                        <i class="bi bi-person-lock"></i>
+                    </div>
+
+                    <h5>
+                        No Tenant Accounts
+                    </h5>
+
+                    <p>
+                        Add tenants first before creating
+                        their login accounts.
+                    </p>
+
+                    <a asp-page="/TenantPages/Index"
+                       class="btn btn-outline-primary">
+
+                        <i class="bi bi-people me-1"></i>
+                        View Tenants
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- INFORMATION NOTE -->
+    <!-- ========================================= -->
+
+    <div class="accounts-note">
+
+        <i class="bi bi-info-circle-fill"></i>
+
+        <span>
+            Tenant accounts allow registered tenants to securely
+            access the Tenant Portal using their username and password.
+        </span>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    :root {
+        --armtis-primary: #0A2D4F;
+        --armtis-accent: #17B6A7;
+        --armtis-bg: #F5F7FA;
+        --armtis-border: #E3E8EE;
+        --armtis-text: #1F2937;
+        --armtis-muted: #6B7280;
+        --armtis-row-alt: #F8FAFC;
+    }
+
+
+    /* ========================================= */
+    /* PAGE */
+    /* ========================================= */
+
+    .tenant-accounts-page {
+        background: var(--armtis-bg);
+        min-height: calc(100vh - 80px);
+        padding: 10px 4px 30px;
+    }
+
+
+    /* ========================================= */
+    /* HEADER */
+    /* ========================================= */
+
+    .accounts-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+
+
+    .accounts-title {
+        color: var(--armtis-primary);
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+
+    .accounts-subtitle {
+        color: var(--armtis-muted);
+        margin: 0;
+        font-size: .9rem;
+    }
+
+
+    /* ========================================= */
+    /* CREATE BUTTON */
+    /* ========================================= */
+
+    .create-account-btn {
+        background: var(--armtis-primary);
+        border: 1px solid var(--armtis-primary);
+        color: white;
+        border-radius: 9px;
+        padding: 10px 17px;
+        font-weight: 600;
+    }
+
+
+        .create-account-btn:hover {
+            background: #071F36;
+            border-color: #071F36;
+            color: white;
+        }
+
+
+    /* ========================================= */
+    /* SUMMARY CARDS */
+    /* ========================================= */
+
+    .account-summary-card {
+        background: white;
+        border: 1px solid var(--armtis-border);
+        border-radius: 14px;
+        padding: 18px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        height: 100%;
+        box-shadow: 0 2px 8px rgba(10,45,79,.05);
+    }
+
+
+    .summary-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        background: #EAF7F5;
+        color: var(--armtis-accent);
+        display: grid;
+        place-items: center;
+        font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+
+
+    .summary-label {
+        color: var(--armtis-muted);
+        font-size: .8rem;
+        margin-bottom: 3px;
+    }
+
+
+    .summary-value {
+        color: var(--armtis-primary);
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+
+
+    /* ========================================= */
+    /* MAIN CARD */
+    /* ========================================= */
+
+    .accounts-card {
+        background: white;
+        border: 1px solid var(--armtis-border);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(10,45,79,.04);
+    }
+
+
+    /* ========================================= */
+    /* CARD HEADER */
+    /* ========================================= */
+
+    .accounts-card-header {
+        padding: 17px 20px;
+        border-bottom: 1px solid var(--armtis-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
+
+
+        .accounts-card-header h5 {
+            color: var(--armtis-primary);
+            font-weight: 700;
+            margin: 0 0 3px;
+        }
+
+
+        .accounts-card-header small {
+            color: var(--armtis-muted);
+            font-size: .78rem;
+        }
+
+
+    .account-count-badge {
+        background: #EAF7F5;
+        color: #117C72;
+        padding: 6px 11px;
+        border-radius: 999px;
+        font-size: .75rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+
+    .accounts-card-body {
+        padding: 0;
+    }
+
+
+    /* ========================================= */
+    /* TABLE */
+    /* ========================================= */
+
+    .accounts-table {
+        font-size: .88rem;
+    }
+
+
+        .accounts-table thead th {
+            background: var(--armtis-accent);
+            color: white;
+            border: none;
+            padding: 13px 15px;
+            font-size: .78rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+
+        .accounts-table tbody td {
+            padding: 13px 15px;
+            border-color: var(--armtis-border);
+            color: var(--armtis-text);
+        }
+
+
+        .accounts-table tbody tr:nth-child(even) {
+            background: var(--armtis-row-alt);
+        }
+
+
+        .accounts-table tbody tr:hover {
+            background: #EEF8F6;
+        }
+
+
+    /* ========================================= */
+    /* ROW NUMBER */
+    /* ========================================= */
+
+    .row-number {
+        color: var(--armtis-muted);
+        font-size: .78rem;
+        font-weight: 600;
+    }
+
+
+    /* ========================================= */
+    /* TENANT NAME */
+    /* ========================================= */
+
+    .tenant-name-cell {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+
+    .tenant-avatar {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        border-radius: 50%;
+        background: #EAF7F5;
+        color: var(--armtis-accent);
+        display: grid;
+        place-items: center;
+    }
+
+
+    .tenant-name-cell strong {
+        display: block;
+        color: var(--armtis-primary);
+        font-size: .86rem;
+    }
+
+
+    .tenant-name-cell small {
+        display: block;
+        color: var(--armtis-muted);
+        font-size: .69rem;
+        margin-top: 1px;
+    }
+
+
+    /* ========================================= */
+    /* USERNAME */
+    /* ========================================= */
+
+    .username-badge {
+        display: inline-flex;
+        align-items: center;
+        background: #EEF3F7;
+        color: var(--armtis-primary);
+        border-radius: 7px;
+        padding: 6px 9px;
+        font-size: .76rem;
+        font-weight: 600;
+    }
+
+
+    .no-username {
+        color: var(--armtis-muted);
+        font-size: .78rem;
+        font-style: italic;
+    }
+
+
+    /* ========================================= */
+    /* ACCOUNT STATUS */
+    /* ========================================= */
+
+    .account-status {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 6px 11px;
+        font-size: .72rem;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+
+        .account-status.active {
+            background: #E8F6EF;
+            color: #137A49;
+        }
+
+
+        .account-status.missing {
+            background: #FFF4D6;
+            color: #8A6500;
+        }
+
+
+            .account-status.missing:hover {
+                background: var(--armtis-accent);
+                color: white;
+            }
+
+
+    /* ========================================= */
+    /* EMPTY STATE */
+    /* ========================================= */
+
+    .accounts-empty-state {
+        text-align: center;
+        padding: 65px 20px;
+        color: var(--armtis-muted);
+    }
+
+
+    .empty-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: #EAF7F5;
+        color: var(--armtis-accent);
+        display: grid;
+        place-items: center;
+        font-size: 2rem;
+        margin: 0 auto 16px;
+    }
+
+
+    .accounts-empty-state h5 {
+        color: var(--armtis-primary);
+        font-weight: 700;
+    }
+
+
+    .accounts-empty-state p {
+        margin-bottom: 18px;
+    }
+
+
+    /* ========================================= */
+    /* NOTE */
+    /* ========================================= */
+
+    .accounts-note {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-top: 14px;
+        padding: 11px 14px;
+        border-radius: 10px;
+        background: #EAF7F5;
+        border: 1px solid #C8EBE7;
+        color: #155E58;
+        font-size: .78rem;
+    }
+
+
+        .accounts-note i {
+            color: var(--armtis-accent);
+        }
+
+
+    /* ========================================= */
+    /* RESPONSIVE */
+    /* ========================================= */
+
+    @@media (max-width: 767.98px) {
+
+        .tenant-accounts-page {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .accounts-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .create-account-btn {
+            width: 100%;
+        }
+
+        .accounts-card-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+
+    @@media (max-width: 575.98px) {
+
+        .accounts-table {
+            font-size: .8rem;
+        }
+
+            .accounts-table tbody td,
+            .accounts-table thead th {
+                padding: 10px;
+            }
+
+        .tenant-avatar {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+        }
+    }
+
+</style>

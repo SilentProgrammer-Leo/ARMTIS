@@ -1,0 +1,1329 @@
+﻿@page
+@model ARMTIS_Capstone_Project.Pages.Reports.ReportsIndexModel
+
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<div class="reports-page">
+
+    <!-- ========================================= -->
+    <!-- PAGE HEADER -->
+    <!-- ========================================= -->
+
+    <div class="reports-header">
+
+        <div>
+            <h2 class="reports-title">
+                <i class="bi bi-bar-chart-line-fill me-2"></i>
+                Reports
+            </h2>
+
+            <p class="reports-subtitle">
+                Generate the basic reports required for apartment rental management.
+            </p>
+        </div>
+
+        <button type="button"
+                class="btn print-btn"
+                onclick="printActiveReport()">
+
+            <i class="bi bi-printer me-1"></i>
+            Print Report
+
+        </button>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- REPORT NAVIGATION -->
+    <!-- ========================================= -->
+
+    <div class="report-tabs">
+
+        <button type="button"
+                class="report-tab active"
+                data-target="incomeReport">
+
+            <i class="bi bi-cash-stack me-1"></i>
+            Monthly Income
+
+        </button>
+
+        <button type="button"
+                class="report-tab"
+                data-target="occupancyReport">
+
+            <i class="bi bi-building me-1"></i>
+            Occupancy
+
+        </button>
+
+        <button type="button"
+                class="report-tab"
+                data-target="unpaidReport">
+
+            <i class="bi bi-exclamation-circle me-1"></i>
+            Unpaid Balances
+
+            @if (Model.UnpaidTenantBalances.Any())
+            {
+                <span class="tab-count">
+                    @Model.UnpaidTenantBalances.Count
+                </span>
+            }
+
+        </button>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- 1. MONTHLY INCOME REPORT -->
+    <!-- ========================================= -->
+
+    <section id="incomeReport"
+             class="report-panel active">
+
+        <div class="report-panel-header">
+
+            <div>
+                <h4>
+                    Monthly Income Report
+                </h4>
+
+                <p>
+                    Payments received during the selected period.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- FILTER -->
+
+        <div class="filter-card">
+
+            <form method="get">
+
+                <div class="row g-3 align-items-end">
+
+                    <div class="col-md-5">
+
+                        <label asp-for="StartDate"
+                               class="form-label report-label">
+                            Start Date
+                        </label>
+
+                        <input asp-for="StartDate"
+                               type="date"
+                               class="form-control report-input" />
+
+                    </div>
+
+
+                    <div class="col-md-5">
+
+                        <label asp-for="EndDate"
+                               class="form-label report-label">
+                            End Date
+                        </label>
+
+                        <input asp-for="EndDate"
+                               type="date"
+                               class="form-control report-input" />
+
+                    </div>
+
+
+                    <div class="col-md-2">
+
+                        <button type="submit"
+                                class="btn generate-btn w-100">
+
+                            <i class="bi bi-arrow-repeat me-1"></i>
+                            Generate
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- TOTAL -->
+
+        <div class="income-total-card">
+
+            <div>
+
+                <span>
+                    Total Income
+                </span>
+
+                <strong>
+                    ₱@Model.TotalPaymentsCollected.ToString("N2")
+                </strong>
+
+                <small>
+                    @Model.PaymentCount payment record(s)
+                    from
+                    @Model.StartDate.ToString("MMM dd, yyyy")
+                    to
+                    @Model.EndDate.ToString("MMM dd, yyyy")
+                </small>
+
+            </div>
+
+            <i class="bi bi-cash-coin"></i>
+
+        </div>
+
+
+        <!-- PAYMENT LIST -->
+
+        <div class="report-card">
+
+            <div class="report-card-header">
+
+                <div>
+                    <h5>
+                        Payment Records
+                    </h5>
+
+                    <small>
+                        Recorded payments for the selected period
+                    </small>
+                </div>
+
+                <span class="record-badge">
+                    @Model.PaymentCount Record(s)
+                </span>
+
+            </div>
+
+
+            @if (Model.PaymentSummaries.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table report-table align-middle mb-0">
+
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Tenant</th>
+                                <th>Payment Method</th>
+                                <th>Receipt No.</th>
+                                <th class="text-end">Amount</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var payment in Model.PaymentSummaries)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @payment.PaymentDate.ToString(
+                                            "MMM dd, yyyy")
+                                    </td>
+
+                                    <td class="fw-semibold">
+                                        @payment.TenantName
+                                    </td>
+
+                                    <td>
+                                        @payment.PaymentMethod
+                                    </td>
+
+                                    <td>
+                                        @payment.ReceiptNo
+                                    </td>
+
+                                    <td class="text-end fw-semibold">
+                                        ₱@payment.AmountPaid.ToString("N2")
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="empty-state">
+                    <i class="bi bi-cash-stack"></i>
+                    <h6>No payment records</h6>
+                    <p>No payments were recorded during the selected period.</p>
+                </div>
+            }
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- 2. OCCUPANCY REPORT -->
+    <!-- ========================================= -->
+
+    <section id="occupancyReport"
+             class="report-panel">
+
+        <div class="report-panel-header">
+
+            <div>
+                <h4>
+                    Occupancy Report
+                </h4>
+
+                <p>
+                    Current occupancy status of all apartment units.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- OCCUPANCY SUMMARY -->
+
+        <div class="row g-3 mb-4">
+
+            <div class="col-md-4">
+
+                <div class="occupancy-card">
+
+                    <span>Total Units</span>
+
+                    <strong>
+                        @Model.TotalUnits
+                    </strong>
+
+                    <i class="bi bi-buildings"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="occupancy-card">
+
+                    <span>Occupied Units</span>
+
+                    <strong class="success-number">
+                        @Model.OccupiedUnits
+                    </strong>
+
+                    <i class="bi bi-house-check"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="occupancy-card">
+
+                    <span>Vacant Units</span>
+
+                    <strong>
+                        @Model.VacantUnits
+                    </strong>
+
+                    <i class="bi bi-door-open"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- OCCUPANCY RATE -->
+
+        <div class="report-card occupancy-rate-card">
+
+            <div class="occupancy-rate-content">
+
+                <span>
+                    Current Occupancy Rate
+                </span>
+
+                <strong>
+                    @Model.OccupancyRate.ToString("N1")%
+                </strong>
+
+            </div>
+
+
+            <div class="rate-track">
+
+                <div class="rate-fill"
+                     style="width:@Model.OccupancyRate%">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- UNIT LIST -->
+
+        <div class="report-card">
+
+            <div class="report-card-header">
+
+                <div>
+                    <h5>
+                        Unit Occupancy Details
+                    </h5>
+
+                    <small>
+                        Current unit status and assigned tenant
+                    </small>
+                </div>
+
+                <span class="record-badge">
+                    @Model.TotalUnits Unit(s)
+                </span>
+
+            </div>
+
+
+            @if (Model.OccupancyUnits.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table report-table align-middle mb-0">
+
+                        <thead>
+                            <tr>
+                                <th>Unit Number</th>
+                                <th>Tenant</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var unit in Model.OccupancyUnits)
+                            {
+                                <tr>
+
+                                    <td class="fw-semibold">
+                                        @unit.UnitNumber
+                                    </td>
+
+                                    <td>
+                                        @unit.TenantName
+                                    </td>
+
+                                    <td>
+
+                                        @if (unit.UnitStatus == "Occupied")
+                                        {
+                                            <span class="status-badge occupied">
+                                                <i class="bi bi-check-circle-fill me-1"></i>
+                                                Occupied
+                                            </span>
+                                        }
+                                        else if (unit.UnitStatus == "Vacant")
+                                        {
+                                            <span class="status-badge vacant">
+                                                <i class="bi bi-door-open-fill me-1"></i>
+                                                Vacant
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge other">
+                                                @unit.UnitStatus
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="empty-state">
+                    <i class="bi bi-building"></i>
+                    <h6>No units found</h6>
+                    <p>No apartment units are currently registered.</p>
+                </div>
+            }
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- 3. UNPAID TENANT BALANCES -->
+    <!-- ========================================= -->
+
+    <section id="unpaidReport"
+             class="report-panel">
+
+        <div class="report-panel-header">
+
+            <div>
+                <h4>
+                    Tenants with Unpaid Balances
+                </h4>
+
+                <p>
+                    Outstanding billing balances that still require payment.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- OUTSTANDING TOTAL -->
+
+        <div class="income-total-card outstanding-card">
+
+            <div>
+
+                <span>
+                    Total Outstanding Balance
+                </span>
+
+                <strong>
+                    ₱@Model.TotalOutstandingBalance.ToString("N2")
+                </strong>
+
+                <small>
+                    @Model.UnpaidTenantBalances.Count tenant billing record(s)
+                    with an outstanding balance
+                </small>
+
+            </div>
+
+            <i class="bi bi-exclamation-triangle"></i>
+
+        </div>
+
+
+        <!-- UNPAID LIST -->
+
+        <div class="report-card">
+
+            <div class="report-card-header">
+
+                <div>
+                    <h5>
+                        Unpaid Tenant List
+                    </h5>
+
+                    <small>
+                        Billing records with remaining balances
+                    </small>
+                </div>
+
+                <span class="record-badge">
+                    @Model.UnpaidTenantBalances.Count Record(s)
+                </span>
+
+            </div>
+
+
+            @if (Model.UnpaidTenantBalances.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table report-table align-middle mb-0">
+
+                        <thead>
+                            <tr>
+                                <th>Tenant</th>
+                                <th>Unit</th>
+                                <th>Billing No.</th>
+                                <th>Billing Month</th>
+                                <th>Due Date</th>
+                                <th class="text-end">Balance</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var item in Model.UnpaidTenantBalances)
+                            {
+                                <tr>
+
+                                    <td class="fw-semibold">
+                                        @item.TenantName
+                                    </td>
+
+                                    <td>
+                                        @item.UnitNumber
+                                    </td>
+
+                                    <td>
+                                        @item.BillingNo
+                                    </td>
+
+                                    <td>
+                                        @item.BillingMonth.ToString(
+                                            "MMMM yyyy")
+                                    </td>
+
+                                    <td>
+                                        @item.DueDate.ToString(
+                                            "MMM dd, yyyy")
+                                    </td>
+
+                                    <td class="text-end fw-bold balance-value">
+                                        ₱@item.RemainingBalance.ToString("N2")
+                                    </td>
+
+                                    <td>
+
+                                        @if (item.BillingStatus == "Overdue")
+                                        {
+                                            <span class="status-badge overdue">
+                                                Overdue
+                                            </span>
+                                        }
+                                        else if (item.BillingStatus == "Partially Paid")
+                                        {
+                                            <span class="status-badge partial">
+                                                Partially Paid
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge unpaid">
+                                                Unpaid
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="empty-state">
+
+                    <i class="bi bi-check-circle"></i>
+
+                    <h6>
+                        No unpaid balances
+                    </h6>
+
+                    <p>
+                        All current billing records are fully paid.
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<style>
+
+    :root {
+        --armtis-primary: #0A2D4F;
+        --armtis-accent: #17B6A7;
+        --armtis-bg: #F5F7FA;
+        --armtis-border: #E3E8EE;
+        --armtis-text: #1F2937;
+        --armtis-muted: #6B7280;
+        --armtis-row-alt: #F8FAFC;
+    }
+
+
+    /* ========================================= */
+    /* PAGE */
+    /* ========================================= */
+
+    .reports-page {
+        background: var(--armtis-bg);
+        min-height: calc(100vh - 80px);
+        padding: 10px 4px 35px;
+    }
+
+
+    /* ========================================= */
+    /* HEADER */
+    /* ========================================= */
+
+    .reports-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+
+    .reports-title {
+        color: var(--armtis-primary);
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+
+    .reports-subtitle {
+        color: var(--armtis-muted);
+        font-size: .88rem;
+        margin: 0;
+    }
+
+
+    .print-btn {
+        color: var(--armtis-primary);
+        background: white;
+        border: 1px solid #C8D2DC;
+        border-radius: 9px;
+        padding: 9px 15px;
+        font-weight: 600;
+    }
+
+
+        .print-btn:hover {
+            background: var(--armtis-primary);
+            border-color: var(--armtis-primary);
+            color: white;
+        }
+
+
+    /* ========================================= */
+    /* TABS */
+    /* ========================================= */
+
+    .report-tabs {
+        display: flex;
+        gap: 5px;
+        border-bottom: 1px solid var(--armtis-border);
+        margin-bottom: 20px;
+        overflow-x: auto;
+    }
+
+
+    .report-tab {
+        border: 0;
+        background: transparent;
+        color: var(--armtis-muted);
+        padding: 11px 15px;
+        font-size: .82rem;
+        font-weight: 600;
+        white-space: nowrap;
+        border-bottom: 3px solid transparent;
+        margin-bottom: -1px;
+    }
+
+
+        .report-tab:hover {
+            color: var(--armtis-primary);
+        }
+
+
+        .report-tab.active {
+            color: var(--armtis-primary);
+            border-bottom-color: var(--armtis-accent);
+        }
+
+
+    .tab-count {
+        display: inline-block;
+        margin-left: 5px;
+        padding: 2px 6px;
+        border-radius: 999px;
+        background: #FCE8EA;
+        color: #B42332;
+        font-size: .65rem;
+    }
+
+
+    .report-panel {
+        display: none;
+    }
+
+
+        .report-panel.active {
+            display: block;
+        }
+
+
+    /* ========================================= */
+    /* PANEL HEADER */
+    /* ========================================= */
+
+    .report-panel-header {
+        margin-bottom: 14px;
+    }
+
+
+        .report-panel-header h4 {
+            color: var(--armtis-primary);
+            font-weight: 700;
+            font-size: 1.08rem;
+            margin: 0 0 3px;
+        }
+
+
+        .report-panel-header p {
+            color: var(--armtis-muted);
+            font-size: .78rem;
+            margin: 0;
+        }
+
+
+    /* ========================================= */
+    /* FILTER */
+    /* ========================================= */
+
+    .filter-card {
+        background: white;
+        border: 1px solid var(--armtis-border);
+        border-radius: 12px;
+        padding: 16px 18px;
+        margin-bottom: 14px;
+        box-shadow: 0 2px 7px rgba(10,45,79,.035);
+    }
+
+
+    .report-label {
+        color: var(--armtis-text);
+        font-size: .78rem;
+        font-weight: 600;
+    }
+
+
+    .report-input {
+        height: 41px;
+        border-color: #D6DDE5;
+        border-radius: 8px;
+        font-size: .84rem;
+        box-shadow: none;
+    }
+
+
+        .report-input:focus {
+            border-color: var(--armtis-accent);
+            box-shadow: 0 0 0 .18rem rgba(23,182,167,.12);
+        }
+
+
+    .generate-btn {
+        height: 41px;
+        background: var(--armtis-primary);
+        border-color: var(--armtis-primary);
+        color: white;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: .82rem;
+    }
+
+
+        .generate-btn:hover {
+            background: #071F36;
+            border-color: #071F36;
+            color: white;
+        }
+
+
+    /* ========================================= */
+    /* TOTAL / INCOME */
+    /* ========================================= */
+
+    .income-total-card {
+        background: var(--armtis-primary);
+        color: white;
+        border-radius: 14px;
+        padding: 19px 22px;
+        min-height: 112px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 14px;
+        box-shadow: 0 3px 12px rgba(10,45,79,.09);
+    }
+
+
+        .income-total-card span {
+            display: block;
+            font-size: .77rem;
+            opacity: .78;
+        }
+
+
+        .income-total-card strong {
+            display: block;
+            font-size: 1.75rem;
+            line-height: 1.15;
+            font-weight: 800;
+            margin: 5px 0 4px;
+            color: white !important;
+        }
+
+
+        .income-total-card small {
+            display: block;
+            font-size: .68rem;
+            opacity: .62;
+        }
+
+
+        .income-total-card > i {
+            font-size: 2.15rem;
+            opacity: .72;
+        }
+
+
+    .outstanding-card {
+        background: #243E56;
+    }
+
+
+    /* ========================================= */
+    /* GENERAL CARD */
+    /* ========================================= */
+
+    .report-card {
+        background: white;
+        border: 1px solid var(--armtis-border);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(10,45,79,.04);
+        margin-bottom: 14px;
+    }
+
+
+    .report-card-header {
+        padding: 15px 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        border-bottom: 1px solid var(--armtis-border);
+    }
+
+
+        .report-card-header h5 {
+            color: var(--armtis-primary);
+            font-size: .96rem;
+            font-weight: 700;
+            margin: 0 0 2px;
+        }
+
+
+        .report-card-header small {
+            color: var(--armtis-muted);
+            font-size: .73rem;
+        }
+
+
+    .record-badge {
+        background: #EAF7F5;
+        color: #117C72;
+        border-radius: 999px;
+        padding: 5px 9px;
+        font-size: .68rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+
+    /* ========================================= */
+    /* TABLE */
+    /* ========================================= */
+
+    .report-table {
+        font-size: .82rem;
+    }
+
+
+        .report-table thead th {
+            background: var(--armtis-accent);
+            color: white;
+            border: none;
+            padding: 10px 13px;
+            font-size: .73rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+
+        .report-table tbody td {
+            padding: 10px 13px;
+            border-color: var(--armtis-border);
+        }
+
+
+        .report-table tbody tr:nth-child(even) {
+            background: var(--armtis-row-alt);
+        }
+
+
+        .report-table tbody tr:hover {
+            background: #EEF8F6;
+        }
+
+
+    /* ========================================= */
+    /* OCCUPANCY */
+    /* ========================================= */
+
+    .occupancy-card {
+        background: white;
+        border: 1px solid var(--armtis-border);
+        border-radius: 12px;
+        padding: 17px 18px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 2px 7px rgba(10,45,79,.035);
+    }
+
+
+        .occupancy-card span {
+            display: block;
+            color: var(--armtis-muted);
+            font-size: .76rem;
+            margin-bottom: 5px;
+        }
+
+
+        .occupancy-card strong {
+            display: block;
+            color: var(--armtis-primary);
+            font-size: 1.6rem;
+            font-weight: 800;
+        }
+
+
+        .occupancy-card .success-number {
+            color: #137A49;
+        }
+
+
+        .occupancy-card > i {
+            position: absolute;
+            right: 18px;
+            top: 20px;
+            color: var(--armtis-accent);
+            font-size: 1.45rem;
+            opacity: .8;
+        }
+
+
+    .occupancy-rate-card {
+        padding: 18px;
+    }
+
+
+    .occupancy-rate-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+
+        .occupancy-rate-content span {
+            color: var(--armtis-muted);
+            font-size: .78rem;
+        }
+
+
+        .occupancy-rate-content strong {
+            color: var(--armtis-primary);
+            font-size: 1.35rem;
+            font-weight: 800;
+        }
+
+
+    .rate-track {
+        width: 100%;
+        height: 9px;
+        background: #E9EEF2;
+        border-radius: 999px;
+        overflow: hidden;
+    }
+
+
+    .rate-fill {
+        height: 100%;
+        background: var(--armtis-accent);
+        border-radius: inherit;
+    }
+
+
+    /* ========================================= */
+    /* STATUS */
+    /* ========================================= */
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 5px 9px;
+        font-size: .68rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+
+        .status-badge.occupied {
+            background: #E8F6EF;
+            color: #137A49;
+        }
+
+
+        .status-badge.vacant {
+            background: #EAF7F5;
+            color: #117C72;
+        }
+
+
+        .status-badge.other {
+            background: #EEF1F4;
+            color: #52606D;
+        }
+
+
+        .status-badge.overdue {
+            background: #FCE8EA;
+            color: #B42332;
+        }
+
+
+        .status-badge.partial {
+            background: #FFF4D6;
+            color: #8A6500;
+        }
+
+
+        .status-badge.unpaid {
+            background: #EEF1F4;
+            color: #52606D;
+        }
+
+
+    .balance-value {
+        color: #B42332;
+    }
+
+
+    /* ========================================= */
+    /* EMPTY */
+    /* ========================================= */
+
+    .empty-state {
+        text-align: center;
+        padding: 42px 20px;
+        color: var(--armtis-muted);
+    }
+
+
+        .empty-state i {
+            display: block;
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+
+        .empty-state h6 {
+            color: var(--armtis-primary);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+
+        .empty-state p {
+            margin: 0;
+            font-size: .77rem;
+        }
+
+
+    /* ========================================= */
+    /* RESPONSIVE */
+    /* ========================================= */
+
+    @@media (max-width: 767.98px) {
+
+        .reports-page {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+
+        .reports-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+
+        .print-btn {
+            width: 100%;
+        }
+
+
+        .income-total-card strong {
+            font-size: 1.45rem;
+        }
+    }
+
+
+    /* ========================================= */
+    /* PRINT */
+    /* ========================================= */
+
+    @@media print {
+
+        body * {
+            visibility: hidden !important;
+        }
+
+
+        .report-panel.active,
+        .report-panel.active * {
+            visibility: visible !important;
+        }
+
+
+        .report-panel.active {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+
+
+        .reports-header,
+        .report-tabs,
+        .filter-card,
+        .print-btn {
+            display: none !important;
+        }
+
+
+        .report-card,
+        .income-total-card,
+        .occupancy-card {
+            box-shadow: none !important;
+            break-inside: avoid;
+        }
+
+
+        .income-total-card {
+            color: #000 !important;
+            background: white !important;
+            border: 1px solid #000 !important;
+        }
+
+
+            .income-total-card strong,
+            .income-total-card span,
+            .income-total-card small,
+            .income-total-card > i {
+                color: #000 !important;
+                opacity: 1 !important;
+            }
+
+
+        @@page {
+            size: A4;
+            margin: 12mm;
+        }
+    }
+
+</style>
+
+
+<script>
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function() {
+
+            const tabs =
+                document.querySelectorAll(".report-tab");
+
+            const panels =
+                document.querySelectorAll(".report-panel");
+
+
+            tabs.forEach(function(tab) {
+
+                tab.addEventListener(
+                    "click",
+                    function() {
+
+                        const targetId =
+                            tab.getAttribute("data-target");
+
+
+                        tabs.forEach(function(item) {
+                            item.classList.remove("active");
+                        });
+
+
+                        panels.forEach(function(panel) {
+                            panel.classList.remove("active");
+                        });
+
+
+                        tab.classList.add("active");
+
+
+                        const target =
+                            document.getElementById(targetId);
+
+
+                        if (target) {
+                            target.classList.add("active");
+                        }
+
+                    });
+
+            });
+
+        });
+
+
+    function printActiveReport() {
+
+        window.print();
+
+    }
+
+</script>

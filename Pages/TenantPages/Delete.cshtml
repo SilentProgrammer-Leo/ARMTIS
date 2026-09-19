@@ -1,0 +1,840 @@
+@page
+@model ARMTIS_Capstone_Project.Pages.TenantPages.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete Tenant";
+
+    var fullName =
+        $"{Model.Tenant.FirstName} {Model.Tenant.LastName}";
+}
+
+<div class="tenant-delete-page">
+
+    <!-- ========================================= -->
+    <!-- PAGE HEADER -->
+    <!-- ========================================= -->
+
+    <div class="delete-header">
+
+        <div>
+            <h2 class="delete-title">
+                <i class="bi bi-person-x-fill me-2"></i>
+                Delete Tenant
+            </h2>
+
+            <p class="delete-subtitle">
+                Review the tenant information before confirming deletion.
+            </p>
+        </div>
+
+        <a asp-page="./Index"
+           class="btn btn-outline-secondary">
+
+            <i class="bi bi-arrow-left me-1"></i>
+            Back to Tenants
+
+        </a>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- WARNING -->
+    <!-- ========================================= -->
+
+    <div class="delete-warning">
+
+        <div class="warning-icon">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+        </div>
+
+        <div>
+
+            <strong>
+                Are you sure you want to delete this tenant?
+            </strong>
+
+            <p>
+                This action cannot be undone. Please review the tenant
+                and rental information below before continuing.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- TENANT PROFILE -->
+    <!-- ========================================= -->
+
+    <div class="delete-card">
+
+        <div class="delete-card-header">
+
+            <div class="tenant-avatar">
+                <i class="bi bi-person-fill"></i>
+            </div>
+
+            <div>
+
+                <h4>
+                    @fullName
+                </h4>
+
+                <span>
+                    Tenant ID: @Model.Tenant.TenantID
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ===================================== -->
+        <!-- TENANT INFORMATION -->
+        <!-- ===================================== -->
+
+        <div class="delete-card-body">
+
+            <div class="section-heading">
+
+                <div class="section-icon">
+                    <i class="bi bi-person-vcard-fill"></i>
+                </div>
+
+                <div>
+
+                    <h5>
+                        Tenant Information
+                    </h5>
+
+                    <small>
+                        Basic information currently recorded
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-grid">
+
+                <!-- FIRST NAME -->
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        First Name
+                    </span>
+
+                    <span class="info-value">
+                        @Model.Tenant.FirstName
+                    </span>
+
+                </div>
+
+
+                <!-- LAST NAME -->
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Last Name
+                    </span>
+
+                    <span class="info-value">
+                        @Model.Tenant.LastName
+                    </span>
+
+                </div>
+
+
+                <!-- CONTACT -->
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Contact Number
+                    </span>
+
+                    <span class="info-value">
+
+                        @(string.IsNullOrWhiteSpace(
+                            Model.Tenant.ContactNo)
+                            ? "N/A"
+                            : Model.Tenant.ContactNo)
+
+                    </span>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Email Address
+                    </span>
+
+                    <span class="info-value">
+
+                        @(string.IsNullOrWhiteSpace(
+                            Model.Tenant.Email)
+                            ? "N/A"
+                            : Model.Tenant.Email)
+
+                    </span>
+
+                </div>
+
+
+                <!-- ADDRESS -->
+
+                <div class="info-item info-full">
+
+                    <span class="info-label">
+                        Address
+                    </span>
+
+                    <span class="info-value">
+
+                        @(string.IsNullOrWhiteSpace(
+                            Model.Tenant.Address)
+                            ? "N/A"
+                            : Model.Tenant.Address)
+
+                    </span>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Tenant Status
+                    </span>
+
+                    @if (Model.Tenant.Status?.Equals(
+                        "Active",
+                        StringComparison.OrdinalIgnoreCase) == true)
+                    {
+                        <span class="status-badge active">
+                            <i class="bi bi-check-circle-fill me-1"></i>
+                            Active
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="status-badge inactive">
+                            @Model.Tenant.Status
+                        </span>
+                    }
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- RENTAL INFORMATION -->
+            <!-- ================================= -->
+
+            <div class="section-divider"></div>
+
+            <div class="section-heading">
+
+                <div class="section-icon">
+                    <i class="bi bi-house-door-fill"></i>
+                </div>
+
+                <div>
+
+                    <h5>
+                        Rental Information
+                    </h5>
+
+                    <small>
+                        Unit and lease details
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="rental-grid">
+
+                <!-- UNIT -->
+
+                <div class="rental-item">
+
+                    <span class="info-label">
+                        Assigned Unit
+                    </span>
+
+                    <strong>
+
+                        @(Model.Tenant.Unit?.UnitNumber
+                            ?? "N/A")
+
+                    </strong>
+
+                </div>
+
+
+                <!-- UNIT ID -->
+
+                <div class="rental-item">
+
+                    <span class="info-label">
+                        Unit ID
+                    </span>
+
+                    <strong>
+                        @Model.Tenant.UnitID
+                    </strong>
+
+                </div>
+
+
+                <!-- LEASE START -->
+
+                <div class="rental-item">
+
+                    <span class="info-label">
+                        Lease Start
+                    </span>
+
+                    <strong>
+                        @Model.Tenant.LeaseStartDate.ToString(
+                            "MMMM dd, yyyy")
+                    </strong>
+
+                </div>
+
+
+                <!-- LEASE END -->
+
+                <div class="rental-item">
+
+                    <span class="info-label">
+                        Lease End
+                    </span>
+
+                    <strong>
+                        @Model.Tenant.LeaseEndDate.ToString(
+                            "MMMM dd, yyyy")
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- DELETE ACTION -->
+        <!-- ========================================= -->
+
+        <div class="delete-card-footer">
+
+            <form method="post"
+                  class="delete-form">
+
+                <input type="hidden"
+                       asp-for="Tenant.TenantID" />
+
+
+                <a asp-page="./Index"
+                   class="btn cancel-btn">
+
+                    <i class="bi bi-x-circle me-1"></i>
+                    Cancel
+
+                </a>
+
+
+                <button type="submit"
+                        class="btn delete-btn">
+
+                    <i class="bi bi-trash3-fill me-1"></i>
+                    Delete Tenant
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- FINAL WARNING -->
+    <!-- ========================================= -->
+
+    <div class="final-warning">
+
+        <i class="bi bi-shield-exclamation"></i>
+
+        <span>
+            <strong>Important:</strong>
+            Deleting a tenant is a permanent action.
+            Make sure this is the correct tenant before confirming.
+        </span>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    :root {
+        --armtis-primary: #0A2D4F;
+        --armtis-accent: #17B6A7;
+        --armtis-bg: #F5F7FA;
+        --armtis-border: #E3E8EE;
+        --armtis-text: #1F2937;
+        --armtis-muted: #6B7280;
+    }
+
+
+    /* ========================================= */
+    /* PAGE */
+    /* ========================================= */
+
+    .tenant-delete-page {
+        background: var(--armtis-bg);
+        min-height: calc(100vh - 80px);
+        padding: 10px 4px 35px;
+    }
+
+
+    /* ========================================= */
+    /* HEADER */
+    /* ========================================= */
+
+    .delete-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 22px;
+    }
+
+
+    .delete-title {
+        color: var(--armtis-primary);
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+
+    .delete-subtitle {
+        color: var(--armtis-muted);
+        margin: 0;
+        font-size: .9rem;
+    }
+
+
+    /* ========================================= */
+    /* WARNING */
+    /* ========================================= */
+
+    .delete-warning {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        background: #FFF4D6;
+        border: 1px solid #F0D994;
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-bottom: 18px;
+        color: #725400;
+    }
+
+
+    .warning-icon {
+        font-size: 1.25rem;
+        margin-top: 1px;
+    }
+
+
+    .delete-warning strong {
+        display: block;
+        font-size: .86rem;
+        margin-bottom: 3px;
+    }
+
+
+    .delete-warning p {
+        margin: 0;
+        font-size: .78rem;
+    }
+
+
+    /* ========================================= */
+    /* MAIN CARD */
+    /* ========================================= */
+
+    .delete-card {
+        background: white;
+        border: 1px solid var(--armtis-border);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(10,45,79,.05);
+    }
+
+
+    /* ========================================= */
+    /* CARD HEADER */
+    /* ========================================= */
+
+    .delete-card-header {
+        background: var(--armtis-primary);
+        color: white;
+        padding: 22px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+
+    .tenant-avatar {
+        width: 54px;
+        height: 54px;
+        min-width: 54px;
+        border-radius: 50%;
+        background: rgba(23,182,167,.18);
+        border: 1px solid rgba(255,255,255,.18);
+        display: grid;
+        place-items: center;
+        color: #72E0D5;
+        font-size: 1.45rem;
+    }
+
+
+    .delete-card-header h4 {
+        margin: 0 0 3px;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+
+
+    .delete-card-header span {
+        font-size: .75rem;
+        opacity: .72;
+    }
+
+
+    /* ========================================= */
+    /* CARD BODY */
+    /* ========================================= */
+
+    .delete-card-body {
+        padding: 26px;
+    }
+
+
+    /* ========================================= */
+    /* SECTION */
+    /* ========================================= */
+
+    .section-heading {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        margin-bottom: 20px;
+    }
+
+
+    .section-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: #EAF7F5;
+        color: var(--armtis-accent);
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+    }
+
+
+    .section-heading h5 {
+        color: var(--armtis-primary);
+        font-weight: 700;
+        margin: 0 0 2px;
+        font-size: 1rem;
+    }
+
+
+    .section-heading small {
+        color: var(--armtis-muted);
+        font-size: .76rem;
+    }
+
+
+    /* ========================================= */
+    /* INFORMATION GRID */
+    /* ========================================= */
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px 30px;
+    }
+
+
+    .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+
+    .info-full {
+        grid-column: 1 / -1;
+    }
+
+
+    .info-label {
+        color: var(--armtis-muted);
+        font-size: .73rem;
+        font-weight: 500;
+    }
+
+
+    .info-value {
+        color: var(--armtis-text);
+        font-size: .9rem;
+        font-weight: 600;
+        word-break: break-word;
+    }
+
+
+    /* ========================================= */
+    /* STATUS */
+    /* ========================================= */
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        border-radius: 999px;
+        padding: 5px 10px;
+        font-size: .72rem;
+        font-weight: 600;
+    }
+
+
+        .status-badge.active {
+            background: #E8F6EF;
+            color: #137A49;
+        }
+
+
+        .status-badge.inactive {
+            background: #EEF1F4;
+            color: #52606D;
+        }
+
+
+    /* ========================================= */
+    /* DIVIDER */
+    /* ========================================= */
+
+    .section-divider {
+        height: 1px;
+        background: var(--armtis-border);
+        margin: 28px 0;
+    }
+
+
+    /* ========================================= */
+    /* RENTAL GRID */
+    /* ========================================= */
+
+    .rental-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+
+    .rental-item {
+        background: #F8FAFC;
+        border: 1px solid var(--armtis-border);
+        border-radius: 10px;
+        padding: 14px;
+    }
+
+
+        .rental-item strong {
+            display: block;
+            color: var(--armtis-primary);
+            font-size: .88rem;
+            margin-top: 5px;
+        }
+
+
+    /* ========================================= */
+    /* CARD FOOTER */
+    /* ========================================= */
+
+    .delete-card-footer {
+        border-top: 1px solid var(--armtis-border);
+        padding: 18px 26px;
+        background: #FAFBFC;
+    }
+
+
+    .delete-form {
+        display: flex;
+        justify-content: flex-end;
+        gap: 9px;
+        margin: 0;
+    }
+
+
+    .cancel-btn {
+        background: white;
+        border: 1px solid #D6DDE5;
+        color: var(--armtis-text);
+        border-radius: 8px;
+        padding: 9px 18px;
+        font-weight: 600;
+    }
+
+
+        .cancel-btn:hover {
+            background: #F2F4F6;
+            color: var(--armtis-text);
+        }
+
+
+    .delete-btn {
+        background: #B42332;
+        border: 1px solid #B42332;
+        color: white;
+        border-radius: 8px;
+        padding: 9px 18px;
+        font-weight: 600;
+    }
+
+
+        .delete-btn:hover {
+            background: #941D29;
+            border-color: #941D29;
+            color: white;
+        }
+
+
+    /* ========================================= */
+    /* FINAL WARNING */
+    /* ========================================= */
+
+    .final-warning {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-top: 14px;
+        padding: 11px 14px;
+        border-radius: 10px;
+        background: #FCE8EA;
+        border: 1px solid #F1C2C7;
+        color: #8A1C28;
+        font-size: .76rem;
+    }
+
+
+        .final-warning i {
+            font-size: 1rem;
+        }
+
+
+    /* ========================================= */
+    /* RESPONSIVE */
+    /* ========================================= */
+
+    @@media (max-width: 991.98px) {
+
+        .rental-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+
+    @@media (max-width: 767.98px) {
+
+        .tenant-delete-page {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+
+        .delete-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+
+            .delete-header .btn {
+                width: 100%;
+            }
+
+
+        .delete-card-body {
+            padding: 20px;
+        }
+
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+
+        .info-full {
+            grid-column: auto;
+        }
+
+
+        .delete-card-footer {
+            padding: 18px 20px;
+        }
+
+
+        .delete-form {
+            flex-direction: column-reverse;
+        }
+
+
+            .delete-form .btn {
+                width: 100%;
+            }
+    }
+
+
+    @@media (max-width: 575.98px) {
+
+        .rental-grid {
+            grid-template-columns: 1fr;
+        }
+
+
+        .delete-card-header {
+            padding: 18px;
+        }
+
+
+            .delete-card-header h4 {
+                font-size: 1.05rem;
+            }
+    }
+
+</style>

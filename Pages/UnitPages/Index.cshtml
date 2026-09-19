@@ -1,0 +1,777 @@
+@page
+@model ARMTIS_Capstone_Project.Pages.UnitPages.IndexModel
+
+@{
+    ViewData["Title"] = "Unit Management";
+
+    var totalUnits = Model.Unit?.Count ?? 0;
+
+    var occupiedUnits = Model.Unit?.Count(u =>
+        u.UnitStatus?.Equals(
+            "Occupied",
+            StringComparison.OrdinalIgnoreCase
+        ) == true) ?? 0;
+
+    var vacantUnits = Model.Unit?.Count(u =>
+        u.UnitStatus?.Equals(
+            "Vacant",
+            StringComparison.OrdinalIgnoreCase
+        ) == true) ?? 0;
+}
+
+<div class="unit-page">
+
+    <!-- ========================================= -->
+    <!-- PAGE HEADER -->
+    <!-- ========================================= -->
+
+    <div class="unit-header">
+
+        <div>
+            <h2 class="unit-title">
+                <i class="bi bi-building me-2"></i>
+                Unit Management
+            </h2>
+
+            <p class="unit-subtitle">
+                Manage apartment units, rental rates, and occupancy status.
+            </p>
+        </div>
+
+        <a asp-page="./Create"
+           class="btn btn-primary unit-add-btn">
+
+            <i class="bi bi-plus-circle-fill me-1"></i>
+            Add Unit
+
+        </a>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- SUMMARY CARDS -->
+    <!-- ========================================= -->
+
+    <div class="row g-3 mb-4">
+
+        <!-- TOTAL -->
+        <div class="col-sm-6 col-lg-4">
+
+            <div class="unit-summary-card">
+
+                <div class="summary-icon">
+                    <i class="bi bi-buildings-fill"></i>
+                </div>
+
+                <div>
+                    <div class="summary-label">
+                        Total Units
+                    </div>
+
+                    <div class="summary-value">
+                        @totalUnits
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- OCCUPIED -->
+        <div class="col-sm-6 col-lg-4">
+
+            <div class="unit-summary-card">
+
+                <div class="summary-icon">
+                    <i class="bi bi-house-check-fill"></i>
+                </div>
+
+                <div>
+                    <div class="summary-label">
+                        Occupied Units
+                    </div>
+
+                    <div class="summary-value">
+                        @occupiedUnits
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- VACANT -->
+        <div class="col-sm-6 col-lg-4">
+
+            <div class="unit-summary-card">
+
+                <div class="summary-icon">
+                    <i class="bi bi-door-open-fill"></i>
+                </div>
+
+                <div>
+                    <div class="summary-label">
+                        Vacant Units
+                    </div>
+
+                    <div class="summary-value">
+                        @vacantUnits
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- UNIT TABLE -->
+    <!-- ========================================= -->
+
+    <div class="unit-card">
+
+        <!-- CARD HEADER -->
+
+        <div class="unit-card-header">
+
+            <div>
+
+                <h5 class="mb-1">
+                    Unit List
+                </h5>
+
+                <small>
+                    View and manage registered apartment units
+                </small>
+
+            </div>
+
+            <span class="unit-count-badge">
+                @totalUnits Unit(s)
+            </span>
+
+        </div>
+
+
+        <!-- CARD BODY -->
+
+        <div class="unit-card-body">
+
+            @if (Model.Unit != null && Model.Unit.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table unit-table align-middle mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Unit Number
+                                </th>
+
+                                <th>
+                                    Description
+                                </th>
+
+                                <th>
+                                    Monthly Rent
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th class="text-center">
+                                    Capacity
+                                </th>
+
+                                <th class="text-center">
+                                    Actions
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var item in Model.Unit)
+                            {
+                                <tr>
+
+                                    <!-- UNIT NUMBER -->
+
+                                    <td>
+
+                                        <span class="unit-number-badge">
+                                            <i class="bi bi-house-door me-1"></i>
+                                            @item.UnitNumber
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- DESCRIPTION -->
+
+                                    <td>
+
+                                        @if (!string.IsNullOrWhiteSpace(item.Description))
+                                        {
+                                            <span>
+                                                @item.Description
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                No description
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- MONTHLY RENT -->
+
+                                    <td>
+
+                                        <span class="rent-value">
+                                            ₱@item.MonthlyRent.ToString("N2")
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- STATUS -->
+
+                                    <td>
+
+                                        @if (item.UnitStatus?.Equals(
+                                            "Occupied",
+                                            StringComparison.OrdinalIgnoreCase) == true)
+                                        {
+                                            <span class="unit-status occupied">
+
+                                                <i class="bi bi-check-circle-fill me-1"></i>
+                                                Occupied
+
+                                            </span>
+                                        }
+                                        else if (item.UnitStatus?.Equals(
+                                            "Vacant",
+                                            StringComparison.OrdinalIgnoreCase) == true)
+                                        {
+                                            <span class="unit-status vacant">
+
+                                                <i class="bi bi-door-open-fill me-1"></i>
+                                                Vacant
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="unit-status other">
+                                                @item.UnitStatus
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- CAPACITY -->
+
+                                    <td class="text-center">
+
+                                        <span class="capacity-value">
+                                            <i class="bi bi-people me-1"></i>
+                                            @item.Capacity
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- ACTIONS -->
+
+                                    <td class="text-center">
+
+                                        <div class="unit-actions">
+
+                                            <a asp-page="./Edit"
+                                               asp-route-id="@item.UnitID"
+                                               class="btn unit-action-edit"
+                                               title="Edit Unit">
+
+                                                <i class="bi bi-pencil-square"></i>
+
+                                            </a>
+
+
+                                            <a asp-page="./Delete"
+                                               asp-route-id="@item.UnitID"
+                                               class="btn unit-action-delete"
+                                               title="Delete Unit">
+
+                                                <i class="bi bi-trash3"></i>
+
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <!-- EMPTY STATE -->
+
+                <div class="unit-empty-state">
+
+                    <div class="empty-icon">
+                        <i class="bi bi-building"></i>
+                    </div>
+
+                    <h5>
+                        No units found
+                    </h5>
+
+                    <p>
+                        There are currently no apartment units
+                        registered in the system.
+                    </p>
+
+                    <a asp-page="./Create"
+                       class="btn btn-primary">
+
+                        <i class="bi bi-plus-circle-fill me-1"></i>
+                        Add Your First Unit
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    :root {
+        --armtis-primary: #0A2D4F;
+        --armtis-accent: #17B6A7;
+        --armtis-bg: #F5F7FA;
+        --armtis-border: #E3E8EE;
+        --armtis-text: #1F2937;
+        --armtis-muted: #6B7280;
+        --armtis-row-alt: #F8FAFC;
+    }
+
+
+    /* ========================================= */
+    /* PAGE */
+    /* ========================================= */
+
+    .unit-page {
+        background: var(--armtis-bg);
+        min-height: calc(100vh - 80px);
+        padding: 10px 4px 30px;
+    }
+
+
+    /* ========================================= */
+    /* HEADER */
+    /* ========================================= */
+
+    .unit-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+
+
+    .unit-title {
+        color: var(--armtis-primary);
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+
+    .unit-subtitle {
+        color: var(--armtis-muted);
+        margin-bottom: 0;
+        font-size: .9rem;
+    }
+
+
+    .unit-add-btn {
+        background: var(--armtis-primary);
+        border-color: var(--armtis-primary);
+        padding: 10px 18px;
+        border-radius: 9px;
+        font-weight: 600;
+    }
+
+
+        .unit-add-btn:hover {
+            background: #071F36;
+            border-color: #071F36;
+        }
+
+
+    /* ========================================= */
+    /* SUMMARY CARDS */
+    /* ========================================= */
+
+    .unit-summary-card {
+        background: white;
+        border: 1px solid var(--armtis-border);
+        border-radius: 14px;
+        padding: 18px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        height: 100%;
+        box-shadow: 0 2px 8px rgba(10, 45, 79, .05);
+    }
+
+
+    .summary-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        background: #EAF7F5;
+        color: var(--armtis-accent);
+        display: grid;
+        place-items: center;
+        font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+
+
+    .summary-label {
+        color: var(--armtis-muted);
+        font-size: .8rem;
+        margin-bottom: 3px;
+    }
+
+
+    .summary-value {
+        color: var(--armtis-primary);
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+
+
+    /* ========================================= */
+    /* MAIN CARD */
+    /* ========================================= */
+
+    .unit-card {
+        background: white;
+        border: 1px solid var(--armtis-border);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(10, 45, 79, .04);
+    }
+
+
+    .unit-card-header {
+        padding: 17px 20px;
+        border-bottom: 1px solid var(--armtis-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
+
+
+        .unit-card-header h5 {
+            color: var(--armtis-primary);
+            font-weight: 700;
+        }
+
+
+        .unit-card-header small {
+            color: var(--armtis-muted);
+        }
+
+
+    .unit-count-badge {
+        background: #EAF7F5;
+        color: #117C72;
+        padding: 6px 11px;
+        border-radius: 999px;
+        font-size: .75rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+
+    .unit-card-body {
+        padding: 0;
+    }
+
+
+    /* ========================================= */
+    /* TABLE */
+    /* ========================================= */
+
+    .unit-table {
+        font-size: .88rem;
+    }
+
+
+        .unit-table thead th {
+            background: var(--armtis-accent);
+            color: white;
+            border: none;
+            padding: 13px 15px;
+            font-size: .78rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+
+        .unit-table tbody td {
+            padding: 13px 15px;
+            border-color: var(--armtis-border);
+            color: var(--armtis-text);
+        }
+
+
+        .unit-table tbody tr:nth-child(even) {
+            background: var(--armtis-row-alt);
+        }
+
+
+        .unit-table tbody tr:hover {
+            background: #EEF8F6;
+        }
+
+
+    /* ========================================= */
+    /* UNIT NUMBER */
+    /* ========================================= */
+
+    .unit-number-badge {
+        display: inline-flex;
+        align-items: center;
+        background: #EEF3F7;
+        color: var(--armtis-primary);
+        border-radius: 7px;
+        padding: 5px 9px;
+        font-size: .77rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+
+    /* ========================================= */
+    /* RENT */
+    /* ========================================= */
+
+    .rent-value {
+        color: var(--armtis-primary);
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+
+    /* ========================================= */
+    /* STATUS */
+    /* ========================================= */
+
+    .unit-status {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 5px 10px;
+        font-size: .72rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+
+        .unit-status.occupied {
+            background: #E8F6EF;
+            color: #137A49;
+        }
+
+
+        .unit-status.vacant {
+            background: #EAF7F5;
+            color: #117C72;
+        }
+
+
+        .unit-status.other {
+            background: #EEF1F4;
+            color: #52606D;
+        }
+
+
+    /* ========================================= */
+    /* CAPACITY */
+    /* ========================================= */
+
+    .capacity-value {
+        display: inline-flex;
+        align-items: center;
+        color: var(--armtis-text);
+        font-weight: 600;
+        font-size: .8rem;
+    }
+
+
+        .capacity-value i {
+            color: var(--armtis-accent);
+        }
+
+
+    /* ========================================= */
+    /* ACTIONS */
+    /* ========================================= */
+
+    .unit-actions {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+    }
+
+
+    .unit-action-edit,
+    .unit-action-delete {
+        width: 34px;
+        height: 34px;
+        padding: 0;
+        border-radius: 7px;
+        display: inline-grid;
+        place-items: center;
+    }
+
+
+    .unit-action-edit {
+        color: var(--armtis-primary);
+        border: 1px solid #B8C6D3;
+        background: white;
+    }
+
+
+        .unit-action-edit:hover {
+            background: var(--armtis-primary);
+            border-color: var(--armtis-primary);
+            color: white;
+        }
+
+
+    .unit-action-delete {
+        color: #B42332;
+        border: 1px solid #E4B8BE;
+        background: white;
+    }
+
+
+        .unit-action-delete:hover {
+            background: #B42332;
+            border-color: #B42332;
+            color: white;
+        }
+
+
+    /* ========================================= */
+    /* EMPTY STATE */
+    /* ========================================= */
+
+    .unit-empty-state {
+        text-align: center;
+        padding: 65px 20px;
+        color: var(--armtis-muted);
+    }
+
+
+    .empty-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: #EAF7F5;
+        color: var(--armtis-accent);
+        display: grid;
+        place-items: center;
+        font-size: 2rem;
+        margin: 0 auto 16px;
+    }
+
+
+    .unit-empty-state h5 {
+        color: var(--armtis-primary);
+        font-weight: 700;
+    }
+
+
+    .unit-empty-state p {
+        margin-bottom: 18px;
+    }
+
+
+    /* ========================================= */
+    /* RESPONSIVE */
+    /* ========================================= */
+
+    @@media (max-width: 767.98px) {
+
+        .unit-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .unit-add-btn {
+            width: 100%;
+        }
+
+        .unit-card-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+
+    @@media (max-width: 575.98px) {
+
+        .unit-page {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .unit-table {
+            font-size: .8rem;
+        }
+
+            .unit-table tbody td,
+            .unit-table thead th {
+                padding: 10px;
+            }
+    }
+
+</style>

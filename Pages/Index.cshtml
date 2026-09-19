@@ -1,0 +1,361 @@
+@page
+@model IndexModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid py-3 dashboard-page">
+
+    <!-- Dashboard Header -->
+    <div class="dashboard-header d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Admin Dashboard</h2>
+            <p class="text-muted mb-0">Apartment rental management overview</p>
+        </div>
+        <div class="dashboard-date">
+            <i class="bi bi-calendar3 me-1"></i>
+            @DateTime.Today.ToString("MMMM dd, yyyy")
+        </div>
+    </div>
+
+    <!-- PROPERTY SUMMARY -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-xl-3">
+            <div class="dashboard-kpi">
+                <div class="kpi-icon"><i class="bi bi-building"></i></div>
+                <div><div class="kpi-label">Total Units</div><div class="kpi-value">@Model.TotalUnits</div></div>
+            </div>
+        </div>
+        <div class="col-6 col-xl-3">
+            <div class="dashboard-kpi">
+                <div class="kpi-icon"><i class="bi bi-house-check"></i></div>
+                <div><div class="kpi-label">Occupied Units</div><div class="kpi-value">@Model.OccupiedUnits</div></div>
+            </div>
+        </div>
+        <div class="col-6 col-xl-3">
+            <div class="dashboard-kpi">
+                <div class="kpi-icon"><i class="bi bi-door-open"></i></div>
+                <div><div class="kpi-label">Vacant Units</div><div class="kpi-value">@Model.VacantUnits</div></div>
+            </div>
+        </div>
+        <div class="col-6 col-xl-3">
+            <div class="dashboard-kpi">
+                <div class="kpi-icon"><i class="bi bi-people"></i></div>
+                <div><div class="kpi-label">Active Tenants</div><div class="kpi-value">@Model.ActiveTenants</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FINANCIAL SNAPSHOT -->
+    <div class="section-title mb-2">
+        <div>
+            <h5 class="fw-bold mb-0">Financial Snapshot</h5>
+            <small class="text-muted">Current collections and outstanding balance</small>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+
+        <!-- MONTHLY COLLECTIONS -->
+        <div class="col-md-6">
+            <div class="finance-card">
+                <div class="finance-content">
+                    <span class="finance-label">Monthly Collections</span>
+
+                    <div class="finance-value">
+                        <span class="currency">₱</span>
+                        <span>@Model.MonthlyCollections.ToString("N2")</span>
+                    </div>
+                </div>
+
+                <i class="bi bi-cash-stack finance-icon"></i>
+            </div>
+        </div>
+
+        <!-- OUTSTANDING BALANCE -->
+        <div class="col-md-6">
+            <div class="finance-card">
+                <div class="finance-content">
+                    <span class="finance-label">Outstanding Balance</span>
+
+                    <div class="finance-value">
+                        <span class="currency">₱</span>
+                        <span>@Model.OutstandingBalance.ToString("N2")</span>
+                    </div>
+                </div>
+
+                <i class="bi bi-exclamation-circle finance-icon"></i>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- BILLING / MAINTENANCE / NOTIFICATIONS -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-lg-5">
+            <div class="dashboard-card h-100">
+                <div class="card-heading">
+                    <div><h5>Billing Status</h5><small>Current billing summary</small></div>
+                    <a asp-page="/PaymentPages/BillingStatementPages/Index" class="btn btn-sm btn-outline-primary">View</a>
+                </div>
+                <div class="billing-status-grid">
+                    <div class="status-box"><span class="status-dot paid"></span><div><strong>@Model.PaidBills</strong><small>Paid</small></div></div>
+                    <div class="status-box"><span class="status-dot unpaid"></span><div><strong>@Model.UnpaidBills</strong><small>Unpaid</small></div></div>
+                    <div class="status-box"><span class="status-dot overdue"></span><div><strong>@Model.OverdueBills</strong><small>Overdue</small></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="dashboard-card h-100">
+                <div class="card-heading">
+                    <div><h5><i class="bi bi-tools me-2"></i>Maintenance</h5><small>Request workload</small></div>
+                    <a asp-page="/Maintenance/MaintenanceIndex" class="btn btn-sm btn-outline-primary">View</a>
+                </div>
+                <div class="maintenance-list">
+                    <div class="maintenance-row"><span>Pending</span><strong>@Model.PendingMaintenance</strong></div>
+                    <div class="maintenance-row"><span>In Progress</span><strong>@Model.InProgressMaintenance</strong></div>
+                    <div class="maintenance-row"><span>Completed</span><strong>@Model.CompletedMaintenance</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="dashboard-card h-100">
+                <div class="card-heading">
+                    <div><h5><i class="bi bi-bell me-2"></i>Notifications</h5><small>System summary</small></div>
+                    <a asp-page="/Notifications/Index" class="btn btn-sm btn-outline-primary">View</a>
+                </div>
+                <div class="notification-summary">
+                    <div><span class="summary-number">@Model.TotalNotifications</span><small>Total</small></div>
+                    <div class="notification-divider"></div>
+                    <div><span class="summary-number">@Model.UnreadNotifications</span><small>Unread</small></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="dashboard-card mb-4">
+        <div class="card-heading">
+            <div><h5><i class="bi bi-lightning-charge me-2"></i>Quick Actions</h5><small>Frequently used management pages</small></div>
+        </div>
+        <div class="quick-actions">
+            <a asp-page="/TenantPages/Index" class="quick-action"><i class="bi bi-people"></i><span>Tenants</span></a>
+            <a asp-page="/UnitPages/Index" class="quick-action"><i class="bi bi-building"></i><span>Units</span></a>
+            <a asp-page="/PaymentPages/BillingStatementPages/Index" class="quick-action"><i class="bi bi-receipt"></i><span>Billing</span></a>
+            <a asp-page="/Maintenance/MaintenanceIndex" class="quick-action"><i class="bi bi-tools"></i><span>Maintenance</span></a>
+            <a asp-page="/Reports/ReportsIndex" class="quick-action"><i class="bi bi-bar-chart"></i><span>Reports</span></a>
+        </div>
+    </div>
+
+    <!-- CURRENT MONTH BILLING -->
+    <div class="dashboard-card mb-4">
+        <div class="card-heading">
+            <div><h5>Current Month Billing</h5><small>@DateTime.Today.ToString("MMMM yyyy")</small></div>
+            <a asp-page="/PaymentPages/BillingStatementPages/Index" class="btn btn-sm btn-outline-primary">View All</a>
+        </div>
+
+        @if (Model.CurrentMonthBillings.Any())
+        {
+            <div class="table-responsive">
+                <table class="table dashboard-table align-middle mb-0">
+                    <thead><tr><th>Billing No.</th><th>Tenant</th><th>Unit</th><th>Due Date</th><th>Amount Due</th><th>Status</th></tr></thead>
+                    <tbody>
+                        @foreach (var item in Model.CurrentMonthBillings)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@item.BillingNo</td>
+                                <td>@(item.Tenant != null ? $"{item.Tenant.FirstName} {item.Tenant.LastName}" : "N/A")</td>
+                                <td>@(item.Unit?.UnitNumber ?? "N/A")</td>
+                                <td>@item.DueDate.ToString("MMM dd, yyyy")</td>
+                                <td class="fw-semibold">₱@item.TotalAmountDue.ToString("N2")</td>
+                                <td>
+                                    @if (item.BillingStatus == "Paid")
+                                    {
+                                        <span class="status-badge paid-badge">Paid</span>
+                                    }
+                                    else if (item.BillingStatus == "Unpaid")
+                                    {
+
+                                        <span class="status-badge unpaid-badge">Unpaid</span>
+                                    }
+                                    else if (item.BillingStatus == "Overdue")
+                                    {
+
+                                        <span class="status-badge overdue-badge">Overdue</span>
+                                    }
+                                    else
+                                    {
+
+                                        <span class="status-badge pending-badge">Pending</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="empty-state"><i class="bi bi-receipt"></i><p>No billing statements generated for this month.</p></div>
+        }
+    </div>
+
+    <!-- RECENT ACTIVITY -->
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <div class="dashboard-card h-100">
+                <div class="card-heading">
+                    <div><h5><i class="bi bi-cash-stack me-2"></i>Recent Payments</h5><small>Latest recorded payments</small></div>
+                    <a asp-page="/PaymentPages/PaymentHistory/Index" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                @if (Model.RecentPayments.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table dashboard-table align-middle mb-0">
+                            <thead><tr><th>Tenant</th><th>Amount</th><th>Date</th></tr></thead>
+                            <tbody>
+                                @foreach (var payment in Model.RecentPayments)
+                                {
+                                    <tr>
+                                        <td>@(payment.Tenant != null ? $"{payment.Tenant.FirstName} {payment.Tenant.LastName}" : "N/A")</td>
+                                        <td class="fw-semibold">₱@payment.AmountPaid.ToString("N2")</td>
+                                        <td>@payment.PaymentDate.ToString("MMM dd, yyyy")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-state compact"><i class="bi bi-cash-stack"></i><p>No payment records yet.</p></div>
+                }
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="dashboard-card h-100">
+                <div class="card-heading">
+                    <div><h5><i class="bi bi-tools me-2"></i>Recent Maintenance</h5><small>Latest maintenance requests</small></div>
+                    <a asp-page="/Maintenance/MaintenanceIndex" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                @if (Model.RecentMaintenanceRequests.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table dashboard-table align-middle mb-0">
+                            <thead><tr><th>Request</th><th>Tenant</th><th>Status</th></tr></thead>
+                            <tbody>
+                                @foreach (var request in Model.RecentMaintenanceRequests)
+                                {
+                                    <tr>
+                                        <td><strong>@request.RequestTitle</strong><small class="d-block text-muted">Unit @(request.Unit?.UnitNumber ?? "N/A")</small></td>
+                                        <td>@(request.Tenant != null ? $"{request.Tenant.FirstName} {request.Tenant.LastName}" : "N/A")</td>
+                                        <td>
+                                            @if (request.Status == "Completed")
+                                            {
+                                                <span class="status-badge paid-badge">Completed</span>
+                                            }
+                                            else if (request.Status == "In Progress")
+                                            {
+
+                                                <span class="status-badge progress-badge">In Progress</span>
+                                            }
+                                            else
+                                            {
+
+                                                <span class="status-badge unpaid-badge">Pending</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-state compact"><i class="bi bi-tools"></i><p>No maintenance requests yet.</p></div>
+                }
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    :root {
+        --armtis-primary:#0A2D4F; --armtis-accent:#17B6A7; --armtis-bg:#F5F7FA;
+        --armtis-border:#E5E7EB; --armtis-text:#1F2937; --armtis-muted:#6B7280;
+        --armtis-row-alt:#F8FAFC;
+    }
+    .dashboard-page{background:var(--armtis-bg);min-height:calc(100vh - 80px);}
+    .dashboard-header h2,.section-title h5{color:var(--armtis-primary);}
+    .dashboard-date{color:var(--armtis-muted);font-size:.9rem;background:#fff;border:1px solid var(--armtis-border);border-radius:10px;padding:9px 13px;}
+    .dashboard-kpi{background:#fff;border:1px solid var(--armtis-border);border-radius:14px;padding:18px;display:flex;align-items:center;gap:14px;height:100%;box-shadow:0 2px 8px rgba(10,45,79,.05);}
+    .kpi-icon{width:46px;height:46px;border-radius:12px;background:#EAF7F5;color:var(--armtis-accent);display:grid;place-items:center;font-size:1.3rem;flex-shrink:0;}
+    .kpi-label{color:var(--armtis-muted);font-size:.82rem;margin-bottom:3px;}
+    .kpi-value{color:var(--armtis-primary);font-size:1.55rem;font-weight:700;line-height:1.1;}
+    .finance-card {
+        min-height: 112px;
+        border-radius: 14px;
+        padding: 20px 22px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--armtis-primary);
+        color: #fff;
+        box-shadow: 0 3px 12px rgba(10,45,79,.10);
+    }
+
+    .finance-content {
+        display: flex;
+        flex-direction: column;
+    }
+    .finance-label {
+        font-size: .84rem;
+        color: #fff !important;
+        opacity: .90;
+        margin-bottom: 5px;
+    }
+    .finance-value {
+        display: block !important;
+        color: #fff !important;
+        font-size: 1.8rem !important;
+        font-weight: 800 !important;
+        line-height: 1.2 !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+        .finance-value .currency {
+            margin-right: 3px;
+        }
+
+    .finance-icon {
+        font-size: 2.2rem !important;
+        color: #fff !important;
+        opacity: .85;
+        flex-shrink: 0;
+    }
+    .dashboard-card{background:#fff;border:1px solid var(--armtis-border);border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(10,45,79,.04);}
+    .card-heading{padding:15px 18px;border-bottom:1px solid var(--armtis-border);display:flex;justify-content:space-between;align-items:center;gap:12px;}
+    .card-heading h5{color:var(--armtis-primary);font-size:1rem;font-weight:700;margin:0}.card-heading small{color:var(--armtis-muted);font-size:.78rem;}
+    .btn-outline-primary{color:var(--armtis-primary);border-color:#B8C6D3}.btn-outline-primary:hover{background:var(--armtis-primary);border-color:var(--armtis-primary);color:#fff;}
+    .billing-status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:16px;}
+    .status-box{background:var(--armtis-row-alt);border:1px solid var(--armtis-border);border-radius:10px;padding:12px;display:flex;align-items:center;gap:9px;}
+    .status-box strong{display:block;font-size:1.15rem;color:var(--armtis-primary)}.status-box small{color:var(--armtis-muted);}
+    .status-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}.status-dot.paid{background:#198754}.status-dot.unpaid{background:#F0AD00}.status-dot.overdue{background:#DC3545;}
+    .maintenance-list{padding:7px 18px 12px}.maintenance-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--armtis-border);color:var(--armtis-text)}.maintenance-row:last-child{border-bottom:0}.maintenance-row strong{color:var(--armtis-primary);}
+    .notification-summary{padding:20px 14px;display:flex;align-items:center;justify-content:space-around;text-align:center}.summary-number{display:block;color:var(--armtis-primary);font-size:1.55rem;font-weight:700}.notification-summary small{color:var(--armtis-muted)}.notification-divider{width:1px;height:42px;background:var(--armtis-border);}
+    .quick-actions{padding:15px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.quick-action{text-decoration:none;color:var(--armtis-primary);background:var(--armtis-row-alt);border:1px solid var(--armtis-border);border-radius:10px;padding:11px 8px;text-align:center}.quick-action:hover{color:var(--armtis-primary);border-color:var(--armtis-accent)}.quick-action i{display:block;color:var(--armtis-accent);font-size:1.15rem;margin-bottom:4px}.quick-action span{font-size:.75rem;font-weight:600;}
+    .dashboard-table{font-size:.84rem}.dashboard-table thead th{background:var(--armtis-accent);color:#fff;border:0;padding:10px 14px;white-space:nowrap;font-size:.77rem}.dashboard-table tbody td{padding:10px 14px;border-color:var(--armtis-border)}.dashboard-table tbody tr:nth-child(even){background:var(--armtis-row-alt)}.dashboard-table tbody tr:hover{background:#EEF7F6;}
+    .status-badge{display:inline-block;padding:4px 9px;border-radius:999px;font-size:.7rem;font-weight:600;white-space:nowrap}.paid-badge{background:#E8F6EF;color:#137A49}.unpaid-badge{background:#FFF4D6;color:#8A6500}.overdue-badge{background:#FCE8EA;color:#B42332}.pending-badge{background:#EEF1F4;color:#52606D}.progress-badge{background:#EAF0F8;color:#245A8D;}
+    .empty-state{text-align:center;padding:35px 20px;color:var(--armtis-muted)}.empty-state.compact{padding:25px 20px}.empty-state i{display:block;font-size:1.8rem;margin-bottom:7px}.empty-state p{margin:0;font-size:.86rem;}
+    @@media (max-width: 991.98px) { .quick-actions { grid-template-columns: repeat(3, 1fr); } }
+    @@media (max-width: 575.98px) { .dashboard-header { gap: 12px; } .dashboard-date { width: 100%; } .billing-status-grid { grid-template-columns: 1fr; } .quick-actions { grid-template-columns: repeat(2, 1fr); } }
+</style>

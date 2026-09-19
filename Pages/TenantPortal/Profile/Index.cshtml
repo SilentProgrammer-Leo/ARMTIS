@@ -1,0 +1,343 @@
+﻿@page
+@model ARMTIS_Capstone_Project.Pages.TenantPortal.Profile.IndexModel
+
+@{
+    ViewData["Title"] = "My Profile";
+    Layout = "/Pages/TenantPortal/_TenantLayout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <!-- PAGE HEADER -->
+    <div class="mb-4">
+        <h2 class="fw-bold">
+            <i class="bi bi-person-circle me-2"></i>
+            My Profile
+        </h2>
+
+        <p class="text-muted mb-0">
+            View your personal and rental information.
+        </p>
+    </div>
+
+    @if (Model.Tenant != null)
+    {
+        <!-- PROFILE HEADER -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body p-4">
+
+                <div class="d-flex align-items-center">
+
+                    <div class="bg-primary text-white rounded-circle
+                        d-flex align-items-center justify-content-center me-3"
+                         style="width:70px; height:70px;">
+
+                        <i class="bi bi-person-fill fs-2"></i>
+
+                    </div>
+
+                    <div>
+                        <h4 class="fw-bold mb-1">
+                            @Model.Tenant.FirstName @Model.Tenant.LastName
+                        </h4>
+
+                        <p class="text-muted mb-0">
+                            Tenant ID:
+                            <strong>@Model.Tenant.TenantID</strong>
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- PERSONAL INFORMATION -->
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-header bg-white py-3">
+                <h5 class="fw-bold mb-0">
+                    <i class="bi bi-person me-2"></i>
+                    Personal Information
+                </h5>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row g-4">
+
+                    <!-- FIRST NAME -->
+                    <div class="col-md-6">
+
+                        <label class="text-muted small">
+                            First Name
+                        </label>
+
+                        <div class="fw-semibold">
+                            @Model.Tenant.FirstName
+                        </div>
+
+                    </div>
+
+
+                    <!-- LAST NAME -->
+                    <div class="col-md-6">
+
+                        <label class="text-muted small">
+                            Last Name
+                        </label>
+
+                        <div class="fw-semibold">
+                            @Model.Tenant.LastName
+                        </div>
+
+                    </div>
+
+
+                    <!-- ADDRESS -->
+                    <div class="col-md-6">
+
+                        <label class="text-muted small">
+                            Address
+                        </label>
+
+                        <div class="fw-semibold">
+                            @(string.IsNullOrWhiteSpace(Model.Tenant.Address)
+                                ? "Not provided"
+                                : Model.Tenant.Address)
+                        </div>
+
+                    </div>
+
+
+                    <!-- CONTACT -->
+                    <div class="col-md-6">
+
+                        <label class="text-muted small">
+                            Contact Number
+                        </label>
+
+                        <div class="fw-semibold">
+                            @(string.IsNullOrWhiteSpace(Model.Tenant.ContactNo)
+                                ? "Not provided"
+                                : Model.Tenant.ContactNo)
+                        </div>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+                    <div class="col-md-6">
+
+                        <label class="text-muted small">
+                            Email Address
+                        </label>
+
+                        <div class="fw-semibold">
+                            @(string.IsNullOrWhiteSpace(Model.Tenant.Email)
+                                ? "Not provided"
+                                : Model.Tenant.Email)
+                        </div>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+                    <div class="col-md-6">
+
+                        <label class="text-muted small">
+                            Tenant Status
+                        </label>
+
+                        <div>
+
+                            @if (Model.Tenant.Status == "Active")
+                            {
+                                <span class="badge bg-success">
+                                    Active
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">
+                                    @Model.Tenant.Status
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACCOUNT INFORMATION -->
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-header bg-white py-3">
+
+                <h5 class="fw-bold mb-0">
+                    <i class="bi bi-shield-lock me-2"></i>
+                    Account Information
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="row g-4">
+
+                    <!-- USERNAME -->
+                    <div class="col-md-6">
+
+                        <label class="text-muted small">
+                            Username
+                        </label>
+
+                        <div class="fw-semibold">
+                            @Model.UserAccount?.UserName
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACCOUNT ROLE -->
+                    <div class="col-md-6">
+
+                        <label class="text-muted small">
+                            Account Type
+                        </label>
+
+                        <div>
+                            <span class="badge bg-primary">
+                                Tenant
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- UNIT & LEASE INFORMATION -->
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-header bg-white py-3">
+
+                <h5 class="fw-bold mb-0">
+                    <i class="bi bi-house-door me-2"></i>
+                    Rental Information
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="row g-4">
+
+                    <!-- UNIT -->
+                    <div class="col-md-6">
+
+                        <label class="text-muted small">
+                            Unit Number
+                        </label>
+
+                        <div class="fw-semibold">
+
+                            @(Model.Tenant.Unit?.UnitNumber ?? "Not assigned")
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MONTHLY RENT -->
+                    <div class="col-md-6">
+
+                        <label class="text-muted small">
+                            Monthly Rent
+                        </label>
+
+                        <div class="fw-semibold">
+
+                            @if (Model.Tenant.Unit != null)
+                            {
+                                <span>
+                                    ₱@Model.Tenant.Unit.MonthlyRent.ToString("N2")
+                                </span>
+                            }
+                            else
+                            {
+                                <span>Not available</span>
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- LEASE START -->
+                    <div class="col-md-6">
+
+                        <label class="text-muted small">
+                            Lease Start Date
+                        </label>
+
+                        <div class="fw-semibold">
+
+                            @Model.Tenant.LeaseStartDate.ToString("MMMM dd, yyyy")
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- LEASE END -->
+                    <div class="col-md-6">
+
+                        <label class="text-muted small">
+                            Lease End Date
+                        </label>
+
+                        <div class="fw-semibold">
+
+                            @Model.Tenant.LeaseEndDate.ToString("MMMM dd, yyyy")
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- NOTICE -->
+        <div class="alert alert-info border-0 shadow-sm">
+
+            <i class="bi bi-info-circle me-2"></i>
+
+            If any of your personal or rental information is incorrect,
+            please contact the administrator.
+
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            Your tenant information could not be found.
+        </div>
+    }
+
+</div>

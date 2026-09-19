@@ -1,0 +1,155 @@
+@page
+@model ARMTIS_Capstone_Project.Pages.AuditLogs.IndexModel
+
+@{
+    ViewData["Title"] = "Activity Logs";
+}
+
+<div class="container-fluid">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Activity Logs</h2>
+            <p class="text-muted mb-0">Administrator-only record of activity performed in the system.</p>
+        </div>
+        <span class="badge rounded-pill px-3 py-2" style="background:#0A2D4F;">Admin Only</span>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Total Logs</div>
+                    <div class="fs-3 fw-bold" style="color:#0A2D4F;">@Model.TotalCount</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Today</div>
+                    <div class="fs-3 fw-bold" style="color:#17B6A7;">@Model.TodayCount</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Data Changes</div>
+                    <div class="fs-3 fw-bold text-warning">@Model.DataChangeCount</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Login Events</div>
+                    <div class="fs-3 fw-bold text-success">@Model.LoginCount</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3 align-items-end">
+                <div class="col-lg-4">
+                    <label class="form-label fw-semibold">Search</label>
+                    <input type="text" class="form-control" name="search" value="@Model.Search" placeholder="User, module, description, ID..." />
+                </div>
+                <div class="col-sm-6 col-lg-2">
+                    <label class="form-label fw-semibold">Action</label>
+                    <select class="form-select" name="actionFilter">
+                        <option value="All">All Actions</option>
+                        @foreach (var action in new[] { "Viewed", "Submitted", "Created", "Updated", "Deleted", "Login", "Login Failed", "Login Blocked", "Logout" })
+                        {
+                            if (Model.ActionFilter == action)
+                            {
+                                <option value="@action" selected>@action</option>
+                            }
+                            else
+                            {
+                                <option value="@action">@action</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-6 col-lg-2">
+                    <label class="form-label fw-semibold">From</label>
+                    <input type="date" class="form-control" name="fromDate" value="@(Model.FromDate?.ToString("yyyy-MM-dd"))" />
+                </div>
+                <div class="col-sm-6 col-lg-2">
+                    <label class="form-label fw-semibold">To</label>
+                    <input type="date" class="form-control" name="toDate" value="@(Model.ToDate?.ToString("yyyy-MM-dd"))" />
+                </div>
+                <div class="col-sm-6 col-lg-2 d-flex gap-2">
+                    <button type="submit" class="btn text-white flex-grow-1" style="background:#0A2D4F;">
+                        <i class="bi bi-search me-1"></i>Filter
+                    </button>
+                    <a asp-page="/AuditLogs/Index" class="btn btn-outline-secondary">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold">System Activity</h5>
+            <span class="text-muted small">Showing up to 500 most recent matching logs</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Date &amp; Time</th>
+                        <th>User</th>
+                        <th>Role</th>
+                        <th>Action</th>
+                        <th>Module</th>
+                        <th>Page / Path</th>
+                        <th>Description</th>
+                        <th>IP Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Logs.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center py-5 text-muted">
+                                <i class="bi bi-journal-x fs-2 d-block mb-2"></i>
+                                No activity logs found.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var log in Model.Logs)
+                        {
+                            var badgeClass = log.Action switch
+                            {
+                                "Created" => "bg-success",
+                                "Updated" => "bg-warning text-dark",
+                                "Deleted" => "bg-danger",
+                                "Login" => "bg-primary",
+                                "Logout" => "bg-secondary",
+                                "Login Failed" or "Login Blocked" => "bg-danger",
+                                "Viewed" => "bg-info text-dark",
+                                _ => "bg-dark"
+                            };
+
+                            <tr>
+                                <td class="text-nowrap">@log.Timestamp.ToString("MMM dd, yyyy hh:mm tt")</td>
+                                <td>@(string.IsNullOrWhiteSpace(log.UserName) ? "System" : log.UserName)</td>
+                                <td>@(string.IsNullOrWhiteSpace(log.UserRole) ? "-" : log.UserRole)</td>
+                                <td><span class="badge @badgeClass">@log.Action</span></td>
+                                <td>@(string.IsNullOrWhiteSpace(log.EntityName) ? "System" : log.EntityName)</td>
+                                <td class="small text-muted">@(string.IsNullOrWhiteSpace(log.RequestPath) ? "-" : log.RequestPath)</td>
+                                <td>@log.Description</td>
+                                <td class="text-nowrap">@(string.IsNullOrWhiteSpace(log.IpAddress) ? "-" : log.IpAddress)</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

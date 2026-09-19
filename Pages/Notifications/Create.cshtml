@@ -1,0 +1,196 @@
+﻿@page
+@model ARMTIS_Capstone_Project.Pages.Notifications.CreateModel
+
+@{
+    ViewData["Title"] = "Create Notification";
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1">
+                Create Notification
+            </h2>
+
+            <p class="text-muted mb-0">
+                Send a notification to a tenant.
+            </p>
+        </div>
+
+        <a asp-page="./Index"
+           class="btn btn-outline-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Back
+
+        </a>
+
+    </div>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-white py-3">
+
+            <h5 class="fw-bold mb-0">
+                Notification Details
+            </h5>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <form method="post">
+
+                <div class="row g-3">
+
+                    <!-- Tenant -->
+
+                    <div class="col-md-6">
+
+                        <label asp-for="Notification.TenantID"
+                               class="form-label fw-semibold">
+                            Tenant
+                        </label>
+
+                        <select asp-for="Notification.TenantID"
+                                asp-items="Model.TenantList"
+                                class="form-select">
+
+                            <option value="">
+                                -- Select Tenant --
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="Notification.TenantID"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Notification Type -->
+
+                    <div class="col-md-6">
+
+                        <label asp-for="Notification.NotificationType"
+                               class="form-label fw-semibold">
+                            Notification Type
+                        </label>
+
+                        <select asp-for="Notification.NotificationType"
+                                class="form-select">
+
+                            <option value="">
+                                -- Select Type --
+                            </option>
+
+                            <option value="Payment">
+                                Payment
+                            </option>
+
+                            <option value="Maintenance">
+                                Maintenance
+                            </option>
+
+                            <option value="Announcement">
+                                Announcement
+                            </option>
+
+                            <option value="Lease">
+                                Lease
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="Notification.NotificationType"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Title -->
+
+                    <div class="col-12">
+
+                        <label asp-for="Notification.Title"
+                               class="form-label fw-semibold">
+                            Title
+                        </label>
+
+                        <input asp-for="Notification.Title"
+                               class="form-control"
+                               placeholder="Enter notification title" />
+
+                        <span asp-validation-for="Notification.Title"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Message -->
+
+                    <div class="col-12">
+
+                        <label asp-for="Notification.Message"
+                               class="form-label fw-semibold">
+                            Message
+                        </label>
+
+                        <textarea asp-for="Notification.Message"
+                                  class="form-control"
+                                  rows="6"
+                                  placeholder="Enter notification message...">
+                        </textarea>
+
+                        <span asp-validation-for="Notification.Message"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Buttons -->
+
+                    <div class="col-12 mt-4">
+
+                        <div class="d-flex gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                <i class="bi bi-send"></i>
+                                Send Notification
+
+                            </button>
+
+                            <a asp-page="./Index"
+                               class="btn btn-outline-secondary">
+
+                                Cancel
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

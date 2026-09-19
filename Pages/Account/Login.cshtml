@@ -1,0 +1,603 @@
+﻿@page
+@model ARMTIS_Capstone_Project.Pages.Account.LoginModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Login - ARMTIS</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+
+    <style>
+
+            :root {
+                --armtis-primary: #0A2D4F;
+                --armtis-primary-dark: #071F36;
+                --armtis-accent: #17B6A7;
+                --armtis-background: #F5F7FA;
+                --armtis-border: #DCE3EA;
+                --armtis-text: #1F2937;
+                --armtis-muted: #6B7280;
+            }
+
+
+            /* ========================================= */
+            /* PAGE */
+            /* ========================================= */
+
+            body {
+                min-height: 100vh;
+                margin: 0;
+                background: linear-gradient( 135deg, #F5F7FA 0%, #EEF5F7 100% );
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+                color: var(--armtis-text);
+            }
+
+
+            /* ========================================= */
+            /* LOGIN CONTAINER */
+            /* ========================================= */
+
+            .login-wrapper {
+                width: 100%;
+                max-width: 430px;
+                padding: 20px;
+            }
+
+
+            /* ========================================= */
+            /* LOGIN CARD */
+            /* ========================================= */
+
+            .login-card {
+                background: #FFFFFF;
+                border: 1px solid var(--armtis-border);
+                border-radius: 18px;
+                overflow: hidden;
+                box-shadow: 0 10px 35px rgba(10, 45, 79, .10);
+            }
+
+
+            /* ========================================= */
+            /* BRAND HEADER */
+            /* ========================================= */
+
+            .login-brand {
+                background: var(--armtis-primary);
+                color: white;
+                text-align: center;
+                padding: 30px 25px 26px;
+            }
+
+
+            .brand-icon {
+                width: 62px;
+                height: 62px;
+                margin: 0 auto 14px;
+                border-radius: 15px;
+                background: rgba(23, 182, 167, .18);
+                border: 1px solid rgba(255,255,255,.15);
+                display: grid;
+                place-items: center;
+                font-size: 1.8rem;
+                color: #7BE1D7;
+            }
+
+
+            .brand-title {
+                font-size: 1.8rem;
+                font-weight: 800;
+                letter-spacing: .5px;
+                margin: 0 0 5px;
+            }
+
+
+            .brand-subtitle {
+                font-size: .82rem;
+                opacity: .78;
+                margin: 0;
+            }
+
+
+            /* ========================================= */
+            /* LOGIN BODY */
+            /* ========================================= */
+
+            .login-body {
+                padding: 30px;
+            }
+
+
+            .welcome-text {
+                margin-bottom: 24px;
+            }
+
+
+                .welcome-text h5 {
+                    color: var(--armtis-primary);
+                    font-weight: 700;
+                    margin-bottom: 5px;
+                }
+
+
+                .welcome-text p {
+                    color: var(--armtis-muted);
+                    font-size: .82rem;
+                    margin: 0;
+                }
+
+
+            /* ========================================= */
+            /* FORM */
+            /* ========================================= */
+
+            .form-label {
+                color: var(--armtis-text);
+                font-size: .82rem;
+                font-weight: 600;
+                margin-bottom: 7px;
+            }
+
+
+            .input-wrapper {
+                position: relative;
+            }
+
+
+            .input-icon {
+                position: absolute;
+                left: 14px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: var(--armtis-muted);
+                z-index: 2;
+            }
+
+
+            .login-input {
+                height: 46px;
+                border: 1px solid var(--armtis-border);
+                border-radius: 9px;
+                padding-left: 42px;
+                padding-right: 42px;
+                font-size: .88rem;
+                box-shadow: none;
+            }
+
+
+                .login-input:focus {
+                    border-color: var(--armtis-accent);
+                    box-shadow: 0 0 0 .2rem rgba(23,182,167,.12);
+                }
+
+
+                .login-input::placeholder {
+                    color: #9CA3AF;
+                }
+
+
+            /* ========================================= */
+            /* PASSWORD BUTTON */
+            /* ========================================= */
+
+            .password-toggle {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                border: 0;
+                background: transparent;
+                color: var(--armtis-muted);
+                padding: 5px 7px;
+                cursor: pointer;
+                z-index: 3;
+            }
+
+
+                .password-toggle:hover {
+                    color: var(--armtis-primary);
+                }
+
+
+            /* ========================================= */
+            /* REMEMBER ME */
+            /* ========================================= */
+
+            .remember-row {
+                margin-top: 18px;
+                margin-bottom: 24px;
+            }
+
+
+            .form-check-input {
+                border-color: #B8C4CF;
+            }
+
+
+                .form-check-input:checked {
+                    background-color: var(--armtis-accent);
+                    border-color: var(--armtis-accent);
+                }
+
+
+            .form-check-label {
+                color: var(--armtis-muted);
+                font-size: .82rem;
+            }
+
+
+            /* ========================================= */
+            /* ERROR MESSAGE */
+            /* ========================================= */
+
+            .login-alert {
+                border: 0;
+                border-left: 4px solid #DC3545;
+                border-radius: 8px;
+                font-size: .8rem;
+                margin-bottom: 20px;
+            }
+
+
+            /* ========================================= */
+            /* LOGIN BUTTON */
+            /* ========================================= */
+
+            .btn-login {
+                width: 100%;
+                height: 46px;
+                border-radius: 9px;
+                background: var(--armtis-primary);
+                border: 1px solid var(--armtis-primary);
+                color: white;
+                font-size: .88rem;
+                font-weight: 700;
+                transition: background .15s ease, transform .15s ease;
+            }
+
+
+                .btn-login:hover {
+                    background: var(--armtis-primary-dark);
+                    border-color: var(--armtis-primary-dark);
+                    color: white;
+                    transform: translateY(-1px);
+                }
+
+
+                .btn-login:active {
+                    transform: translateY(0);
+                }
+
+
+            /* ========================================= */
+            /* FOOTER */
+            /* ========================================= */
+
+            .login-footer {
+                text-align: center;
+                margin-top: 22px;
+                color: var(--armtis-muted);
+                font-size: .72rem;
+            }
+
+
+                .login-footer span {
+                    color: var(--armtis-accent);
+                    font-weight: 600;
+                }
+
+
+            /* ========================================= */
+            /* VALIDATION */
+            /* ========================================= */
+
+            .text-danger {
+                font-size: .74rem;
+                margin-top: 4px;
+            }
+
+
+            /* ========================================= */
+            /* MOBILE */
+            /* ========================================= */
+
+            @@media (max-width: 575.98px) {
+
+                .login-wrapper {
+                    padding: 15px;
+                }
+
+
+                .login-brand {
+                    padding: 26px 20px 24px;
+                }
+
+
+                .login-body {
+                    padding: 24px 20px;
+                }
+
+
+                .brand-title {
+                    font-size: 1.6rem;
+                }
+            }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="login-wrapper">
+
+        <div class="login-card">
+
+
+            <!-- ================================= -->
+            <!-- BRAND -->
+            <!-- ================================= -->
+
+            <div class="login-brand">
+
+                <div class="brand-icon">
+                    <i class="bi bi-building"></i>
+                </div>
+
+                <h1 class="brand-title">
+                    ARMTIS
+                </h1>
+
+                <p class="brand-subtitle">
+                    Apartment Rental Management System
+                </p>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- LOGIN BODY -->
+            <!-- ================================= -->
+
+            <div class="login-body">
+
+
+                <div class="welcome-text">
+
+                    <h5>
+                        Welcome Back
+                    </h5>
+
+                    <p>
+                        Sign in to access your account.
+                    </p>
+
+                </div>
+
+
+                <!-- ERROR MESSAGE -->
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <div class="alert alert-danger login-alert"
+                         role="alert">
+
+                        <i class="bi bi-exclamation-circle-fill me-2"></i>
+
+                        @Model.ErrorMessage
+
+                    </div>
+                }
+
+
+                <!-- LOGIN FORM -->
+
+                <form method="post">
+
+
+                    <!-- USERNAME -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="Input.Username"
+                               class="form-label">
+
+                            Username
+
+                        </label>
+
+
+                        <div class="input-wrapper">
+
+                            <i class="bi bi-person input-icon"></i>
+
+
+                            <input asp-for="Input.Username"
+                                   class="form-control login-input"
+                                   placeholder="Enter your username"
+                                   autocomplete="username"
+                                   autofocus />
+
+
+                        </div>
+
+
+                        <span asp-validation-for="Input.Username"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- PASSWORD -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="Input.Password"
+                               class="form-label">
+
+                            Password
+
+                        </label>
+
+
+                        <div class="input-wrapper">
+
+                            <i class="bi bi-lock input-icon"></i>
+
+
+                            <input asp-for="Input.Password"
+                                   id="passwordInput"
+                                   class="form-control login-input"
+                                   type="password"
+                                   placeholder="Enter your password"
+                                   autocomplete="current-password" />
+
+
+                            <button type="button"
+                                    class="password-toggle"
+                                    id="togglePassword"
+                                    aria-label="Show password">
+
+                                <i class="bi bi-eye"
+                                   id="passwordIcon">
+                                </i>
+
+                            </button>
+
+                        </div>
+
+
+                        <span asp-validation-for="Input.Password"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- REMEMBER ME -->
+
+                    <div class="form-check remember-row">
+
+                        <input asp-for="Input.RememberMe"
+                               class="form-check-input" />
+
+                        <label asp-for="Input.RememberMe"
+                               class="form-check-label">
+
+                            Remember me
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- LOGIN -->
+
+                    <button type="submit"
+                            class="btn btn-login">
+
+                        <i class="bi bi-box-arrow-in-right me-1"></i>
+
+                        Login
+
+                    </button>
+
+
+                </form>
+
+
+                <!-- FOOTER -->
+
+                <div class="login-footer">
+
+                    <span>ARMTIS</span>
+                    &nbsp;•&nbsp;
+                    Apartment Rental Management System
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ===================================== -->
+    <!-- PASSWORD TOGGLE -->
+    <!-- ===================================== -->
+
+    <script>
+
+            const passwordInput =
+                document.getElementById("passwordInput");
+
+            const togglePassword =
+                document.getElementById("togglePassword");
+
+            const passwordIcon =
+                document.getElementById("passwordIcon");
+
+
+            if (passwordInput &&
+                togglePassword &&
+                passwordIcon) {
+
+                togglePassword.addEventListener(
+                    "click",
+                    function () {
+
+                        const isPassword =
+                            passwordInput.type === "password";
+
+
+                        passwordInput.type =
+                            isPassword
+                                ? "text"
+                                : "password";
+
+
+                        passwordIcon.className =
+                            isPassword
+                                ? "bi bi-eye-slash"
+                                : "bi bi-eye";
+
+
+                        togglePassword.setAttribute(
+                            "aria-label",
+                            isPassword
+                                ? "Hide password"
+                                : "Show password"
+                        );
+
+                    });
+
+            }
+
+    </script>
+
+
+    <partial name="_ValidationScriptsPartial" />
+
+</body>
+
+</html>

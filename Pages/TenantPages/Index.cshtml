@@ -1,0 +1,743 @@
+@page
+@model ARMTIS_Capstone_Project.Pages.TenantPages.IndexModel
+
+@{
+    ViewData["Title"] = "Tenant Management";
+}
+
+<div class="tenant-page">
+
+    <!-- ============================= -->
+    <!-- PAGE HEADER -->
+    <!-- ============================= -->
+
+    <div class="tenant-header">
+
+        <div>
+            <h2 class="tenant-title">
+                <i class="bi bi-people-fill me-2"></i>
+                Tenant Management
+            </h2>
+
+            <p class="tenant-subtitle">
+                Manage tenant information and rental profiles.
+            </p>
+        </div>
+
+        <a asp-page="./Create"
+           class="btn btn-primary tenant-add-btn">
+
+            <i class="bi bi-person-plus-fill me-1"></i>
+            Add Tenant
+
+        </a>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- SUMMARY -->
+    <!-- ============================= -->
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-sm-6 col-lg-4">
+
+            <div class="tenant-summary-card">
+
+                <div class="summary-icon">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+
+                <div>
+                    <div class="summary-label">
+                        Total Tenants
+                    </div>
+
+                    <div class="summary-value">
+                        @(Model.Tenant?.Count ?? 0)
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-sm-6 col-lg-4">
+
+            <div class="tenant-summary-card">
+
+                <div class="summary-icon">
+                    <i class="bi bi-person-check-fill"></i>
+                </div>
+
+                <div>
+                    <div class="summary-label">
+                        Active Tenants
+                    </div>
+
+                    <div class="summary-value">
+                        @(Model.Tenant?.Count(t =>
+                            t.Status?.Equals(
+                                "Active",
+                                StringComparison.OrdinalIgnoreCase
+                            ) == true) ?? 0)
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-sm-6 col-lg-4">
+
+            <div class="tenant-summary-card">
+
+                <div class="summary-icon">
+                    <i class="bi bi-house-door-fill"></i>
+                </div>
+
+                <div>
+                    <div class="summary-label">
+                        Tenants With Unit
+                    </div>
+
+                    <div class="summary-value">
+                        @(Model.Tenant?.Count(t =>
+                            t.Unit != null) ?? 0)
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- TENANT TABLE -->
+    <!-- ============================= -->
+
+    <div class="tenant-card">
+
+        <!-- CARD HEADER -->
+
+        <div class="tenant-card-header">
+
+            <div>
+
+                <h5 class="mb-1">
+                    Tenant List
+                </h5>
+
+                <small>
+                    View and manage registered tenants
+                </small>
+
+            </div>
+
+            <span class="tenant-count-badge">
+                @(Model.Tenant?.Count ?? 0)
+                Tenant(s)
+            </span>
+
+        </div>
+
+
+        <!-- TABLE -->
+
+        <div class="tenant-card-body">
+
+            @if (Model.Tenant != null && Model.Tenant.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table tenant-table align-middle mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Unit Number
+                                </th>
+
+                                <th>
+                                    First Name
+                                </th>
+
+                                <th>
+                                    Last Name
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th class="text-center">
+                                    Profile
+                                </th>
+
+                                <th class="text-center">
+                                    Actions
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var item in Model.Tenant)
+                            {
+                                <tr>
+
+                                    <!-- UNIT -->
+
+                                    <td>
+
+                                        @if (item.Unit != null)
+                                        {
+                                            <span class="unit-badge">
+                                                <i class="bi bi-house-door me-1"></i>
+                                                @item.Unit.UnitNumber
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                No Unit
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- FIRST NAME -->
+
+                                    <td>
+                                        <span class="fw-semibold">
+                                            @item.FirstName
+                                        </span>
+                                    </td>
+
+
+                                    <!-- LAST NAME -->
+
+                                    <td>
+                                        <span class="fw-semibold">
+                                            @item.LastName
+                                        </span>
+                                    </td>
+
+
+                                    <!-- STATUS -->
+
+                                    <td>
+
+                                        @if (item.Status?.Equals(
+                                            "Active",
+                                            StringComparison.OrdinalIgnoreCase) == true)
+                                        {
+                                            <span class="status-badge status-active">
+                                                <i class="bi bi-check-circle-fill me-1"></i>
+                                                Active
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge status-inactive">
+                                                @item.Status
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- PROFILE -->
+
+                                    <td class="text-center">
+
+                                        <a asp-page="./RentalProfile"
+                                           asp-route-id="@item.TenantID"
+                                           class="btn btn-profile">
+
+                                            <i class="bi bi-person-vcard me-1"></i>
+                                            View Profile
+
+                                        </a>
+
+                                    </td>
+
+
+                                    <!-- ACTIONS -->
+
+                                    <td class="text-center">
+
+                                        <div class="tenant-actions">
+
+                                            <a asp-page="./Edit"
+                                               asp-route-id="@item.TenantID"
+                                               class="btn btn-action-edit"
+                                               title="Edit Tenant">
+
+                                                <i class="bi bi-pencil-square"></i>
+
+                                            </a>
+
+
+                                            <a asp-page="./Delete"
+                                               asp-route-id="@item.TenantID"
+                                               class="btn btn-action-delete"
+                                               title="Delete Tenant">
+
+                                                <i class="bi bi-trash3"></i>
+
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <!-- EMPTY STATE -->
+
+                <div class="tenant-empty-state">
+
+                    <div class="empty-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+
+                    <h5>
+                        No tenants found
+                    </h5>
+
+                    <p>
+                        There are currently no tenants registered
+                        in the system.
+                    </p>
+
+                    <a asp-page="./Create"
+                       class="btn btn-primary">
+
+                        <i class="bi bi-person-plus-fill me-1"></i>
+                        Add Your First Tenant
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    :root {
+        --armtis-primary: #0A2D4F;
+        --armtis-accent: #17B6A7;
+        --armtis-bg: #F5F7FA;
+        --armtis-border: #E3E8EE;
+        --armtis-text: #1F2937;
+        --armtis-muted: #6B7280;
+        --armtis-row-alt: #F8FAFC;
+    }
+
+
+    /* ================================= */
+    /* PAGE */
+    /* ================================= */
+
+    .tenant-page {
+        background: var(--armtis-bg);
+        min-height: calc(100vh - 80px);
+        padding: 10px 4px 30px;
+    }
+
+
+    /* ================================= */
+    /* HEADER */
+    /* ================================= */
+
+    .tenant-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+
+
+    .tenant-title {
+        color: var(--armtis-primary);
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+
+    .tenant-subtitle {
+        color: var(--armtis-muted);
+        margin-bottom: 0;
+        font-size: .9rem;
+    }
+
+
+    .tenant-add-btn {
+        background: var(--armtis-primary);
+        border-color: var(--armtis-primary);
+        padding: 10px 18px;
+        font-weight: 600;
+        border-radius: 9px;
+    }
+
+
+        .tenant-add-btn:hover {
+            background: #071f36;
+            border-color: #071f36;
+        }
+
+
+    /* ================================= */
+    /* SUMMARY CARDS */
+    /* ================================= */
+
+    .tenant-summary-card {
+        background: white;
+        border: 1px solid var(--armtis-border);
+        border-radius: 14px;
+        padding: 18px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        height: 100%;
+        box-shadow: 0 2px 8px rgba(10, 45, 79, .05);
+    }
+
+
+    .summary-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        background: #EAF7F5;
+        color: var(--armtis-accent);
+        display: grid;
+        place-items: center;
+        font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+
+
+    .summary-label {
+        color: var(--armtis-muted);
+        font-size: .8rem;
+        margin-bottom: 3px;
+    }
+
+
+    .summary-value {
+        color: var(--armtis-primary);
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+
+
+    /* ================================= */
+    /* MAIN CARD */
+    /* ================================= */
+
+    .tenant-card {
+        background: white;
+        border: 1px solid var(--armtis-border);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(10, 45, 79, .04);
+    }
+
+
+    .tenant-card-header {
+        padding: 17px 20px;
+        border-bottom: 1px solid var(--armtis-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
+
+
+        .tenant-card-header h5 {
+            color: var(--armtis-primary);
+            font-weight: 700;
+        }
+
+
+        .tenant-card-header small {
+            color: var(--armtis-muted);
+        }
+
+
+    .tenant-count-badge {
+        background: #EAF7F5;
+        color: #117C72;
+        padding: 6px 11px;
+        border-radius: 999px;
+        font-size: .75rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+
+    .tenant-card-body {
+        padding: 0;
+    }
+
+
+    /* ================================= */
+    /* TABLE */
+    /* ================================= */
+
+    .tenant-table {
+        font-size: .88rem;
+    }
+
+
+        .tenant-table thead th {
+            background: var(--armtis-accent);
+            color: white;
+            border: none;
+            padding: 13px 15px;
+            font-size: .78rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+
+        .tenant-table tbody td {
+            padding: 13px 15px;
+            border-color: var(--armtis-border);
+            color: var(--armtis-text);
+        }
+
+
+        .tenant-table tbody tr:nth-child(even) {
+            background: var(--armtis-row-alt);
+        }
+
+
+        .tenant-table tbody tr:hover {
+            background: #EEF8F6;
+        }
+
+
+    /* ================================= */
+    /* UNIT BADGE */
+    /* ================================= */
+
+    .unit-badge {
+        display: inline-flex;
+        align-items: center;
+        background: #EEF3F7;
+        color: var(--armtis-primary);
+        border-radius: 7px;
+        padding: 5px 9px;
+        font-size: .77rem;
+        font-weight: 600;
+    }
+
+
+    /* ================================= */
+    /* STATUS */
+    /* ================================= */
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 5px 10px;
+        font-size: .72rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+
+    .status-active {
+        background: #E8F6EF;
+        color: #137A49;
+    }
+
+
+    .status-inactive {
+        background: #EEF1F4;
+        color: #52606D;
+    }
+
+
+    /* ================================= */
+    /* PROFILE BUTTON */
+    /* ================================= */
+
+    .btn-profile {
+        background: var(--armtis-primary);
+        color: white;
+        border: 1px solid var(--armtis-primary);
+        border-radius: 7px;
+        padding: 6px 11px;
+        font-size: .76rem;
+        font-weight: 600;
+    }
+
+
+        .btn-profile:hover {
+            background: var(--armtis-accent);
+            border-color: var(--armtis-accent);
+            color: white;
+        }
+
+
+    /* ================================= */
+    /* ACTION BUTTONS */
+    /* ================================= */
+
+    .tenant-actions {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+    }
+
+
+    .btn-action-edit,
+    .btn-action-delete {
+        width: 34px;
+        height: 34px;
+        padding: 0;
+        border-radius: 7px;
+        display: inline-grid;
+        place-items: center;
+    }
+
+
+    .btn-action-edit {
+        color: var(--armtis-primary);
+        border: 1px solid #B8C6D3;
+        background: white;
+    }
+
+
+        .btn-action-edit:hover {
+            background: var(--armtis-primary);
+            border-color: var(--armtis-primary);
+            color: white;
+        }
+
+
+    .btn-action-delete {
+        color: #B42332;
+        border: 1px solid #E4B8BE;
+        background: white;
+    }
+
+
+        .btn-action-delete:hover {
+            background: #B42332;
+            border-color: #B42332;
+            color: white;
+        }
+
+
+    /* ================================= */
+    /* EMPTY STATE */
+    /* ================================= */
+
+    .tenant-empty-state {
+        text-align: center;
+        padding: 65px 20px;
+        color: var(--armtis-muted);
+    }
+
+
+    .empty-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: #EAF7F5;
+        color: var(--armtis-accent);
+        display: grid;
+        place-items: center;
+        font-size: 2rem;
+        margin: 0 auto 16px;
+    }
+
+
+    .tenant-empty-state h5 {
+        color: var(--armtis-primary);
+        font-weight: 700;
+    }
+
+
+    .tenant-empty-state p {
+        margin-bottom: 18px;
+    }
+
+
+    /* ================================= */
+    /* RESPONSIVE */
+    /* ================================= */
+
+    @@media (max-width: 767.98px) {
+
+        .tenant-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .tenant-add-btn {
+            width: 100%;
+        }
+
+        .tenant-card-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+    }
+
+
+    @@media (max-width: 575.98px) {
+
+        .tenant-page {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .tenant-table {
+            font-size: .8rem;
+        }
+
+            .tenant-table tbody td,
+            .tenant-table thead th {
+                padding: 10px;
+            }
+
+        .btn-profile {
+            padding: 5px 8px;
+        }
+    }
+
+</style>

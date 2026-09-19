@@ -1,0 +1,122 @@
+@page
+@model ARMTIS_Capstone_Project.Pages.UtilityReadingPages.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>UtilityReading</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="UtilityReading.TenantID" class="control-label"></label>
+                <input asp-for="UtilityReading.TenantID" class="form-control" aria-required="true"/>
+                <span asp-validation-for="UtilityReading.TenantID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UtilityReading.Tenant" class="control-label"></label>
+                <input asp-for="UtilityReading.Tenant" class="form-control" />
+                <span asp-validation-for="UtilityReading.Tenant" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="UtilityReading.UnitID" class="control-label"></label>
+                <input asp-for="UtilityReading.UnitID" class="form-control" aria-required="true"/>
+                <span asp-validation-for="UtilityReading.UnitID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UtilityReading.Unit" class="control-label"></label>
+                <input asp-for="UtilityReading.Unit" class="form-control" />
+                <span asp-validation-for="UtilityReading.Unit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="UtilityReading.BillingMonth" class="control-label"></label>
+                <input asp-for="UtilityReading.BillingMonth" class="form-control" aria-required="true"/>
+                <span asp-validation-for="UtilityReading.BillingMonth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UtilityReading.PreviousElectricReading" class="control-label"></label>
+                <input asp-for="UtilityReading.PreviousElectricReading" class="form-control" />
+                <span asp-validation-for="UtilityReading.PreviousElectricReading" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UtilityReading.CurrentElectricReading" class="control-label"></label>
+                <input asp-for="UtilityReading.CurrentElectricReading" class="form-control" />
+                <span asp-validation-for="UtilityReading.CurrentElectricReading" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UtilityReading.ElectricConsumption" class="control-label"></label>
+                <input asp-for="UtilityReading.ElectricConsumption" class="form-control" />
+                <span asp-validation-for="UtilityReading.ElectricConsumption" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UtilityReading.ElectricRate" class="control-label"></label>
+                <input asp-for="UtilityReading.ElectricRate" class="form-control" />
+                <span asp-validation-for="UtilityReading.ElectricRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UtilityReading.ElectricityBill" class="control-label"></label>
+                <input asp-for="UtilityReading.ElectricityBill" class="form-control" />
+                <span asp-validation-for="UtilityReading.ElectricityBill" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UtilityReading.PreviousWaterReading" class="control-label"></label>
+                <input asp-for="UtilityReading.PreviousWaterReading" class="form-control" />
+                <span asp-validation-for="UtilityReading.PreviousWaterReading" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UtilityReading.CurrentWaterReading" class="control-label"></label>
+                <input asp-for="UtilityReading.CurrentWaterReading" class="form-control" />
+                <span asp-validation-for="UtilityReading.CurrentWaterReading" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UtilityReading.WaterConsumption" class="control-label"></label>
+                <input asp-for="UtilityReading.WaterConsumption" class="form-control" />
+                <span asp-validation-for="UtilityReading.WaterConsumption" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UtilityReading.WaterRate" class="control-label"></label>
+                <input asp-for="UtilityReading.WaterRate" class="form-control" />
+                <span asp-validation-for="UtilityReading.WaterRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UtilityReading.WaterBill" class="control-label"></label>
+                <input asp-for="UtilityReading.WaterBill" class="form-control" />
+                <span asp-validation-for="UtilityReading.WaterBill" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UtilityReading.InternetBill" class="control-label"></label>
+                <input asp-for="UtilityReading.InternetBill" class="form-control" />
+                <span asp-validation-for="UtilityReading.InternetBill" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UtilityReading.TotalUtilityCharges" class="control-label"></label>
+                <input asp-for="UtilityReading.TotalUtilityCharges" class="form-control" />
+                <span asp-validation-for="UtilityReading.TotalUtilityCharges" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UtilityReading.DateRecorded" class="control-label"></label>
+                <input asp-for="UtilityReading.DateRecorded" class="form-control" />
+                <span asp-validation-for="UtilityReading.DateRecorded" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

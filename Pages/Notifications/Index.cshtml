@@ -1,0 +1,130 @@
+@page
+@model ARMTIS_Capstone_Project.Pages.Notifications.IndexModel
+
+@{
+    ViewData["Title"] = "Notifications";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Notifications</h2>
+            <p class="text-muted mb-0">Automatic system notifications for the administrator.</p>
+        </div>
+
+        @if (Model.UnreadCount > 0)
+        {
+            <form method="post" asp-page-handler="MarkAllAsRead">
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="bi bi-check2-all me-1"></i> Mark All as Read
+                </button>
+            </form>
+        }
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-muted">Total</h6>
+                    <h3 class="fw-bold">@Model.Notifications.Count</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-muted">Unread</h6>
+                    <h3 class="fw-bold text-warning">@Model.UnreadCount</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-muted">Read</h6>
+                    <h3 class="fw-bold text-success">@Model.Notifications.Count(n => n.IsRead)</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0 fw-bold">System Notifications</h5>
+        </div>
+
+        <div class="card-body p-0">
+            @if (Model.Notifications.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Type</th>
+                                <th>Notification</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in Model.Notifications)
+                        {
+                            <tr class="@(item.IsRead ? "" : "table-warning")">
+                                <td>
+                                    @if (item.NotificationType == "Maintenance")
+                                    {
+                                        <span class="badge bg-warning text-dark"><i class="bi bi-tools me-1"></i>Maintenance</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">@(item.NotificationType ?? "System")</span>
+                                    }
+                                </td>
+                                <td>
+                                    <strong>@item.Title</strong>
+                                    <div class="small text-muted">@item.Message</div>
+                                </td>
+                                <td>
+                                    @item.CreatedDate.ToString("MMM dd, yyyy")
+                                    <div class="small text-muted">@item.CreatedDate.ToString("hh:mm tt")</div>
+                                </td>
+                                <td>
+                                    @if (item.IsRead)
+                                    {
+                                        <span class="badge bg-success">Read</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Unread</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    @if (!item.IsRead)
+                                    {
+                                        <form method="post" asp-page-handler="MarkAsRead">
+                                            <input type="hidden" name="id" value="@item.NotificationID" />
+                                            <button type="submit" class="btn btn-sm btn-outline-success">
+                                                <i class="bi bi-check2"></i> Mark Read
+                                            </button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="bi bi-bell fs-1 text-muted"></i>
+                    <h5 class="text-muted mt-3">No automatic notifications</h5>
+                    <p class="text-muted mb-0">System-generated administrator notifications will appear here.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

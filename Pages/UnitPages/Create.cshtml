@@ -1,0 +1,695 @@
+@page
+@model ARMTIS_Capstone_Project.Pages.UnitPages.CreateModel
+
+@{
+    ViewData["Title"] = "Add Unit";
+}
+
+<div class="unit-create-page">
+
+    <!-- ========================================= -->
+    <!-- PAGE HEADER -->
+    <!-- ========================================= -->
+
+    <div class="create-header">
+
+        <div>
+            <h2 class="create-title">
+                <i class="bi bi-building-add me-2"></i>
+                Add New Unit
+            </h2>
+
+            <p class="create-subtitle">
+                Register a new apartment unit and set its rental details.
+            </p>
+        </div>
+
+        <a asp-page="./Index"
+           class="btn btn-outline-secondary">
+
+            <i class="bi bi-arrow-left me-1"></i>
+            Back to Units
+
+        </a>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- MAIN FORM CARD -->
+    <!-- ========================================= -->
+
+    <div class="unit-create-card">
+
+        <!-- CARD HEADER -->
+
+        <div class="unit-create-card-header">
+
+            <div class="header-icon">
+                <i class="bi bi-house-add-fill"></i>
+            </div>
+
+            <div>
+
+                <h5>
+                    Unit Registration
+                </h5>
+
+                <small>
+                    Enter the information for the new apartment unit.
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- CARD BODY -->
+
+        <div class="unit-create-card-body">
+
+            <form method="post">
+
+                <!-- VALIDATION -->
+
+                <div asp-validation-summary="ModelOnly"
+                     class="alert alert-danger validation-summary">
+                </div>
+
+
+                <!-- ===================================== -->
+                <!-- UNIT INFORMATION -->
+                <!-- ===================================== -->
+
+                <div class="form-section">
+
+                    <div class="section-heading">
+
+                        <div class="section-icon">
+                            <i class="bi bi-building"></i>
+                        </div>
+
+                        <div>
+
+                            <h5>
+                                Unit Information
+                            </h5>
+
+                            <small>
+                                Basic information about the apartment unit
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row g-4">
+
+                        <!-- UNIT NUMBER -->
+
+                        <div class="col-md-6">
+
+                            <label asp-for="Unit.UnitNumber"
+                                   class="form-label custom-label">
+
+                                Unit Number
+                                <span class="required-mark">*</span>
+
+                            </label>
+
+                            <input asp-for="Unit.UnitNumber"
+                                   class="form-control custom-input"
+                                   placeholder="e.g. Unit 101"
+                                   aria-required="true" />
+
+                            <span asp-validation-for="Unit.UnitNumber"
+                                  class="text-danger">
+                            </span>
+
+                            <div class="form-help">
+                                Enter the unique unit or room number.
+                            </div>
+
+                        </div>
+
+
+                        <!-- CAPACITY -->
+
+                        <div class="col-md-6">
+
+                            <label asp-for="Unit.Capacity"
+                                   class="form-label custom-label">
+
+                                Capacity
+                                <span class="required-mark">*</span>
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <input asp-for="Unit.Capacity"
+                                       type="number"
+                                       min="1"
+                                       class="form-control custom-input"
+                                       placeholder="e.g. 2" />
+
+                                <span class="input-group-text capacity-addon">
+                                    Person(s)
+                                </span>
+
+                            </div>
+
+                            <span asp-validation-for="Unit.Capacity"
+                                  class="text-danger">
+                            </span>
+
+                            <div class="form-help">
+                                Maximum number of occupants for this unit.
+                            </div>
+
+                        </div>
+
+
+                        <!-- DESCRIPTION -->
+
+                        <div class="col-12">
+
+                            <label asp-for="Unit.Description"
+                                   class="form-label custom-label">
+
+                                Unit Description
+
+                            </label>
+
+                            <textarea asp-for="Unit.Description"
+                                      class="form-control custom-input"
+                                      rows="4"
+                                      placeholder="Describe the unit, room type, included features, or other useful details...">
+                            </textarea>
+
+                            <span asp-validation-for="Unit.Description"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ===================================== -->
+                <!-- RENTAL DETAILS -->
+                <!-- ===================================== -->
+
+                <div class="form-section rental-section">
+
+                    <div class="section-heading">
+
+                        <div class="section-icon">
+                            <i class="bi bi-cash-coin"></i>
+                        </div>
+
+                        <div>
+
+                            <h5>
+                                Rental Details
+                            </h5>
+
+                            <small>
+                                Set the rental amount and current unit status
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row g-4">
+
+                        <!-- MONTHLY RENT -->
+
+                        <div class="col-md-6">
+
+                            <label asp-for="Unit.MonthlyRent"
+                                   class="form-label custom-label">
+
+                                Monthly Rent
+                                <span class="required-mark">*</span>
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text currency-addon">
+                                    ₱
+                                </span>
+
+                                <input asp-for="Unit.MonthlyRent"
+                                       type="number"
+                                       min="0"
+                                       step="0.01"
+                                       class="form-control custom-input"
+                                       placeholder="0.00" />
+
+                            </div>
+
+                            <span asp-validation-for="Unit.MonthlyRent"
+                                  class="text-danger">
+                            </span>
+
+                            <div class="form-help">
+                                Enter the monthly rental amount.
+                            </div>
+
+                        </div>
+
+
+                        <!-- UNIT STATUS -->
+
+                        <div class="col-md-6">
+
+                            <label asp-for="Unit.UnitStatus"
+                                   class="form-label custom-label">
+
+                                Unit Status
+                                <span class="required-mark">*</span>
+
+                            </label>
+
+                            <select asp-for="Unit.UnitStatus"
+                                    class="form-select custom-input">
+
+                                <option value="">
+                                    -- Select Status --
+                                </option>
+
+                                <option value="Vacant">
+                                    Vacant
+                                </option>
+
+                                <option value="Occupied">
+                                    Occupied
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="Unit.UnitStatus"
+                                  class="text-danger">
+                            </span>
+
+                            <div class="form-help">
+                                New units are normally registered as Vacant.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ===================================== -->
+                <!-- FORM ACTIONS -->
+                <!-- ===================================== -->
+
+                <div class="form-actions">
+
+                    <a asp-page="./Index"
+                       class="btn cancel-btn">
+
+                        Cancel
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn save-btn">
+
+                        <i class="bi bi-building-add me-1"></i>
+                        Create Unit
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- INFORMATION NOTE -->
+    <!-- ========================================= -->
+
+    <div class="create-note">
+
+        <i class="bi bi-info-circle-fill"></i>
+
+        <span>
+            Fields marked with <strong>*</strong> are required.
+        </span>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    :root {
+        --armtis-primary: #0A2D4F;
+        --armtis-accent: #17B6A7;
+        --armtis-bg: #F5F7FA;
+        --armtis-border: #E3E8EE;
+        --armtis-text: #1F2937;
+        --armtis-muted: #6B7280;
+    }
+
+
+    /* ========================================= */
+    /* PAGE */
+    /* ========================================= */
+
+    .unit-create-page {
+        background: var(--armtis-bg);
+        min-height: calc(100vh - 80px);
+        padding: 10px 4px 35px;
+    }
+
+
+    /* ========================================= */
+    /* HEADER */
+    /* ========================================= */
+
+    .create-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+
+
+    .create-title {
+        color: var(--armtis-primary);
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+
+    .create-subtitle {
+        color: var(--armtis-muted);
+        margin: 0;
+        font-size: .9rem;
+    }
+
+
+    /* ========================================= */
+    /* MAIN CARD */
+    /* ========================================= */
+
+    .unit-create-card {
+        background: white;
+        border: 1px solid var(--armtis-border);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(10,45,79,.05);
+    }
+
+
+    .unit-create-card-header {
+        background: var(--armtis-primary);
+        color: white;
+        padding: 18px 22px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+
+    .header-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        background: rgba(23,182,167,.18);
+        color: #72E0D5;
+        display: grid;
+        place-items: center;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+    }
+
+
+    .unit-create-card-header h5 {
+        margin: 0 0 3px;
+        font-weight: 700;
+    }
+
+
+    .unit-create-card-header small {
+        opacity: .75;
+        font-size: .78rem;
+    }
+
+
+    .unit-create-card-body {
+        padding: 26px;
+    }
+
+
+    /* ========================================= */
+    /* VALIDATION */
+    /* ========================================= */
+
+    .validation-summary:empty {
+        display: none;
+    }
+
+
+    /* ========================================= */
+    /* FORM SECTIONS */
+    /* ========================================= */
+
+    .form-section {
+        padding-bottom: 26px;
+    }
+
+
+    .rental-section {
+        padding-top: 26px;
+        border-top: 1px solid var(--armtis-border);
+    }
+
+
+    .section-heading {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        margin-bottom: 20px;
+    }
+
+
+    .section-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: #EAF7F5;
+        color: var(--armtis-accent);
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+    }
+
+
+    .section-heading h5 {
+        color: var(--armtis-primary);
+        margin: 0 0 2px;
+        font-weight: 700;
+        font-size: 1rem;
+    }
+
+
+    .section-heading small {
+        color: var(--armtis-muted);
+        font-size: .77rem;
+    }
+
+
+    /* ========================================= */
+    /* FORM LABELS */
+    /* ========================================= */
+
+    .custom-label {
+        color: var(--armtis-text);
+        font-size: .82rem;
+        font-weight: 600;
+        margin-bottom: 7px;
+    }
+
+
+    .required-mark {
+        color: #DC3545;
+        margin-left: 2px;
+    }
+
+
+    /* ========================================= */
+    /* FORM INPUTS */
+    /* ========================================= */
+
+    .custom-input {
+        border: 1px solid #D6DDE5;
+        border-radius: 9px;
+        min-height: 43px;
+        font-size: .88rem;
+        box-shadow: none;
+    }
+
+
+    textarea.custom-input {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+
+    .custom-input:focus {
+        border-color: var(--armtis-accent);
+        box-shadow: 0 0 0 .2rem rgba(23,182,167,.12);
+    }
+
+
+    .currency-addon,
+    .capacity-addon {
+        background: #F8FAFC;
+        border-color: #D6DDE5;
+        color: var(--armtis-primary);
+        font-weight: 600;
+    }
+
+
+    .currency-addon {
+        border-radius: 9px 0 0 9px;
+    }
+
+
+    .form-help {
+        color: var(--armtis-muted);
+        font-size: .72rem;
+        margin-top: 5px;
+    }
+
+
+    .text-danger {
+        font-size: .76rem;
+    }
+
+
+    /* ========================================= */
+    /* FORM ACTIONS */
+    /* ========================================= */
+
+    .form-actions {
+        border-top: 1px solid var(--armtis-border);
+        padding-top: 20px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 9px;
+    }
+
+
+    .save-btn {
+        background: var(--armtis-primary);
+        color: white;
+        border: 1px solid var(--armtis-primary);
+        border-radius: 8px;
+        padding: 9px 18px;
+        font-weight: 600;
+    }
+
+
+        .save-btn:hover {
+            background: #071F36;
+            border-color: #071F36;
+            color: white;
+        }
+
+
+    .cancel-btn {
+        border: 1px solid #D6DDE5;
+        border-radius: 8px;
+        padding: 9px 18px;
+        color: var(--armtis-text);
+        background: white;
+    }
+
+
+        .cancel-btn:hover {
+            background: #F3F5F7;
+        }
+
+
+    /* ========================================= */
+    /* NOTE */
+    /* ========================================= */
+
+    .create-note {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-top: 14px;
+        padding: 11px 14px;
+        border-radius: 10px;
+        background: #EAF7F5;
+        border: 1px solid #C8EBE7;
+        color: #155E58;
+        font-size: .78rem;
+    }
+
+
+        .create-note i {
+            color: var(--armtis-accent);
+        }
+
+
+    /* ========================================= */
+    /* RESPONSIVE */
+    /* ========================================= */
+
+    @@media (max-width: 767.98px) {
+
+        .unit-create-page {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .create-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+            .create-header .btn {
+                width: 100%;
+            }
+
+        .unit-create-card-body {
+            padding: 20px;
+        }
+
+        .form-actions {
+            flex-direction: column-reverse;
+        }
+
+            .form-actions .btn {
+                width: 100%;
+            }
+    }
+
+</style>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

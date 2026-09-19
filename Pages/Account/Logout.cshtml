@@ -1,0 +1,44 @@
+﻿@page
+@model ARMTIS_Capstone_Project.Pages.Account.LogoutModel
+@{
+    ViewData["Title"] = "Logout";
+}
+
+<div class="container text-center mt-5">
+
+    <div class="card shadow-sm border-0 mx-auto"
+         style="max-width: 450px;">
+
+        <div class="card-body p-4">
+
+            <i class="bi bi-box-arrow-right fs-1 text-danger"></i>
+
+            <h3 class="fw-bold mt-3">
+                Sign Out
+            </h3>
+
+            <p class="text-muted">
+                Are you sure you want to sign out?
+            </p>
+
+            <form method="post">
+
+                <button type="submit"
+                        class="btn btn-danger me-2">
+                    <i class="bi bi-box-arrow-right"></i>
+                    Yes, Sign Out
+                </button>
+
+                <button type="button"
+                        class="btn btn-secondary"
+                        onclick="history.back()">
+                    Cancel
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

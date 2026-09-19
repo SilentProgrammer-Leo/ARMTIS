@@ -1,0 +1,86 @@
+@page
+@model ARMTIS_Capstone_Project.Pages.PaymentPages.RentalPaymentPages.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Payment Records</h1>
+
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RentalPayment[0].TenantID)
+            </th>         
+            <th>
+                @Html.DisplayNameFor(model => model.RentalPayment[0].AmountPaid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RentalPayment[0].PaymentDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RentalPayment[0].PaymentMethod)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RentalPayment[0].PaymentStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RentalPayment[0].PaymentFor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RentalPayment[0].Remarks)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RentalPayment[0].ReceiptNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RentalPayment[0].BillingMonth)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.RentalPayment) {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.TenantID)
+            </td>       
+            <td>
+                @Html.DisplayFor(model => item.AmountPaid)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.PaymentDate)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.PaymentMethod)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.PaymentStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.PaymentFor)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Remarks)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.ReceiptNo)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.BillingMonth)
+            </td>
+            <td>
+                   @* <a asp-page="./Edit" asp-route-paymentid="@item.PaymentID">Edit</a> |* *@
+                    @* <a asp-page="./Details" asp-route-paymentid="@item.PaymentID">Details</a> | *@
+                   @* <a asp-page="./Delete" asp-route-paymentid="@item.PaymentID">Delete</a> *@
+                    <a asp-page="./Receipt" asp-route-paymentid="@item.PaymentID"
+                       class="btn btn-success btn-sm">
+                        Generate Receipt
+                    </a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

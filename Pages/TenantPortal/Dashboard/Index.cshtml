@@ -1,0 +1,207 @@
+﻿@page
+@model ARMTIS_Capstone_Project.Pages.TenantPortal.Dashboard.IndexModel
+@{
+    ViewData["Title"] = "Tenant Dashboard";
+    Layout = "/Pages/TenantPortal/_TenantLayout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <!-- Welcome Header -->
+    <div class="mb-4">
+        <h2 class="fw-bold">
+            Welcome, @Model.Tenant?.FirstName!
+        </h2>
+
+        <p class="text-muted">
+            Here's an overview of your rental information.
+        </p>
+    </div>
+
+
+    <!-- Tenant Information -->
+    <div class="row g-4">
+
+        <!-- Tenant Profile -->
+        <div class="col-md-6 col-xl-4">
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-person-circle fs-2 me-3"></i>
+
+                        <div>
+                            <h5 class="mb-0 fw-bold">
+                                My Profile
+                            </h5>
+
+                            <small class="text-muted">
+                                Tenant Information
+                            </small>
+                        </div>
+                    </div>
+
+                    <p class="mb-1">
+                        <strong>Name:</strong>
+                        @Model.Tenant?.FirstName @Model.Tenant?.LastName
+                    </p>
+
+                    <p class="mb-1">
+                        <strong>Contact:</strong>
+                        @Model.Tenant?.ContactNo
+                    </p>
+
+                    <p class="mb-0">
+                        <strong>Email:</strong>
+                        @Model.Tenant?.Email
+                    </p>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Unit Information -->
+        <div class="col-md-6 col-xl-4">
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-house-door fs-2 me-3"></i>
+
+                        <div>
+                            <h5 class="mb-0 fw-bold">
+                                My Unit
+                            </h5>
+
+                            <small class="text-muted">
+                                Rental Information
+                            </small>
+                        </div>
+                    </div>
+
+                    @if (Model.Tenant?.Unit != null)
+                    {
+                        <p class="mb-1">
+                            <strong>Unit:</strong>
+                            @Model.Tenant.Unit.UnitNumber
+                        </p>
+
+                        <p class="mb-1">
+                            <strong>Monthly Rent:</strong>
+                            ₱@Model.Tenant.Unit.MonthlyRent.ToString("N2")
+                        </p>
+
+                        <p class="mb-0">
+                            <strong>Status:</strong>
+                            <span class="badge bg-success">
+                                @Model.Tenant.Status
+                            </span>
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">
+                            No unit assigned.
+                        </p>
+                    }
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Lease Information -->
+        <div class="col-md-6 col-xl-4">
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-calendar-check fs-2 me-3"></i>
+
+                        <div>
+                            <h5 class="mb-0 fw-bold">
+                                My Lease
+                            </h5>
+
+                            <small class="text-muted">
+                                Lease Period
+                            </small>
+                        </div>
+                    </div>
+
+                    <p class="mb-1">
+                        <strong>Start:</strong>
+                        @Model.Tenant?.LeaseStartDate.ToString("MMM dd, yyyy")
+                    </p>
+
+                    <p class="mb-0">
+                        <strong>End:</strong>
+                        @Model.Tenant?.LeaseEndDate.ToString("MMM dd, yyyy")
+                    </p>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Quick Access -->
+    <div class="card shadow-sm border-0 mt-4">
+
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0 fw-bold">
+                Quick Access
+            </h5>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <div class="col-md-3">
+                    <a href="#"
+                       class="btn btn-outline-primary w-100 py-3">
+                        <i class="bi bi-receipt fs-4 d-block mb-1"></i>
+                        My Bills
+                    </a>
+                </div>
+
+                <div class="col-md-3">
+                    <a href="#"
+                       class="btn btn-outline-success w-100 py-3">
+                        <i class="bi bi-cash-stack fs-4 d-block mb-1"></i>
+                        My Payments
+                    </a>
+                </div>
+
+                <div class="col-md-3">
+                    <a href="#"
+                       class="btn btn-outline-warning w-100 py-3">
+                        <i class="bi bi-lightning-charge fs-4 d-block mb-1"></i>
+                        Utilities
+                    </a>
+                </div>
+
+                <div class="col-md-3">
+                    <a href="#"
+                       class="btn btn-outline-danger w-100 py-3">
+                        <i class="bi bi-tools fs-4 d-block mb-1"></i>
+                        Maintenance
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

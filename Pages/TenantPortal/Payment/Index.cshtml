@@ -1,0 +1,261 @@
+﻿@page
+@model ARMTIS_Capstone_Project.Pages.TenantPortal.Payment.IndexModel
+
+@{
+    Layout = "/Pages/TenantPortal/_TenantLayout.cshtml";
+    ViewData["Title"] = "Payment History";
+}
+
+<div class="container-fluid py-4">
+
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">
+                <i class="bi bi-clock-history me-2"></i>
+                Payment History
+            </h2>
+
+            <p class="text-muted mb-0">
+                View your recorded rental payments and payment details.
+            </p>
+        </div>
+    </div>
+
+
+    <!-- SUMMARY CARDS -->
+    <div class="row g-3 mb-4">
+
+        <!-- TOTAL PAYMENTS -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center">
+
+                    <div class="rounded-circle bg-primary bg-opacity-10
+                        text-primary p-3 me-3">
+                        <i class="bi bi-receipt fs-4"></i>
+                    </div>
+
+                    <div>
+                        <small class="text-muted">
+                            Total Payments
+                        </small>
+
+                        <h4 class="fw-bold mb-0">
+                            @Model.TotalPayments
+                        </h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- TOTAL AMOUNT PAID -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center">
+
+                    <div class="rounded-circle bg-success bg-opacity-10
+                        text-success p-3 me-3">
+                        <i class="bi bi-cash-stack fs-4"></i>
+                    </div>
+
+                    <div>
+                        <small class="text-muted">
+                            Total Amount Paid
+                        </small>
+
+                        <h4 class="fw-bold mb-0">
+                            ₱@Model.TotalAmountPaid.ToString("N2")
+                        </h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- PAYMENT HISTORY CARD -->
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0 fw-bold">
+                <i class="bi bi-list-ul me-2"></i>
+                Payment Records
+            </h5>
+        </div>
+
+
+        <div class="card-body">
+
+            @if (Model.Payments.Count == 0)
+            {
+                <div class="text-center py-5">
+
+                    <i class="bi bi-receipt-cutoff text-muted"
+                       style="font-size: 3rem;"></i>
+
+                    <h5 class="mt-3">
+                        No Payment Records
+                    </h5>
+
+                    <p class="text-muted mb-0">
+                        Your recorded payments will appear here.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-light">
+                            <tr>
+                                <th>Receipt No.</th>
+                                <th>Billing No.</th>
+                                <th>Billing Month</th>
+                                <th>Payment Date</th>
+                                <th>Amount Paid</th>
+                                <th>Applied to Bill</th>
+                                <th>Payment Method</th>
+                                <th>Status</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var payment in Model.Payments)
+                            {
+                                <tr>
+
+                                    <!-- RECEIPT NUMBER -->
+                                    <td>
+                                        <span class="fw-semibold">
+                                            @(string.IsNullOrWhiteSpace(payment.ReceiptNo)
+                                                ? "N/A"
+                                                : payment.ReceiptNo)
+                                        </span>
+                                    </td>
+
+
+                                    <!-- BILLING NUMBER -->
+                                    <td>
+                                        @(string.IsNullOrWhiteSpace(payment.PaymentFor)
+                                            ? "N/A"
+                                            : payment.PaymentFor)
+                                    </td>
+
+
+                                    <!-- BILLING MONTH -->
+                                    <td>
+                                        @payment.BillingMonth.ToString("MMMM yyyy")
+                                    </td>
+
+
+                                    <!-- PAYMENT DATE -->
+                                    <td>
+                                        @payment.PaymentDate.ToString("MMMM dd, yyyy")
+                                    </td>
+
+
+                                    <!-- AMOUNT PAID -->
+                                    <td>
+                                        <span class="fw-bold text-success">
+                                            ₱@payment.AmountPaid.ToString("N2")
+                                        </span>
+                                    </td>
+
+
+                                    <!-- APPLIED AMOUNT -->
+                                    <td>
+                                        ₱@payment.AppliedAmount.ToString("N2")
+                                    </td>
+
+
+                                    <!-- PAYMENT METHOD -->
+                                    <td>
+                                        @if (!string.IsNullOrWhiteSpace(payment.PaymentMethod))
+                                        {
+                                            <span>
+                                                @payment.PaymentMethod
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                N/A
+                                            </span>
+                                        }
+                                    </td>
+
+
+                                    <!-- PAYMENT STATUS -->
+                                    <td>
+                                        @if (payment.PaymentStatus == "Completed")
+                                        {
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-check-circle me-1"></i>
+                                                Completed
+                                            </span>
+                                        }
+                                        else if (payment.PaymentStatus == "Pending")
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="bi bi-clock me-1"></i>
+                                                Pending
+                                            </span>
+                                        }
+                                        else if (payment.PaymentStatus == "Cancelled")
+                                        {
+                                            <span class="badge bg-danger">
+                                                <i class="bi bi-x-circle me-1"></i>
+                                                Cancelled
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                @(string.IsNullOrWhiteSpace(payment.PaymentStatus)
+                                                    ? "N/A"
+                                                    : payment.PaymentStatus)
+                                            </span>
+                                        }
+                                    </td>
+
+
+                                    <!-- REMARKS -->
+                                    <td>
+                                        @if (string.IsNullOrWhiteSpace(payment.Remarks))
+                                        {
+                                            <span class="text-muted">
+                                                None
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @payment.Remarks
+                                        }
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

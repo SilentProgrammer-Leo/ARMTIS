@@ -1,0 +1,136 @@
+@page
+@model ARMTIS_Capstone_Project.Pages.PaymentPages.RentalPaymentPages.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>RentalPayment</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="RentalPayment.TenantID" class="control-label"></label>
+
+                <select asp-for="RentalPayment.TenantID"
+                        class="form-control"
+                        asp-items="ViewBag.TenantID">
+                </select>
+
+                <span asp-validation-for="RentalPayment.TenantID"
+                      class="text-danger"></span>
+            </div>
+           
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="RentalPayment.AmountPaid" class="control-label"></label>
+                <input asp-for="RentalPayment.AmountPaid" class="form-control" aria-required="true"/>
+                <span asp-validation-for="RentalPayment.AmountPaid" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="RentalPayment.PaymentDate" class="control-label"></label>
+                <input asp-for="RentalPayment.PaymentDate" class="form-control" aria-required="true"/>
+                <span asp-validation-for="RentalPayment.PaymentDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="RentalPayment.PaymentMethod"
+                       class="control-label"></label>
+
+                <select asp-for="RentalPayment.PaymentMethod"
+                        class="form-control"
+                        aria-required="true">
+
+                    <option value="">-- Select Payment Method --</option>
+                    <option value="Cash">Cash</option>
+                    <option value="GCash">GCash</option>
+                    <option value="Bank Transfer">Bank Transfer</option>
+                    <option value="Credit Card">Credit Card</option>
+                    <option value="Debit Card">Debit Card</option>
+
+                </select>
+
+                <span asp-validation-for="RentalPayment.PaymentMethod"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="RentalPayment.PaymentStatus"
+                       class="control-label"></label>
+
+                <select asp-for="RentalPayment.PaymentStatus"
+                        class="form-control"
+                        aria-required="true">
+
+                    <option value="">-- Select Payment Status --</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Partial">Partial</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Overdue">Overdue</option>
+                    
+
+                </select>
+
+                <span asp-validation-for="RentalPayment.PaymentStatus"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="RentalPayment.PaymentFor"
+                       class="control-label"></label>
+
+                <select asp-for="RentalPayment.PaymentFor"
+                        class="form-control"
+                        aria-required="true">
+
+                    <option value="">-- Select Payment Purpose --</option>
+                    <option value="Monthly Billing">Monthly Billing</option>
+                    <option value="Advanced Payment">Advanced Payment</option>
+                    <option value="Security Deposit">Security Deposit</option>
+                    <option value="Utility Payment">Utility Payment</option>
+                    <option value="Penalty">Penalty</option>
+
+                </select>
+
+                <span asp-validation-for="RentalPayment.PaymentFor"
+                      class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RentalPayment.Remarks" class="control-label"></label>
+                <input asp-for="RentalPayment.Remarks" class="form-control" />
+                <span asp-validation-for="RentalPayment.Remarks" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RentalPayment.ReceiptNo" class="control-label"></label>
+                <input asp-for="RentalPayment.ReceiptNo" class="form-control" />
+                <span asp-validation-for="RentalPayment.ReceiptNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span class="text-danger">*</span>
+                <label asp-for="RentalPayment.BillingMonth" class="control-label"></label>
+                <input asp-for="RentalPayment.BillingMonth" class="form-control" aria-required="true"/>
+                <span asp-validation-for="RentalPayment.BillingMonth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

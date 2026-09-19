@@ -1,0 +1,171 @@
+﻿@page
+@model ARMTIS_Capstone_Project.Pages.TenantPortal.Notifications.IndexModel
+
+@{
+    Layout = "~/Pages/TenantPortal/_TenantLayout.cshtml";
+    ViewData["Title"] = "Notifications";
+}
+
+<div class="container-fluid py-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">
+                <i class="bi bi-bell me-2"></i>Notifications
+            </h2>
+            <p class="text-muted mb-0">
+                Stay updated with important information from the management.
+            </p>
+        </div>
+
+        @if (Model.UnreadCount > 0)
+        {
+            <span class="badge bg-danger fs-6 px-3 py-2">
+                @Model.UnreadCount Unread
+            </span>
+        }
+    </div>
+
+    <!-- Notifications -->
+    @if (Model.Notifications.Any())
+    {
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+
+                @foreach (var notification in Model.Notifications)
+                {
+                    <div class="p-4 border-bottom
+                        @(notification.IsRead ? "bg-white" : "bg-light")">
+
+                        <div class="d-flex justify-content-between align-items-start">
+
+                            <div class="d-flex">
+
+                                <!-- Icon -->
+                                <div class="me-3">
+                                    @if (notification.NotificationType == "Payment")
+                                    {
+                                        <i class="bi bi-credit-card-fill text-success fs-3"></i>
+                                    }
+                                    else if (notification.NotificationType == "Maintenance")
+                                    {
+                                        <i class="bi bi-tools text-warning fs-3"></i>
+                                    }
+                                    else if (notification.NotificationType == "Billing")
+                                    {
+                                        <i class="bi bi-receipt-cutoff text-primary fs-3"></i>
+                                    }
+                                    else if (notification.NotificationType == "Utility")
+                                    {
+                                        <i class="bi bi-lightning-charge-fill text-warning fs-3"></i>
+                                    }
+                                    else if (notification.NotificationType == "Lease")
+                                    {
+                                        <i class="bi bi-file-earmark-text-fill text-primary fs-3"></i>
+                                    }
+                                    else if (notification.NotificationType == "Announcement")
+                                    {
+                                        <i class="bi bi-megaphone-fill text-info fs-3"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-bell-fill text-secondary fs-3"></i>
+                                    }
+                                </div>
+
+                                <!-- Content -->
+                                <div>
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+
+                                        <h5 class="fw-bold mb-0">
+                                            @notification.Title
+                                        </h5>
+
+                                        @if (!notification.IsRead)
+                                        {
+                                            <span class="badge bg-primary">
+                                                New
+                                            </span>
+                                        }
+
+                                    </div>
+
+                                    <p class="text-muted mb-2">
+                                        @notification.Message
+                                    </p>
+
+                                    <div class="small text-secondary">
+                                        <i class="bi bi-clock me-1"></i>
+                                        @notification.CreatedDate.ToString("MMMM dd, yyyy hh:mm tt")
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Status / Action -->
+                            <div class="ms-3 text-end">
+
+                                @if (!string.IsNullOrWhiteSpace(notification.NotificationType))
+                                {
+                                    <span class="badge bg-secondary mb-2">
+                                        @notification.NotificationType
+                                    </span>
+                                }
+
+                                @if (!notification.IsRead)
+                                {
+                                    <form method="post"
+                                          asp-page-handler="MarkAsRead"
+                                          asp-route-id="@notification.NotificationID">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-check2 me-1"></i>
+                                            Mark as Read
+                                        </button>
+
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="text-success small">
+                                        <i class="bi bi-check-circle-fill me-1"></i>
+                                        Read
+                                    </span>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Empty State -->
+        <div class="card shadow-sm border-0">
+            <div class="card-body text-center py-5">
+
+                <i class="bi bi-bell-slash text-muted"
+                   style="font-size: 4rem;"></i>
+
+                <h4 class="fw-bold mt-3">
+                    No Notifications
+                </h4>
+
+                <p class="text-muted mb-0">
+                    You don't have any notifications at the moment.
+                </p>
+
+            </div>
+        </div>
+    }
+
+</div>

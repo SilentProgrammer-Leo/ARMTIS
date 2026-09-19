@@ -1,0 +1,301 @@
+﻿@page
+@model ARMTIS_Capstone_Project.Pages.Maintenance.MaintenanceIndexModel
+
+@{
+    ViewData["Title"] = "Maintenance Management";
+}
+
+<div class="container-fluid">
+
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1">
+                Maintenance Management
+            </h2>
+
+            <p class="text-muted mb-0">
+                View and manage tenant maintenance requests.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- SUMMARY CARDS -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Total Requests
+                    </h6>
+
+                    <h3 class="fw-bold">
+                        @Model.TotalRequests
+                    </h3>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Pending
+                    </h6>
+
+                    <h3 class="fw-bold">
+                        @Model.PendingRequests
+                    </h3>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        In Progress
+                    </h6>
+
+                    <h3 class="fw-bold">
+                        @Model.InProgressRequests
+                    </h3>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Completed
+                    </h6>
+
+                    <h3 class="fw-bold">
+                        @Model.CompletedRequests
+                    </h3>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- MAINTENANCE REQUESTS TABLE -->
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-white py-3">
+
+            <h5 class="mb-0 fw-bold">
+                Tenant Maintenance Requests
+            </h5>
+
+        </div>
+
+
+        <div class="card-body">
+
+            @if (Model.MaintenanceRequests.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+                            <tr>
+
+                                <th>
+                                    Request #
+                                </th>
+
+                                @* <th>
+                                    Tenant
+                                </th> *@
+
+                                <th>
+                                    Unit
+                                </th>
+
+                                <th>
+                                    Request
+                                </th>
+
+                                @* <th>
+                                    Category
+                                </th> *@
+
+                                <th>
+                                    Priority
+                                </th>
+
+                                @* <th>
+                                    Date
+                                </th> *@
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var item in Model.MaintenanceRequests)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @item.MaintenanceRequestID
+                                    </td>
+
+
+                                    @* <td>
+                                        @item.Tenant.FirstName
+                                        @item.Tenant.LastName
+                                    </td> *@
+
+
+                                    <td>
+                                        @item.Unit.UnitNumber
+                                    </td>
+
+
+                                    <td>
+                                        @item.RequestTitle
+                                    </td>
+
+
+                                   @*  <td>
+                                        @item.Category
+                                    </td> *@
+
+
+                                    <td>
+
+                                        @if (item.Priority == "High")
+                                        {
+                                            <span class="badge bg-danger">
+                                                High
+                                            </span>
+                                        }
+                                        else if (item.Priority == "Medium")
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                Medium
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                Low
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    @* <td>
+                                        @item.RequestDate.ToString("MMM dd, yyyy")
+                                    </td> *@
+
+
+                                    <td>
+
+                                        @if (item.Status == "Pending")
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                Pending
+                                            </span>
+                                        }
+                                        else if (item.Status == "In Progress")
+                                        {
+                                            <span class="badge bg-primary">
+                                                In Progress
+                                            </span>
+                                        }
+                                        else if (item.Status == "Completed")
+                                        {
+                                            <span class="badge bg-success">
+                                                Completed
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                @item.Status
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <td>
+                                        <div class="d-flex gap-1">
+
+                                            <a asp-page="./Details"
+                                               asp-route-id="@item.MaintenanceRequestID"
+                                               class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-eye"></i>
+                                                View
+                                            </a>
+
+                                            <a asp-page="./Edit"
+                                               asp-route-id="@item.MaintenanceRequestID"
+                                               class="btn btn-sm btn-outline-warning">
+                                                <i class="bi bi-pencil"></i>
+                                                Update
+                                            </a>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+
+                    <h5 class="text-muted">
+                        No maintenance requests found.
+                    </h5>
+
+                    <p class="text-muted">
+                        Tenant maintenance requests will appear here.
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
