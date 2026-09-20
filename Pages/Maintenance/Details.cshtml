@@ -67,6 +67,12 @@
                                 Completed
                             </span>
                         }
+                        else if (Model.MaintenanceRequest.Status == "Cancelled")
+                        {
+                            <span class="badge bg-danger">
+                                Cancelled
+                            </span>
+                        }
                         else
                         {
                             <span class="badge bg-secondary">

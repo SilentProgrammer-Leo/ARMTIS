@@ -22,6 +22,8 @@ namespace ARMTIS_Capstone_Project.Pages.Maintenance
         public int InProgressRequests { get; set; }
         public int CompletedRequests { get; set; }
 
+        public int CancelledRequests { get; set; }
+
         public async Task OnGetAsync()
         {
             MaintenanceRequests = await _context.MaintenanceRequests
@@ -41,6 +43,9 @@ namespace ARMTIS_Capstone_Project.Pages.Maintenance
 
             CompletedRequests = MaintenanceRequests.Count(
                 m => m.Status == "Completed");
+
+            CancelledRequests = MaintenanceRequests.Count(
+                m => m.Status == "Cancelled");
         }
     }
 }
