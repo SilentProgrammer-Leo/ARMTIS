@@ -1,0 +1,852 @@
+﻿@page
+@model ARMTIS_Capstone_Project.Pages.Settings.AccountSecurity.IndexModel
+
+@{
+    ViewData["Title"] = "Account & Security";
+}
+
+<div class="container-fluid px-0">
+
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1"
+                style="color:#0A2D4F;">
+
+                <i class="bi bi-shield-lock me-2"
+                   style="color:#17B6A7;">
+                </i>
+
+                Account & Security
+
+            </h2>
+
+            <p class="text-muted mb-0">
+                Manage user accounts and reset passwords for administrators and tenants.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- SUCCESS MESSAGE -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm"
+             role="alert">
+
+            <i class="bi bi-check-circle-fill me-2"></i>
+
+            @TempData["SuccessMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+
+    <!-- SECURITY NOTICE -->
+    <div class="security-notice mb-4">
+
+        <div class="d-flex align-items-start">
+
+            <div class="security-notice-icon me-3">
+
+                <i class="bi bi-shield-check"></i>
+
+            </div>
+
+            <div>
+
+                <h6 class="fw-bold mb-1">
+                    Password Security
+                </h6>
+
+                <p class="mb-0 small">
+                    Existing passwords are not displayed for security.
+                    Administrators can reset an account password when necessary.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACCOUNT RECORDS -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <div>
+
+            <h5 class="fw-bold mb-1"
+                style="color:#0A2D4F;">
+
+                <i class="bi bi-people me-2"
+                   style="color:#17B6A7;">
+                </i>
+
+                User Accounts
+
+            </h5>
+
+            <small class="text-muted">
+                All registered administrator and tenant accounts.
+            </small>
+
+        </div>
+
+        <span class="account-count">
+
+            <i class="bi bi-person-check me-1"></i>
+
+            @Model.Accounts.Count Account(s)
+
+        </span>
+
+    </div>
+
+
+    <div asp-validation-summary="ModelOnly"
+         class="alert alert-danger"
+         role="alert">
+    </div>
+
+
+    <!-- ACCOUNT TABLE -->
+    <div class="card border-0 shadow-sm account-table-card">
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table align-middle mb-0 account-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>User</th>
+
+                            <th>Username</th>
+
+                            <th>Role</th>
+
+                            <th>Password</th>
+
+                            <th class="text-center">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @if (Model.Accounts.Any())
+                        {
+                            @foreach (var account in Model.Accounts)
+                            {
+                                <tr>
+
+                                    <!-- USER -->
+                                    <td>
+
+                                        <div class="d-flex align-items-center">
+
+                                            <div class="account-avatar me-3">
+
+                                                @if (account.Roles.Contains("Admin"))
+                                                {
+                                                    <i class="bi bi-person-fill-gear"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="bi bi-person-fill"></i>
+                                                }
+
+                                            </div>
+
+                                            <div>
+
+                                                <div class="fw-semibold"
+                                                     style="color:#0A2D4F;">
+
+                                                    @account.DisplayName
+
+                                                </div>
+
+                                                <small class="text-muted">
+                                                    @account.Roles account
+                                                </small>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- USERNAME -->
+                                    <td>
+
+                                        <span class="username-badge">
+
+                                            <i class="bi bi-person me-1"></i>
+
+                                            @account.UserName
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- ROLE -->
+                                    <td>
+
+                                        @if (account.Roles.Contains("Admin"))
+                                        {
+                                            <span class="role-badge role-admin">
+
+                                                <i class="bi bi-shield-fill-check me-1"></i>
+                                                Admin
+
+                                            </span>
+                                        }
+                                        else if (account.Roles.Contains("Tenant"))
+                                        {
+                                            <span class="role-badge role-tenant">
+
+                                                <i class="bi bi-person-check me-1"></i>
+                                                Tenant
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="role-badge role-other">
+                                                @account.Roles
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- PASSWORD -->
+                                    <td>
+
+                                        @if (account.HasPassword)
+                                        {
+                                            <span class="password-status password-protected">
+
+                                                <i class="bi bi-lock-fill me-1"></i>
+                                                Password Protected
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="password-status password-missing">
+
+                                                <i class="bi bi-exclamation-circle me-1"></i>
+                                                No Password
+
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- ACTION -->
+                                    <td>
+
+                                        <div class="text-center">
+
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-primary reset-password-btn"
+                                                    data-userid="@account.UserId"
+                                                    data-username="@account.UserName"
+                                                    data-displayname="@account.DisplayName">
+
+                                                <i class="bi bi-key-fill me-1"></i>
+                                                Reset Password
+
+                                            </button>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+
+                                <td colspan="5"
+                                    class="text-center py-5">
+
+                                    <div class="empty-account-icon mb-3">
+
+                                        <i class="bi bi-people"></i>
+
+                                    </div>
+
+                                    <h6 class="fw-bold"
+                                        style="color:#0A2D4F;">
+
+                                        No User Accounts Found
+
+                                    </h6>
+
+                                    <p class="text-muted mb-0">
+                                        There are currently no registered accounts.
+                                    </p>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- RESET PASSWORD MODAL -->
+<div class="modal fade"
+     id="resetPasswordModal"
+     tabindex="-1"
+     aria-labelledby="resetPasswordModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content reset-password-modal">
+
+            <div class="modal-header reset-password-header">
+
+                <div class="d-flex align-items-center">
+
+                    <div class="reset-password-icon me-3">
+
+                        <i class="bi bi-key-fill"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h5 class="modal-title mb-1"
+                            id="resetPasswordModalLabel"
+                        style="color:white">
+
+                            Reset Password
+
+                        </h5>
+
+                        <small class="text-white-50">
+                            Set a new password for this account.
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <button type="button"
+                        class="btn-close reset-password-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+
+            <form method="post"
+                  asp-page-handler="ResetPassword">
+
+                <div class="modal-body p-4">
+
+                    <input type="hidden"
+                           asp-for="Input.UserId"
+                           id="ResetUserId" />
+
+
+                    <div class="reset-account-info mb-4">
+
+                        <small class="text-muted d-block">
+                            Account
+                        </small>
+
+                        <strong id="ResetDisplayName"
+                                style="color:#0A2D4F;">
+                        </strong>
+
+                        <div class="small text-muted">
+
+                            Username:
+                            <span id="ResetUsername"></span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- NEW PASSWORD -->
+                    <div class="mb-3">
+
+                        <label asp-for="Input.NewPassword"
+                               class="form-label fw-semibold">
+
+                            New Password
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <input asp-for="Input.NewPassword"
+                                   type="password"
+                                   class="form-control"
+                                   id="NewPassword"
+                                   autocomplete="new-password"
+                                   placeholder="Enter new password" />
+
+                            <button type="button"
+                                    class="btn btn-outline-secondary"
+                                    id="toggleNewPassword">
+
+                                <i class="bi bi-eye"></i>
+
+                            </button>
+
+                        </div>
+
+                        <span asp-validation-for="Input.NewPassword"
+                              class="text-danger small">
+                        </span>
+
+                        <small class="text-muted">
+                            Must meet the system's password requirements.
+                        </small>
+
+                    </div>
+
+
+                    <!-- CONFIRM PASSWORD -->
+                    <div class="mb-3">
+
+                        <label asp-for="Input.ConfirmPassword"
+                               class="form-label fw-semibold">
+
+                            Confirm Password
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <input asp-for="Input.ConfirmPassword"
+                                   type="password"
+                                   class="form-control"
+                                   autocomplete="new-password"
+                                   placeholder="Confirm new password" />
+
+                            <button type="button"
+                                    class="btn btn-outline-secondary"
+                                    id="toggleConfirmPassword">
+
+                                <i class="bi bi-eye"></i>
+
+                            </button>
+
+                        </div>
+
+                        <span asp-validation-for="Input.ConfirmPassword"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <div class="alert alert-warning small mb-0">
+
+                        <i class="bi bi-exclamation-triangle me-1"></i>
+
+                        The selected account will need to use the new password
+                        on its next login.
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-light border"
+                            data-bs-dismiss="modal">
+
+                        Cancel
+
+                    </button>
+
+                    <button type="submit"
+                            class="btn text-white"
+                            style="background:#0A2D4F;">
+
+                        <i class="bi bi-check-circle me-1"></i>
+                        Update Password
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    .security-notice {
+        padding: 15px 17px;
+        border-radius: 11px;
+        background: #f3f9ff;
+        border: 1px solid #d7e9f7;
+        color: #315d77;
+    }
+
+    .security-notice-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #e7f4ff;
+        color: #1473a3;
+        flex-shrink: 0;
+    }
+
+    .account-count {
+        display: inline-flex;
+        align-items: center;
+        background: #eaf7f5;
+        color: #087f73;
+        padding: 7px 11px;
+        border-radius: 999px;
+        font-size: 0.76rem;
+        font-weight: 600;
+    }
+
+    .account-table-card {
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .account-table {
+        min-width: 900px;
+    }
+
+        .account-table thead th {
+            background: #0A2D4F;
+            color: white;
+            border: none;
+            padding: 14px 16px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .account-table tbody td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #edf0f3;
+            font-size: 0.88rem;
+        }
+
+        .account-table tbody tr {
+            transition: background-color 0.15s ease;
+        }
+
+            .account-table tbody tr:hover {
+                background: #f7fbfa;
+            }
+
+    .account-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eaf7f5;
+        color: #17B6A7;
+        flex-shrink: 0;
+    }
+
+    .username-badge {
+        display: inline-flex;
+        align-items: center;
+        background: #f4f6f8;
+        color: #495057;
+        padding: 6px 9px;
+        border-radius: 7px;
+        font-size: 0.76rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .role-badge,
+    .password-status {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 0.74rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .role-admin {
+        background: #efeafd;
+        color: #6750a4;
+    }
+
+    .role-tenant {
+        background: #e7f4ff;
+        color: #1473a3;
+    }
+
+    .role-other {
+        background: #eef1f5;
+        color: #5f6b78;
+    }
+
+    .password-protected {
+        background: #e9f7ef;
+        color: #198754;
+    }
+
+    .password-missing {
+        background: #fdecec;
+        color: #dc3545;
+    }
+
+    .reset-password-btn {
+        min-height: 32px;
+        padding: 4px 10px;
+        font-size: 0.76rem;
+        border-radius: 6px;
+    }
+
+    .empty-account-icon {
+        width: 54px;
+        height: 54px;
+        margin: 0 auto;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eaf7f5;
+        color: #17B6A7;
+        font-size: 1.4rem;
+    }
+
+    .reset-password-modal {
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .reset-password-header {
+        background: #0A2D4F;
+        color: white;
+        border-bottom: 3px solid #17B6A7;
+    }
+
+    .reset-password-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(23, 182, 167, 0.16);
+        color: #17B6A7;
+    }
+
+    .reset-password-close {
+        filter: brightness(0) invert(1);
+    }
+
+    .reset-account-info {
+        padding: 12px 14px;
+        border-radius: 9px;
+        background: #f8fafb;
+        border: 1px solid #e5eaee;
+    }
+
+    .form-control:focus {
+        border-color: #17B6A7;
+        box-shadow: 0 0 0 0.2rem rgba(23, 182, 167, 0.12);
+    }
+
+    @@media (max-width: 768px) {
+
+        .account-table {
+            min-width: 900px;
+        }
+
+        .account-table-card {
+            border-radius: 10px;
+        }
+    }
+
+</style>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            const resetModalElement =
+                document.getElementById("resetPasswordModal");
+
+            const resetModal =
+                resetModalElement
+                    ? bootstrap.Modal.getOrCreateInstance(
+                        resetModalElement)
+                    : null;
+
+
+            document
+                .querySelectorAll(".reset-password-btn")
+                .forEach(function(button) {
+
+                    button.addEventListener("click", function() {
+
+                        const userId =
+                            this.dataset.userid;
+
+                        const username =
+                            this.dataset.username;
+
+                        const displayName =
+                            this.dataset.displayname;
+
+
+                        document.getElementById(
+                            "ResetUserId"
+                        ).value = userId;
+
+                        document.getElementById(
+                            "ResetUsername"
+                        ).textContent = username;
+
+                        document.getElementById(
+                            "ResetDisplayName"
+                        ).textContent = displayName;
+
+
+                        document.getElementById(
+                            "NewPassword"
+                        ).value = "";
+
+                        document.getElementById(
+                            "Input_ConfirmPassword"
+                        ).value = "";
+
+
+                        if (resetModal) {
+                            resetModal.show();
+                        }
+
+                    });
+
+                });
+
+
+            // SHOW / HIDE NEW PASSWORD
+
+            const toggleNewPassword =
+                document.getElementById(
+                    "toggleNewPassword");
+
+            const newPasswordInput =
+                document.getElementById(
+                    "NewPassword");
+
+
+            toggleNewPassword?.addEventListener(
+                "click",
+                function() {
+
+                    const isPassword =
+                        newPasswordInput.type === "password";
+
+                    newPasswordInput.type =
+                        isPassword
+                            ? "text"
+                            : "password";
+
+                    this.innerHTML =
+                        isPassword
+                            ? '<i class="bi bi-eye-slash"></i>'
+                            : '<i class="bi bi-eye"></i>';
+
+                });
+
+
+            // SHOW / HIDE CONFIRM PASSWORD
+
+            const toggleConfirmPassword =
+                document.getElementById(
+                    "toggleConfirmPassword");
+
+            const confirmPasswordInput =
+                document.getElementById(
+                    "Input_ConfirmPassword");
+
+
+            toggleConfirmPassword?.addEventListener(
+                "click",
+                function() {
+
+                    const isPassword =
+                        confirmPasswordInput.type === "password";
+
+                    confirmPasswordInput.type =
+                        isPassword
+                            ? "text"
+                            : "password";
+
+                    this.innerHTML =
+                        isPassword
+                            ? '<i class="bi bi-eye-slash"></i>'
+                            : '<i class="bi bi-eye"></i>';
+
+                });
+
+        });
+
+    </script>
+}

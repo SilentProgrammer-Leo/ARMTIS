@@ -892,3 +892,8 @@ h1, h2, h3, h4, h5 {
     padding: 14px 20px;
 }
 
+/* Prevent browser from adding a second password-reveal icon */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
