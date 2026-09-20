@@ -10,6 +10,14 @@ namespace ARMTIS_Capstone_Project.Pages.BillingStatementPages;
 
 public class IndexModel : PageModel
 {
+    [BindProperty(SupportsGet = true)]
+    public string? SearchTerm { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public string? StatusFilter { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public string? BillingMonthFilter { get; set; }
     private readonly ApplicationDbContext _context;
 
     public IndexModel(ApplicationDbContext context)
@@ -29,59 +37,39 @@ public class IndexModel : PageModel
             return;
         }
 
-        decimal baseAmount =
-            billing.MonthlyRent +
-            billing.UtilityCharges;
+        decimal baseAmount =billing.MonthlyRent + billing.UtilityCharges;
 
-        var gracePeriodEnd =
-            billing.DueDate.AddDays(7);
+        var gracePeriodEnd =billing.DueDate.AddDays(7);
 
-
-        // =========================
         // BEFORE / WITHIN GRACE PERIOD
-        // =========================
 
         if (DateTime.Today <= gracePeriodEnd)
         {
             billing.PenaltyAmount = 0;
 
-            billing.TotalAmountDue =
-                baseAmount;
+            billing.TotalAmountDue = baseAmount;
 
-            // IMPORTANT:
-            // Do not change Unpaid back to Pending.
+            // To not change Unpaid back to Pending.
             if (billing.BillingStatus != "Unpaid")
             {
-                billing.BillingStatus =
-                    "Pending";
+                billing.BillingStatus = "Pending";
             }
 
             return;
         }
 
-
-        // =========================
         // AFTER GRACE PERIOD
-        // =========================
 
-        int lateDays =
-            (DateTime.Today -
-             gracePeriodEnd).Days;
+        int lateDays =(DateTime.Today -gracePeriodEnd).Days;
 
-        decimal dailyPenalty =
-            baseAmount * 0.04m;
+        decimal dailyPenalty = baseAmount * 0.04m;
 
-        billing.PenaltyAmount =
-            dailyPenalty *
-            lateDays;
+        billing.PenaltyAmount = dailyPenalty * lateDays;
 
-        billing.TotalAmountDue =
-            baseAmount +
-            billing.PenaltyAmount;
+        billing.TotalAmountDue = baseAmount + billing.PenaltyAmount;
 
         // Only issued/unpaid bills become overdue.
-        if (billing.BillingStatus == "Unpaid" ||
-            billing.BillingStatus == "Overdue")
+        if (billing.BillingStatus == "Unpaid" || billing.BillingStatus == "Overdue")
         {
             billing.BillingStatus =
                 "Overdue";
@@ -93,40 +81,93 @@ public class IndexModel : PageModel
 
     public async Task OnGetAsync()
     {
-        BillingStatement = await _context.BillingStatements
+  
+        // LOAD ALL BILLING STATEMENTS
+
+        var allBillingStatements = await _context.BillingStatements
             .Include(b => b.Tenant)
             .Include(b => b.Unit)
             .OrderByDescending(b => b.DateGenerated)
             .ToListAsync();
 
-        UtilityReadingsByBillingId =
-            new Dictionary<int, UtilityReading>();
+        // INITIALIZE UTILITY READING DICTIONARY
 
-        foreach (var billing in BillingStatement)
+        UtilityReadingsByBillingId = new Dictionary<int, UtilityReading>();
+
+        // UPDATE PENALTY / STATUS
+        // AND LOAD UTILITY READINGS
+
+        foreach (var billing in allBillingStatements)
         {
             UpdatePenaltyAndStatus(billing);
 
-            var billingMonth =
-                new DateTime(
-                    billing.BillingMonth.Year,
-                    billing.BillingMonth.Month,
-                    1);
+            var billingMonth = new DateTime(billing.BillingMonth.Year,billing.BillingMonth.Month,1);
 
-            var utilityReading =
-                await _context.UtilityReadings
-                    .FirstOrDefaultAsync(u =>
-                        u.TenantID == billing.TenantID &&
-                        u.BillingMonth == billingMonth);
+            var utilityReading = await _context.UtilityReadings
+                    .FirstOrDefaultAsync(
+                        u =>u.TenantID == billing.TenantID && u.BillingMonth == billingMonth);
 
             if (utilityReading != null)
             {
-                UtilityReadingsByBillingId[
-                    billing.BillingStatementID
-                ] = utilityReading;
+                UtilityReadingsByBillingId[billing.BillingStatementID] = utilityReading;
             }
         }
 
+
+        // SAVE UPDATED PENALTIES / STATUS
+
         await _context.SaveChangesAsync();
+
+        // APPLY SEARCH
+
+        IEnumerable<BillingStatement> filteredBillingStatements =
+            allBillingStatements;
+
+        if (!string.IsNullOrWhiteSpace(SearchTerm))
+        {
+            var search = SearchTerm.Trim();
+
+            filteredBillingStatements = filteredBillingStatements
+                .Where(b =>(!string.IsNullOrEmpty(b.BillingNo) &&b.BillingNo.Contains(search,StringComparison.OrdinalIgnoreCase)) ||
+                        (b.Tenant != null && ( ($"{b.Tenant.FirstName} {b.Tenant.LastName}").Contains(search,StringComparison.OrdinalIgnoreCase))) ||
+                     (b.Unit != null && !string.IsNullOrEmpty(b.Unit.UnitNumber) && b.Unit.UnitNumber.Contains(search,StringComparison.OrdinalIgnoreCase))
+                );
+        }
+
+        // APPLY STATUS FILTER
+
+        if (!string.IsNullOrWhiteSpace(StatusFilter) &&
+            !StatusFilter.Equals(
+                "All",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            filteredBillingStatements =
+                filteredBillingStatements.Where(b =>
+                    string.Equals(
+                        b.BillingStatus,
+                        StatusFilter,
+                        StringComparison.OrdinalIgnoreCase));
+        }
+
+        // APPLY BILLING MONTH FILTER
+
+        if (!string.IsNullOrWhiteSpace(BillingMonthFilter) &&
+            DateTime.TryParseExact(
+                BillingMonthFilter + "-01",
+                "yyyy-MM-dd",
+                System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.None,
+                out var selectedMonth))
+        {
+            filteredBillingStatements =
+                filteredBillingStatements.Where(b =>
+                    b.BillingMonth.Year == selectedMonth.Year &&
+                    b.BillingMonth.Month == selectedMonth.Month);
+        }
+
+        // FINAL BILLING STATEMENT LIST
+
+        BillingStatement = filteredBillingStatements.ToList();
     }
 
     public class RecordPaymentRequest

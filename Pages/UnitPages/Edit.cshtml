@@ -2,60 +2,279 @@
 @model ARMTIS_Capstone_Project.Pages.UnitPages.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Unit";
 }
 
-<h1>Edit</h1>
+<div class="container-fluid px-0">
 
-<h4>Unit</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Unit.UnitID" />
-            <div class="form-group">
-                <span class="text-danger">*</span>
-                <label asp-for="Unit.UnitNumber" class="control-label"></label>
-                <input asp-for="Unit.UnitNumber" class="form-control" aria-required="true"/>
-                <span asp-validation-for="Unit.UnitNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Unit.Description" class="control-label"></label>
-                <input asp-for="Unit.Description" class="form-control" />
-                <span asp-validation-for="Unit.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Unit.MonthlyRent" class="control-label"></label>
-                <input asp-for="Unit.MonthlyRent" class="form-control" />
-                <span asp-validation-for="Unit.MonthlyRent" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Unit.UnitStatus" class="control-label"></label>
-                <input asp-for="Unit.UnitStatus" class="form-control" />
-                <span asp-validation-for="Unit.UnitStatus" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Unit.Capacity" class="control-label"></label>
-                <input asp-for="Unit.Capacity" class="form-control" />
-                <span asp-validation-for="Unit.Capacity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Unit.Tenants" class="control-label"></label>
-                <input asp-for="Unit.Tenants" class="form-control" />
-                <span asp-validation-for="Unit.Tenants" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1" style="color:#0A2D4F;">
+                Edit Unit
+            </h2>
+            <p class="text-muted mb-0">
+                Update the information and status of this rental unit.
+            </p>
+        </div>
+
+        <a asp-page="./Index"
+           class="btn btn-outline-secondary px-3">
+            <i class="bi bi-arrow-left me-1"></i>
+            Back to Units
+        </a>
     </div>
+
+
+    <!-- FORM CARD -->
+    <div class="card border-0 shadow-sm">
+
+        <!-- CARD HEADER -->
+        <div class="card-header text-white py-3"
+             style="background:#0A2D4F;">
+
+            <div class="d-flex align-items-center">
+
+                <div class="rounded-circle bg-white bg-opacity-10
+                    d-flex align-items-center justify-content-center me-3"
+                     style="width:42px;height:42px;">
+
+                    <i class="bi bi-building fs-5"></i>
+
+                </div>
+
+                <div>
+                    <h5 class="mb-0 fw-semibold">
+                        Unit Information
+                    </h5>
+
+                    <small class="text-white-50">
+                        Modify the details below
+                    </small>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CARD BODY -->
+        <div class="card-body p-4">
+
+            <form method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="alert alert-danger"
+                     role="alert">
+                </div>
+
+                <input type="hidden" asp-for="Unit.UnitID" />
+
+
+                <div class="row g-4">
+
+                    <!-- UNIT NUMBER -->
+                    <div class="col-md-6">
+
+                        <label asp-for="Unit.UnitNumber"
+                               class="form-label fw-semibold">
+
+                            Unit Number
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+                        <input asp-for="Unit.UnitNumber"
+                               class="form-control form-control-lg"
+                               placeholder="Example: A-101" />
+
+                        <span asp-validation-for="Unit.UnitNumber"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- MONTHLY RENT -->
+                    <div class="col-md-6">
+
+                        <label asp-for="Unit.MonthlyRent"
+                               class="form-label fw-semibold">
+
+                            Monthly Rent
+
+                        </label>
+
+                        <div class="input-group input-group-lg">
+
+                            <span class="input-group-text">
+                                ₱
+                            </span>
+
+                            <input asp-for="Unit.MonthlyRent"
+                                   class="form-control"
+                                   type="number"
+                                   step="0.01"
+                                   min="0"
+                                   placeholder="0.00" />
+
+                        </div>
+
+                        <span asp-validation-for="Unit.MonthlyRent"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+                    <div class="col-12">
+
+                        <label asp-for="Unit.Description"
+                               class="form-label fw-semibold">
+
+                            Description
+
+                        </label>
+
+                        <textarea asp-for="Unit.Description"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="Enter unit description...">
+                        </textarea>
+
+                        <span asp-validation-for="Unit.Description"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- UNIT STATUS -->
+                    <div class="col-md-6">
+
+                        <label asp-for="Unit.UnitStatus"
+                               class="form-label fw-semibold">
+
+                            Unit Status
+
+                        </label>
+
+                        <select asp-for="Unit.UnitStatus"
+                                class="form-select form-select-lg">
+
+                            <option value="">-- Select Status --</option>
+                            <option value="Vacant">Vacant</option>
+                            <option value="Occupied">Occupied</option>
+                            <option value="Maintenance">Maintenance</option>
+
+                        </select>
+
+                        <span asp-validation-for="Unit.UnitStatus"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- CAPACITY -->
+                    <div class="col-md-6">
+
+                        <label asp-for="Unit.Capacity"
+                               class="form-label fw-semibold">
+
+                            Capacity
+
+                        </label>
+
+                        <input asp-for="Unit.Capacity"
+                               class="form-control form-control-lg"
+                               type="number"
+                               min="1"
+                               placeholder="Maximum tenants" />
+
+                        <span asp-validation-for="Unit.Capacity"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- CURRENT TENANTS -->
+                    <div class="col-12">
+
+                        <div class="p-3 rounded-3"
+                             style="background:#f7f9fb;border:1px solid #e5e9ef;">
+
+                            <div class="d-flex align-items-center">
+
+                                <div class="rounded-circle d-flex
+                                    align-items-center
+                                    justify-content-center me-3"
+                                     style="width:42px;height:42px;
+                                    background:#17B6A7;
+                                    color:white;">
+
+                                    <i class="bi bi-people"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <div class="fw-semibold">
+                                        Current Tenants
+                                    </div>
+
+                                    <div class="text-muted small">
+                                        Tenant assignments are managed
+                                        through Tenant Management.
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACTION BUTTONS -->
+                <div class="d-flex justify-content-end gap-2
+                    mt-4 pt-4 border-top">
+
+                    <a asp-page="./Index"
+                       class="btn btn-light border px-4">
+
+                        <i class="bi bi-x-circle me-1"></i>
+                        Cancel
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn text-white px-4"
+                            style="background:#0A2D4F;">
+
+                        <i class="bi bi-check-circle me-1"></i>
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
 </div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
