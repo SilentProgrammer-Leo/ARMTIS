@@ -2,122 +2,783 @@
 @model ARMTIS_Capstone_Project.Pages.UtilityReadingPages.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Utility Reading";
 }
 
-<h1>Edit</h1>
+<div class="container-fluid px-0">
 
-<h4>UtilityReading</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="UtilityReading.UtilityReadingID" />
-            <div class="form-group">
-                <span class="text-danger">*</span>
-                <label asp-for="UtilityReading.TenantID" class="control-label"></label>
-                <input asp-for="UtilityReading.TenantID" class="form-control" aria-required="true"/>
-                <span asp-validation-for="UtilityReading.TenantID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UtilityReading.Tenant" class="control-label"></label>
-                <input asp-for="UtilityReading.Tenant" class="form-control" />
-                <span asp-validation-for="UtilityReading.Tenant" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <span class="text-danger">*</span>
-                <label asp-for="UtilityReading.UnitID" class="control-label"></label>
-                <input asp-for="UtilityReading.UnitID" class="form-control" aria-required="true"/>
-                <span asp-validation-for="UtilityReading.UnitID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UtilityReading.Unit" class="control-label"></label>
-                <input asp-for="UtilityReading.Unit" class="form-control" />
-                <span asp-validation-for="UtilityReading.Unit" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <span class="text-danger">*</span>
-                <label asp-for="UtilityReading.BillingMonth" class="control-label"></label>
-                <input asp-for="UtilityReading.BillingMonth" class="form-control" aria-required="true"/>
-                <span asp-validation-for="UtilityReading.BillingMonth" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UtilityReading.PreviousElectricReading" class="control-label"></label>
-                <input asp-for="UtilityReading.PreviousElectricReading" class="form-control" />
-                <span asp-validation-for="UtilityReading.PreviousElectricReading" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UtilityReading.CurrentElectricReading" class="control-label"></label>
-                <input asp-for="UtilityReading.CurrentElectricReading" class="form-control" />
-                <span asp-validation-for="UtilityReading.CurrentElectricReading" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UtilityReading.ElectricConsumption" class="control-label"></label>
-                <input asp-for="UtilityReading.ElectricConsumption" class="form-control" />
-                <span asp-validation-for="UtilityReading.ElectricConsumption" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UtilityReading.ElectricRate" class="control-label"></label>
-                <input asp-for="UtilityReading.ElectricRate" class="form-control" />
-                <span asp-validation-for="UtilityReading.ElectricRate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UtilityReading.ElectricityBill" class="control-label"></label>
-                <input asp-for="UtilityReading.ElectricityBill" class="form-control" />
-                <span asp-validation-for="UtilityReading.ElectricityBill" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UtilityReading.PreviousWaterReading" class="control-label"></label>
-                <input asp-for="UtilityReading.PreviousWaterReading" class="form-control" />
-                <span asp-validation-for="UtilityReading.PreviousWaterReading" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UtilityReading.CurrentWaterReading" class="control-label"></label>
-                <input asp-for="UtilityReading.CurrentWaterReading" class="form-control" />
-                <span asp-validation-for="UtilityReading.CurrentWaterReading" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UtilityReading.WaterConsumption" class="control-label"></label>
-                <input asp-for="UtilityReading.WaterConsumption" class="form-control" />
-                <span asp-validation-for="UtilityReading.WaterConsumption" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UtilityReading.WaterRate" class="control-label"></label>
-                <input asp-for="UtilityReading.WaterRate" class="form-control" />
-                <span asp-validation-for="UtilityReading.WaterRate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UtilityReading.WaterBill" class="control-label"></label>
-                <input asp-for="UtilityReading.WaterBill" class="form-control" />
-                <span asp-validation-for="UtilityReading.WaterBill" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UtilityReading.InternetBill" class="control-label"></label>
-                <input asp-for="UtilityReading.InternetBill" class="form-control" />
-                <span asp-validation-for="UtilityReading.InternetBill" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UtilityReading.TotalUtilityCharges" class="control-label"></label>
-                <input asp-for="UtilityReading.TotalUtilityCharges" class="form-control" />
-                <span asp-validation-for="UtilityReading.TotalUtilityCharges" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UtilityReading.DateRecorded" class="control-label"></label>
-                <input asp-for="UtilityReading.DateRecorded" class="form-control" />
-                <span asp-validation-for="UtilityReading.DateRecorded" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1" style="color:#0A2D4F;">
+                Edit Utility Reading
+            </h2>
+
+            <p class="text-muted mb-0">
+                Update the utility meter readings and billing information.
+            </p>
+        </div>
+
+        <a asp-page="./Index"
+           class="btn btn-outline-secondary px-3 py-2">
+
+            <i class="bi bi-arrow-left me-1"></i>
+            Back to Utility Readings
+
+        </a>
+
     </div>
+
+
+    <!-- MAIN CARD -->
+    <div class="card border-0 shadow-sm utility-edit-card">
+
+        <!-- HEADER -->
+        <div class="card-header text-white py-3"
+             style="background:#0A2D4F;">
+
+            <div class="d-flex align-items-center">
+
+                <div class="utility-edit-icon me-3">
+                    <i class="bi bi-speedometer2"></i>
+                </div>
+
+                <div>
+                    <h5 class="mb-0 fw-semibold">
+                        Utility Reading Information
+                    </h5>
+
+                    <small class="text-white-50">
+                        Review and update the selected utility record.
+                    </small>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- BODY -->
+        <div class="card-body p-4">
+
+            <form method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="alert alert-danger"
+                     role="alert">
+                </div>
+
+                <input type="hidden"
+                       asp-for="UtilityReading.UtilityReadingID" />
+
+                <input type="hidden"
+                       asp-for="UtilityReading.TenantID" />
+
+                <input type="hidden"
+                       asp-for="UtilityReading.UnitID" />
+
+
+                <!-- RECORD INFORMATION -->
+                <div class="section-header">
+
+                    <div>
+                        <h6 class="fw-bold mb-1"
+                            style="color:#0A2D4F;">
+
+                            Record Information
+
+                        </h6>
+
+                        <small class="text-muted">
+                            Tenant, unit, and billing period.
+                        </small>
+                    </div>
+
+                </div>
+
+                <div class="row g-4 mb-4">
+
+                    <!-- TENANT -->
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Tenant
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                            @if (Model.UtilityReading.Tenant != null)
+                            {
+                                <i class="bi bi-person me-2 text-muted"></i>
+
+                                @($"{Model.UtilityReading.Tenant.FirstName} {Model.UtilityReading.Tenant.LastName}")
+                            }
+                            else
+                            {
+                                <span class="text-muted">
+                                    Tenant ID: @Model.UtilityReading.TenantID
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- UNIT -->
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Unit
+                        </label>
+
+                        <div class="form-control bg-light">
+
+                            @if (Model.UtilityReading.Unit != null)
+                            {
+                                <i class="bi bi-door-open me-2 text-muted"></i>
+
+                                @Model.UtilityReading.Unit.UnitNumber
+                            }
+                            else
+                            {
+                                <span class="text-muted">
+                                    Unit ID: @Model.UtilityReading.UnitID
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- BILLING MONTH -->
+                    <div class="col-md-6">
+
+                        <label asp-for="UtilityReading.BillingMonth"
+                               class="form-label fw-semibold">
+
+                            Billing Month
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+                        <input asp-for="UtilityReading.BillingMonth"
+                               type="month"
+                               class="form-control" />
+
+                        <span asp-validation-for="UtilityReading.BillingMonth"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- DATE RECORDED -->
+                    <div class="col-md-6">
+
+                        <label asp-for="UtilityReading.DateRecorded"
+                               class="form-label fw-semibold">
+
+                            Date Recorded
+
+                        </label>
+
+                        <input asp-for="UtilityReading.DateRecorded"
+                               type="datetime-local"
+                               class="form-control" />
+
+                        <span asp-validation-for="UtilityReading.DateRecorded"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ELECTRICITY -->
+                <div class="section-header">
+
+                    <div class="d-flex align-items-center">
+
+                        <div class="service-icon electricity-icon me-3">
+                            <i class="bi bi-lightning-charge-fill"></i>
+                        </div>
+
+                        <div>
+
+                            <h6 class="fw-bold mb-1"
+                                style="color:#0A2D4F;">
+
+                                Electricity
+
+                            </h6>
+
+                            <small class="text-muted">
+                                Electricity meter readings and charges.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row g-4 mb-4">
+
+                    <!-- PREVIOUS READING -->
+                    <div class="col-md-6 col-lg-3">
+
+                        <label asp-for="UtilityReading.PreviousElectricReading"
+                               class="form-label fw-semibold">
+
+                            Previous Reading
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <input asp-for="UtilityReading.PreviousElectricReading"
+                                   class="form-control"
+                                   type="number"
+                                   step="0.01"
+                                   min="0" />
+
+                            <span class="input-group-text">
+                                kWh
+                            </span>
+
+                        </div>
+
+                        <span asp-validation-for="UtilityReading.PreviousElectricReading"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- CURRENT READING -->
+                    <div class="col-md-6 col-lg-3">
+
+                        <label asp-for="UtilityReading.CurrentElectricReading"
+                               class="form-label fw-semibold">
+
+                            Current Reading
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <input asp-for="UtilityReading.CurrentElectricReading"
+                                   class="form-control"
+                                   type="number"
+                                   step="0.01"
+                                   min="0" />
+
+                            <span class="input-group-text">
+                                kWh
+                            </span>
+
+                        </div>
+
+                        <span asp-validation-for="UtilityReading.CurrentElectricReading"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- CONSUMPTION -->
+                    <div class="col-md-6 col-lg-3">
+
+                        <label asp-for="UtilityReading.ElectricConsumption"
+                               class="form-label fw-semibold">
+
+                            Consumption
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <input asp-for="UtilityReading.ElectricConsumption"
+                                   class="form-control bg-light"
+                                   type="number"
+                                   step="0.01"
+                                   readonly />
+
+                            <span class="input-group-text">
+                                kWh
+                            </span>
+
+                        </div>
+
+                        <span asp-validation-for="UtilityReading.ElectricConsumption"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- RATE -->
+                    <div class="col-md-6 col-lg-3">
+
+                        <label asp-for="UtilityReading.ElectricRate"
+                               class="form-label fw-semibold">
+
+                            Rate
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+                                ₱
+                            </span>
+
+                            <input asp-for="UtilityReading.ElectricRate"
+                                   class="form-control"
+                                   type="number"
+                                   step="0.01"
+                                   min="0" />
+
+                            <span class="input-group-text">
+                                / kWh
+                            </span>
+
+                        </div>
+
+                        <span asp-validation-for="UtilityReading.ElectricRate"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- ELECTRICITY BILL -->
+                    <div class="col-12">
+
+                        <label asp-for="UtilityReading.ElectricityBill"
+                               class="form-label fw-semibold">
+
+                            Electricity Bill
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+                                ₱
+                            </span>
+
+                            <input asp-for="UtilityReading.ElectricityBill"
+                                   class="form-control bg-light fw-semibold"
+                                   type="number"
+                                   step="0.01"
+                                   readonly />
+
+                        </div>
+
+                        <span asp-validation-for="UtilityReading.ElectricityBill"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- WATER -->
+                <div class="section-header">
+
+                    <div class="d-flex align-items-center">
+
+                        <div class="service-icon water-icon me-3">
+                            <i class="bi bi-droplet-fill"></i>
+                        </div>
+
+                        <div>
+
+                            <h6 class="fw-bold mb-1"
+                                style="color:#0A2D4F;">
+
+                                Water
+
+                            </h6>
+
+                            <small class="text-muted">
+                                Water meter readings and charges.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row g-4 mb-4">
+
+                    <!-- PREVIOUS READING -->
+                    <div class="col-md-6 col-lg-3">
+
+                        <label asp-for="UtilityReading.PreviousWaterReading"
+                               class="form-label fw-semibold">
+
+                            Previous Reading
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <input asp-for="UtilityReading.PreviousWaterReading"
+                                   class="form-control"
+                                   type="number"
+                                   step="0.01"
+                                   min="0" />
+
+                            <span class="input-group-text">
+                                m³
+                            </span>
+
+                        </div>
+
+                        <span asp-validation-for="UtilityReading.PreviousWaterReading"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- CURRENT READING -->
+                    <div class="col-md-6 col-lg-3">
+
+                        <label asp-for="UtilityReading.CurrentWaterReading"
+                               class="form-label fw-semibold">
+
+                            Current Reading
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <input asp-for="UtilityReading.CurrentWaterReading"
+                                   class="form-control"
+                                   type="number"
+                                   step="0.01"
+                                   min="0" />
+
+                            <span class="input-group-text">
+                                m³
+                            </span>
+
+                        </div>
+
+                        <span asp-validation-for="UtilityReading.CurrentWaterReading"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- CONSUMPTION -->
+                    <div class="col-md-6 col-lg-3">
+
+                        <label asp-for="UtilityReading.WaterConsumption"
+                               class="form-label fw-semibold">
+
+                            Consumption
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <input asp-for="UtilityReading.WaterConsumption"
+                                   class="form-control bg-light"
+                                   type="number"
+                                   step="0.01"
+                                   readonly />
+
+                            <span class="input-group-text">
+                                m³
+                            </span>
+
+                        </div>
+
+                        <span asp-validation-for="UtilityReading.WaterConsumption"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- RATE -->
+                    <div class="col-md-6 col-lg-3">
+
+                        <label asp-for="UtilityReading.WaterRate"
+                               class="form-label fw-semibold">
+
+                            Rate
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+                                ₱
+                            </span>
+
+                            <input asp-for="UtilityReading.WaterRate"
+                                   class="form-control"
+                                   type="number"
+                                   step="0.01"
+                                   min="0" />
+
+                            <span class="input-group-text">
+                                / m³
+                            </span>
+
+                        </div>
+
+                        <span asp-validation-for="UtilityReading.WaterRate"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- WATER BILL -->
+                    <div class="col-12">
+
+                        <label asp-for="UtilityReading.WaterBill"
+                               class="form-label fw-semibold">
+
+                            Water Bill
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+                                ₱
+                            </span>
+
+                            <input asp-for="UtilityReading.WaterBill"
+                                   class="form-control bg-light fw-semibold"
+                                   type="number"
+                                   step="0.01"
+                                   readonly />
+
+                        </div>
+
+                        <span asp-validation-for="UtilityReading.WaterBill"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- OTHER CHARGES -->
+                <div class="section-header">
+
+                    <div class="d-flex align-items-center">
+
+                        <div class="service-icon internet-icon me-3">
+                            <i class="bi bi-wifi"></i>
+                        </div>
+
+                        <div>
+
+                            <h6 class="fw-bold mb-1"
+                                style="color:#0A2D4F;">
+
+                                Other Charges
+
+                            </h6>
+
+                            <small class="text-muted">
+                                Internet and total utility charges.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row g-4 mb-4">
+
+                    <!-- INTERNET -->
+                    <div class="col-md-6">
+
+                        <label asp-for="UtilityReading.InternetBill"
+                               class="form-label fw-semibold">
+
+                            Internet Bill
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+                                ₱
+                            </span>
+
+                            <input asp-for="UtilityReading.InternetBill"
+                                   class="form-control"
+                                   type="number"
+                                   step="0.01"
+                                   min="0" />
+
+                        </div>
+
+                        <span asp-validation-for="UtilityReading.InternetBill"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- TOTAL -->
+                    <div class="col-md-6">
+
+                        <label asp-for="UtilityReading.TotalUtilityCharges"
+                               class="form-label fw-semibold">
+
+                            Total Utility Charges
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+                                ₱
+                            </span>
+
+                            <input asp-for="UtilityReading.TotalUtilityCharges"
+                                   class="form-control bg-light fw-bold total-charge"
+                                   type="number"
+                                   step="0.01"
+                                   readonly />
+
+                        </div>
+
+                        <span asp-validation-for="UtilityReading.TotalUtilityCharges"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+                <div class="d-flex justify-content-end gap-2
+                    mt-4 pt-4 border-top">
+
+                    <a asp-page="./Index"
+                       class="btn btn-light border px-4">
+
+                        <i class="bi bi-x-circle me-1"></i>
+                        Cancel
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn text-white px-4"
+                            style="background:#0A2D4F;">
+
+                        <i class="bi bi-check-circle me-1"></i>
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
 </div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
+
+<style>
+
+    .utility-edit-card {
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .utility-edit-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+    }
+
+    .section-header {
+        padding-bottom: 12px;
+        margin-bottom: 22px;
+        border-bottom: 1px solid #edf0f3;
+    }
+
+    .service-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .electricity-icon {
+        background: #fff4d6;
+        color: #9a6700;
+    }
+
+    .water-icon {
+        background: #e7f4ff;
+        color: #1473a3;
+    }
+
+    .internet-icon {
+        background: #efeafd;
+        color: #6750a4;
+    }
+
+    .form-control,
+    .form-select,
+    .input-group-text {
+        border-color: #dfe5ea;
+    }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #17B6A7;
+            box-shadow: 0 0 0 0.2rem rgba(23, 182, 167, 0.12);
+        }
+
+    .total-charge {
+        color: #0A2D4F;
+        font-size: 1rem;
+    }
+
+</style>
+
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

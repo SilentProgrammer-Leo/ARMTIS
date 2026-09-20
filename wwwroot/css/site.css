@@ -532,34 +532,108 @@ h1, h2, h3, h4, h5 {
     background-color: var(--armtis-primary) !important;
 }
 
-/* =========================
-   FOOTER
-   ========================= */
+/* ============================= */
+/* ARMTIS FOOTER */
+/* ============================= */
 
 .app-footer {
-    min-height: 48px;
-    margin-left: 260px;
-    padding: 14px 28px;
-    background: #fff;
-    border-top: 1px solid var(--armtis-border);
-    color: var(--armtis-muted);
-    font-size: 11px;
+    background: #0A2D4F;
+    color: rgba(255, 255, 255, 0.75);
+    padding: 18px 0;
+    margin-top: auto;
+    border-top: 3px solid #17B6A7;
 }
 
-.app-footer a {
-    color: var(--armtis-primary);
+.footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.footer-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #17B6A7;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.footer-title {
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.footer-subtitle {
+    margin-top: 2px;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.footer-info {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    font-size: 0.75rem;
+}
+
+.footer-link {
+    color: rgba(255, 255, 255, 0.78);
     text-decoration: none;
+    transition: color 0.2s ease;
 }
 
-.app-footer a:hover {
-    color: var(--armtis-accent-dark);
-}
+    .footer-link:hover {
+        color: #17B6A7;
+    }
 
 .footer-divider {
-    margin: 0 8px;
-    color: #CBD5E1;
+    width: 1px;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.2);
 }
 
+.footer-system {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.footer-copy {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+
+    .footer-brand {
+        justify-content: center;
+    }
+
+    .footer-info {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
 
 /* =========================
    DESKTOP WIDTH SAFETY
@@ -676,4 +750,144 @@ h1, h2, h3, h4, h5 {
 .header-icon:focus-visible {
     outline: 2px solid var(--armtis-accent);
     outline-offset: 2px;
+}
+
+/* ============================= */
+/* UTILITY READING MODAL */
+/* ============================= */
+
+.utility-modal-content {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.utility-modal-header {
+    background: #0A2D4F;
+    color: white;
+    border-bottom: 3px solid #17B6A7;
+    padding: 16px 20px;
+}
+
+.utility-modal-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(23, 182, 167, 0.18);
+    color: #17B6A7;
+    font-size: 1.1rem;
+}
+
+.utility-close-btn {
+    filter: brightness(0) invert(1);
+}
+
+.utility-info-card {
+    background: #f8fafb;
+    border: 1px solid #e5eaee;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.utility-input-icon {
+    background: #eaf7f5;
+    color: #17B6A7;
+    border-color: #dfe5ea;
+}
+
+.utility-section {
+    border: 1px solid #e7ebef;
+    border-radius: 12px;
+    padding: 18px;
+    background: white;
+}
+
+.utility-section-header {
+    padding-bottom: 12px;
+    border-bottom: 1px solid #edf0f3;
+}
+
+.utility-service-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.electricity-modal-icon {
+    background: #fff4d6;
+    color: #9a6700;
+}
+
+.water-modal-icon {
+    background: #e7f4ff;
+    color: #1473a3;
+}
+
+.internet-modal-icon {
+    background: #efeafd;
+    color: #6750a4;
+}
+
+.utility-total-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid #e5eaee;
+}
+
+    .utility-total-box strong {
+        font-size: 1rem;
+        color: #0A2D4F;
+    }
+
+    .utility-total-box i {
+        font-size: 1.2rem;
+    }
+
+.electricity-total {
+    background: #fffaf0;
+}
+
+    .electricity-total i {
+        color: #9a6700;
+    }
+
+.water-total {
+    background: #f3faff;
+}
+
+    .water-total i {
+        color: #1473a3;
+    }
+
+.total-charge-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 44px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: #eaf7f5;
+    border: 1px solid #bfe8e2;
+    color: #0A2D4F;
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.total-currency {
+    color: #17B6A7;
+}
+
+.utility-modal-footer {
+    background: #f8fafb;
+    border-top: 1px solid #e5eaee;
+    padding: 14px 20px;
 }

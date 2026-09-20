@@ -1,102 +1,475 @@
 ﻿@page
 @model ARMTIS_Capstone_Project.Pages.PaymentPages.Payment_History.IndexModel
+
 @{
+    ViewData["Title"] = "Payment History";
 }
-<h1 class="mb-4">Payment History</h1>
 
-<table class="table table-striped table-hover">
-    <thead class="table-dark">
-        <tr>
-            <th>
-                Receipt No.
-            </th>
-          
-            <th>
-                Tenant
-            </th>
-            <th>
-                Billing Number
-            </th>
-            <th>
-                Amount Paid
-            </th>
-            <th>
-                Payment Method
-            </th> 
-            <th>
-                Payment Date
-            </th>
-            <th>
-                Status
-            </th>
-            <th></th>
-        </tr>
-    </thead>
+<div class="container-fluid px-0">
 
-    <tbody>
-        @foreach (var item in Model.Payments)
-        {
-            <tr>
-                <td>
-                    @item.ReceiptNo
-                </td>
-               
-                <td>
-                    @item.Tenant?.FirstName
-                    @item.Tenant?.LastName
-                </td>
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-                <td>
-                    @item.PaymentFor
-                </td>
+        <div>
+            <h2 class="fw-bold mb-1" style="color:#0A2D4F;">
+                Payment History
+            </h2>
 
-                <td>
-                    ₱@item.AmountPaid.ToString("N2")
-                </td>
+            <p class="text-muted mb-0">
+                View and monitor recorded tenant payments and receipts.
+            </p>
+        </div>
 
-                <td>
-                    @item.PaymentMethod
-                </td>
+        <div class="payment-summary-badge">
 
-                <td>
-                    @item.PaymentDate.ToString("MMMM dd, yyyy")
-                </td>
+            <i class="bi bi-cash-stack me-1"></i>
 
-                <td>
-                    @if (item.PaymentStatus == "Paid")
-                    {
-                        <span class="badge bg-success">
-                            @item.PaymentStatus
-                        </span>
-                    }
-                    else if (item.PaymentStatus == "Partial")
-                    {
-                        <span class="badge bg-warning text-dark">
-                            @item.PaymentStatus
-                        </span>
-                    }
-                    else if (item.PaymentStatus == "Overdue")
-                    {
-                        <span class="badge bg-danger">
-                            @item.PaymentStatus
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-secondary">
-                            @item.PaymentStatus
-                        </span>
-                    }
-                </td>
+            @Model.Payments.Count Payment(s)
 
-              @*   <td>
-                    <a asp-page="/PaymentPages/Record_Payment/Details"
-                       asp-route-id="@item.PaymentID"
-                       class="btn btn-sm btn-primary">
-                        Details
-                    </a>
-                </td> *@
-            </tr>
+        </div>
+
+    </div>
+
+
+    <!-- PAYMENT HISTORY CARD -->
+    <div class="card border-0 shadow-sm payment-history-card">
+
+        <div class="card-header bg-white border-0 px-4 pt-4">
+
+            <div class="d-flex align-items-center">
+
+                <div class="payment-header-icon me-3">
+
+                    <i class="bi bi-wallet2"></i>
+
+                </div>
+
+                <div>
+
+                    <h5 class="fw-semibold mb-1"
+                        style="color:#0A2D4F;">
+
+                        Payment Records
+
+                    </h5>
+
+                    <small class="text-muted">
+                        All recorded rental payments and payment status.
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body px-0 pt-3">
+
+            <div class="table-responsive">
+
+                <table class="table align-middle mb-0 payment-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Receipt No.</th>
+
+                            <th>Tenant</th>
+
+                            <th>Billing Number</th>
+
+                            <th>Amount Paid</th>
+
+                            <th>Payment Method</th>
+
+                            <th>Payment Date</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @if (Model.Payments.Any())
+                        {
+                            @foreach (var item in Model.Payments)
+                            {
+                                <tr>
+
+                                    <!-- RECEIPT NUMBER -->
+                                    <td>
+
+                                        <span class="receipt-label">
+
+                                            <i class="bi bi-receipt me-1"></i>
+
+                                            @item.ReceiptNo
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- TENANT -->
+                                    <td>
+
+                                        @if (item.Tenant != null)
+                                        {
+                                            <div class="tenant-name">
+
+                                                <i class="bi bi-person me-1 text-muted"></i>
+
+                                                @item.Tenant.FirstName
+                                                @item.Tenant.LastName
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                N/A
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- BILLING NUMBER -->
+                                    <td>
+
+                                        <span class="billing-number">
+
+                                            <i class="bi bi-file-text me-1"></i>
+
+                                            @item.PaymentFor
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- AMOUNT -->
+                                    <td class="text-nowrap">
+
+                                        <strong class="payment-amount">
+
+                                            ₱@item.AmountPaid.ToString("N2")
+
+                                        </strong>
+
+                                    </td>
+
+
+                                    <!-- PAYMENT METHOD -->
+                                    <td>
+
+                                        @if (!string.IsNullOrWhiteSpace(item.PaymentMethod))
+                                        {
+                                            <span class="payment-method-badge">
+
+                                                @if (item.PaymentMethod == "Cash")
+                                                {
+                                                    <i class="bi bi-cash me-1"></i>
+                                                }
+                                                else if (item.PaymentMethod == "GCash")
+                                                {
+                                                    <i class="bi bi-phone me-1"></i>
+                                                }
+                                                else if (item.PaymentMethod == "Bank Transfer")
+                                                {
+                                                    <i class="bi bi-bank me-1"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="bi bi-credit-card me-1"></i>
+                                                }
+
+                                                @item.PaymentMethod
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                N/A
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- PAYMENT DATE -->
+                                    <td class="text-nowrap">
+
+                                        <div class="payment-date">
+
+                                            <i class="bi bi-calendar3 me-2 text-muted"></i>
+
+                                            @item.PaymentDate.ToString("MMMM dd, yyyy")
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- STATUS -->
+                                    <td>
+
+                                        @if (item.PaymentStatus == "Paid")
+                                        {
+                                            <span class="payment-status status-paid">
+
+                                                <i class="bi bi-check-circle me-1"></i>
+
+                                                Paid
+
+                                            </span>
+                                        }
+                                        else if (item.PaymentStatus == "Partial")
+                                        {
+                                            <span class="payment-status status-partial">
+
+                                                <i class="bi bi-hourglass-split me-1"></i>
+
+                                                Partial
+
+                                            </span>
+                                        }
+                                        else if (item.PaymentStatus == "Overdue")
+                                        {
+                                            <span class="payment-status status-overdue">
+
+                                                <i class="bi bi-exclamation-circle me-1"></i>
+
+                                                Overdue
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="payment-status status-other">
+
+                                                <i class="bi bi-clock me-1"></i>
+
+                                                @item.PaymentStatus
+
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+
+                                <td colspan="7"
+                                    class="text-center py-5">
+
+                                    <div class="empty-payment-icon mb-3">
+
+                                        <i class="bi bi-wallet2"></i>
+
+                                    </div>
+
+                                    <h6 class="fw-bold"
+                                        style="color:#0A2D4F;">
+
+                                        No Payment Records Found
+
+                                    </h6>
+
+                                    <p class="text-muted mb-0">
+
+                                        No recorded payments are available yet.
+
+                                    </p>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- PAYMENT HISTORY UI -->
+<style>
+
+    .payment-history-card {
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .payment-header-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eaf7f5;
+        color: #17B6A7;
+        font-size: 1.1rem;
+    }
+
+    .payment-summary-badge {
+        display: inline-flex;
+        align-items: center;
+        background: #eaf7f5;
+        color: #087f73;
+        padding: 7px 12px;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 600;
+    }
+
+    .payment-table {
+        min-width: 1050px;
+    }
+
+        .payment-table thead th {
+            background: #0A2D4F;
+            color: white;
+            border: none;
+            padding: 14px 16px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            white-space: nowrap;
         }
-    </tbody>
-</table>
+
+        .payment-table tbody td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #edf0f3;
+            font-size: 0.88rem;
+        }
+
+        .payment-table tbody tr {
+            transition: background-color 0.15s ease;
+        }
+
+            .payment-table tbody tr:hover {
+                background: #f7fbfa;
+            }
+
+    .receipt-label {
+        display: inline-flex;
+        align-items: center;
+        color: #0A2D4F;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .tenant-name {
+        font-weight: 600;
+        color: #263238;
+        white-space: nowrap;
+    }
+
+    .billing-number {
+        display: inline-flex;
+        align-items: center;
+        color: #087f73;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .payment-amount {
+        color: #198754;
+        font-size: 0.94rem;
+    }
+
+    .payment-method-badge {
+        display: inline-flex;
+        align-items: center;
+        background: #f4f6f8;
+        color: #495057;
+        padding: 6px 9px;
+        border-radius: 7px;
+        font-size: 0.76rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .payment-date {
+        display: inline-flex;
+        align-items: center;
+        white-space: nowrap;
+    }
+
+    .payment-status {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 0.74rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .status-paid {
+        background: #e9f7ef;
+        color: #198754;
+    }
+
+    .status-partial {
+        background: #fff4d6;
+        color: #9a6700;
+    }
+
+    .status-overdue {
+        background: #fdecec;
+        color: #dc3545;
+    }
+
+    .status-other {
+        background: #eef1f5;
+        color: #5f6b78;
+    }
+
+    .empty-payment-icon {
+        width: 54px;
+        height: 54px;
+        margin: 0 auto;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eaf7f5;
+        color: #17B6A7;
+        font-size: 1.4rem;
+    }
+
+    @@media (max-width: 768px) {
+
+        .payment-history-card {
+            border-radius: 10px;
+        }
+
+        .payment-table {
+            min-width: 1050px;
+        }
+
+        .payment-summary-badge {
+            margin-top: 5px;
+        }
+    }
+
+</style>

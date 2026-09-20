@@ -1,191 +1,579 @@
 ﻿@page
 @model ARMTIS_Capstone_Project.Pages.PaymentPages.BillingStatementPages.GenerateModel
+
 @{
+    ViewData["Title"] = "Generate Billing";
 }
 
-<form method="get" class="row mb-4">
+<div class="container-fluid px-0">
 
-    <div class="col-md-3">
-        <label class="form-label">Month</label>
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
+        <div>
+            <h2 class="fw-bold mb-1" style="color:#0A2D4F;">
+                Generate Billing
+            </h2>
 
-        <select asp-for="SelectedMonth"
-                class="form-select"
-                required>
-
-            <option value="">-- Select Month --</option>
-
-            @for (int month = 1; month <= 12; month++)
-            {
-                <option value="@month">
-                    @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month)
-                </option>
-            }
-        </select>
-    </div>
-
-    <div class="col-md-3">
-        <label class="form-label">Year</label>
-
-        <select asp-for="SelectedYear"
-                class="form-select"
-                required>
-
-            <option value="">-- Select Year --</option>
-
-            @for (int year = DateTime.Now.Year - 2;
-                 year <= DateTime.Now.Year + 5;
-                 year++)
-            {
-                <option value="@year">@year</option>
-            }
-        </select>
-    </div>
-
-    <div class="col-md-3 d-flex align-items-end">
-        <button type="submit" class="btn btn-primary">
-            Load Billing
-        </button>
-    </div>
-
-   <div class="col-md-3 d-flex align-items-end">
-    <a asp-page="/UtilityReadingPages/Index" class="btn btn-primary">
-        Add Utility Charges
-    </a>
-    </div>
-
-</form>
-
-@if (Model.Bills.Any())
-{
-    <form method="post"
-          asp-page-handler="GenerateAll"
-          id="generateAllForm">
-
-        <input type="hidden"
-               name="selectedMonth"
-               value="@Model.SelectedMonth" />
-
-        <input type="hidden"
-               name="selectedYear"
-               value="@Model.SelectedYear" />
-
-        <div asp-validation-summary="ModelOnly"
-             class="text-danger mb-3">
+            <p class="text-muted mb-0">
+                Review tenant charges and generate billing statements for a selected period.
+            </p>
         </div>
 
-        <table class="table table-striped table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>Unit</th>
-                    <th>Tenant</th>
-                    <th>Monthly Rent</th>
-                    <th>Utilities</th>
-                    <th>Total Preview</th>
-                    <th>Utility Status</th>
-                    <th>Billing Status</th>
-                </tr>
-            </thead>
+        <a asp-page="/BillingStatementPages/Index"
+           class="btn btn-outline-secondary px-3 py-2">
 
-            <tbody>
-                @if (!Model.Bills.Any())
-                {
-                    <tr>
-                        <td colspan="7"
-                            class="text-center">
+            <i class="bi bi-arrow-left me-1"></i>
+            Back to Billing
 
-                            Select a month and year,
-                            then click Load Billing.
+        </a>
 
-                        </td>
-                    </tr>
-                }
-                else
-                {
-                    foreach (var item in Model.Bills)
-                    {
-                        <tr>
-                            <td>
-                                @item.UnitNumber
-                            </td>
+    </div>
 
-                            <td>
-                                @item.TenantName
-                            </td>
 
-                            <td>
-                                ₱@item.MonthlyRent.ToString("N2")
-                            </td>
+    <!-- BILLING PERIOD CARD -->
+    <div class="card border-0 shadow-sm mb-4 billing-period-card">
 
-                            <td>
-                                ₱@item.UtilityTotal.ToString("N2")
-                            </td>
+        <div class="card-body p-4">
 
-                            <td>
-                                ₱@((item.MonthlyRent + item.UtilityTotal).ToString("N2"))
-                            </td>
+            <div class="d-flex align-items-center mb-3">
 
-                            <td>
-                                @if (item.HasUtilityReading)
-                                {
-                                    <span class="badge bg-success">
-                                        Ready
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-danger">
-                                        Missing
-                                    </span>
-                                }
-                            </td>
+                <div class="period-icon me-3">
 
-                            <td>
-                                @if (item.BillingAlreadyExists)
-                                {
-                                    <span class="badge bg-secondary">
-                                        Already Generated
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-warning text-dark">
-                                        Not Generated
-                                    </span>
-                                }
-                            </td>
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
+                    <i class="bi bi-calendar3"></i>
 
-        <div class="text-end">
-            <button type="submit"
-                    class="btn btn-success"
-                    onclick="return confirm(
-                'Generate billing statements for all listed tenants?');">
+                </div>
 
-                <i class="bi bi-receipt"></i>
-                Generate All Billing Statements
-            </button>
+                <div>
+
+                    <h6 class="fw-bold mb-1"
+                        style="color:#0A2D4F;">
+
+                        Select Billing Period
+
+                    </h6>
+
+                    <small class="text-muted">
+                        Choose the month and year for the billing statements.
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <form method="get">
+
+                <div class="row g-3 align-items-end">
+
+                    <!-- MONTH -->
+                    <div class="col-md-4 col-lg-3">
+
+                        <label asp-for="SelectedMonth"
+                               class="form-label fw-semibold">
+
+                            Month
+
+                        </label>
+
+                        <select asp-for="SelectedMonth"
+                                class="form-select">
+
+                            <option value="">
+                                -- Select Month --
+                            </option>
+
+                            @for (int month = 1; month <= 12; month++)
+                            {
+                                <option value="@month">
+                                    @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month)
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- YEAR -->
+                    <div class="col-md-4 col-lg-3">
+
+                        <label asp-for="SelectedYear"
+                               class="form-label fw-semibold">
+
+                            Year
+
+                        </label>
+
+                        <select asp-for="SelectedYear"
+                                class="form-select">
+
+                            <option value="">
+                                -- Select Year --
+                            </option>
+
+                            @for (
+                                int year = DateTime.Now.Year - 2;
+                                year <= DateTime.Now.Year + 5;
+                                year++)
+                            {
+                                <option value="@year">
+                                    @year
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- LOAD BUTTON -->
+                    <div class="col-md-4 col-lg-3">
+
+                        <button type="submit"
+                                class="btn text-white px-4 py-2"
+                                style="background:#0A2D4F;">
+
+                            <i class="bi bi-arrow-clockwise me-1"></i>
+                            Load Billing
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- UTILITY BUTTON -->
+                    <div class="col-md-4 col-lg-3">
+
+                        <a asp-page="/UtilityReadingPages/Index"
+                           class="btn btn-outline-primary px-3 py-2">
+
+                            <i class="bi bi-lightning-charge me-1"></i>
+                            Add Utility Charges
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </form>
+
         </div>
-    </form>
-}
-else if (Model.SelectedMonth.HasValue &&
+
+    </div>
+
+
+    <!-- VALIDATION -->
+    <div asp-validation-summary="ModelOnly"
+         class="alert alert-danger"
+         role="alert">
+    </div>
+
+
+    <!-- RESULTS -->
+    @if (Model.SelectedMonth.HasValue &&
          Model.SelectedYear.HasValue)
-{
-    <div class="alert alert-info">
-        No active tenants were found for the selected billing period.
-    </div>
-}
-else
-{
-    <div class="alert alert-secondary">
-        Select a month and year, then click
-        <strong>Load Billing</strong>.
-    </div>
-}
+    {
+        @if (Model.Bills.Any())
+        {
+            <form method="post"
+                  asp-page-handler="GenerateAll"
+                  id="generateAllForm">
+
+                <input type="hidden"
+                       name="selectedMonth"
+                       value="@Model.SelectedMonth" />
+
+                <input type="hidden"
+                       name="selectedYear"
+                       value="@Model.SelectedYear" />
+
+
+                <!-- RESULTS HEADER -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                    <div>
+
+                        <h5 class="fw-bold mb-1"
+                            style="color:#0A2D4F;">
+
+                            <i class="bi bi-receipt me-2"
+                               style="color:#17B6A7;">
+                            </i>
+
+                            Billing Preview
+
+                        </h5>
+
+                        <small class="text-muted">
+
+                            Showing
+                            <strong>
+                                @Model.Bills.Count
+                            </strong>
+                            active tenant(s) for the selected period.
+
+                        </small>
+
+                    </div>
+
+
+                    <button type="submit"
+                            class="btn btn-success px-3 py-2"
+                            onclick="return confirm('Generate billing statements for all listed tenants?');">
+
+                        <i class="bi bi-receipt-cutoff me-1"></i>
+                        Generate All Billing
+
+                    </button>
+
+                </div>
+
+
+                <!-- BILLING PREVIEW TABLE -->
+                <div class="card border-0 shadow-sm billing-preview-card">
+
+                    <div class="card-body p-0">
+
+                        <div class="table-responsive">
+
+                            <table class="table align-middle mb-0 billing-preview-table">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>Unit</th>
+
+                                        <th>Tenant</th>
+
+                                        <th>Monthly Rent</th>
+
+                                        <th>Utilities</th>
+
+                                        <th>Total Preview</th>
+
+                                        <th>Utility Status</th>
+
+                                        <th>Billing Status</th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody>
+
+                                    @foreach (var item in Model.Bills)
+                                    {
+                                        var totalPreview =
+                                            item.MonthlyRent +
+                                            item.UtilityTotal;
+
+                                        <tr>
+
+                                            <!-- UNIT -->
+                                            <td>
+
+                                                <span class="fw-semibold unit-label">
+
+                                                    <i class="bi bi-door-open me-1"></i>
+
+                                                    @item.UnitNumber
+
+                                                </span>
+
+                                            </td>
+
+
+                                            <!-- TENANT -->
+                                            <td>
+
+                                                <span class="fw-semibold">
+                                                    @item.TenantName
+                                                </span>
+
+                                            </td>
+
+
+                                            <!-- MONTHLY RENT -->
+                                            <td class="text-nowrap">
+
+                                                ₱@item.MonthlyRent.ToString("N2")
+
+                                            </td>
+
+
+                                            <!-- UTILITIES -->
+                                            <td class="text-nowrap">
+
+                                                ₱@item.UtilityTotal.ToString("N2")
+
+                                            </td>
+
+
+                                            <!-- TOTAL PREVIEW -->
+                                            <td class="text-nowrap">
+
+                                                <strong class="total-preview">
+
+                                                    ₱@totalPreview.ToString("N2")
+
+                                                </strong>
+
+                                            </td>
+
+
+                                            <!-- UTILITY STATUS -->
+                                            <td>
+
+                                                @if (item.HasUtilityReading)
+                                                {
+                                                    <span class="billing-status status-ready">
+
+                                                        <i class="bi bi-check-circle me-1"></i>
+                                                        Ready
+
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="billing-status status-missing">
+
+                                                        <i class="bi bi-exclamation-circle me-1"></i>
+                                                        Missing
+
+                                                    </span>
+                                                }
+
+                                            </td>
+
+
+                                            <!-- BILLING STATUS -->
+                                            <td>
+
+                                                @if (item.BillingAlreadyExists)
+                                                {
+                                                    <span class="billing-status status-generated">
+
+                                                        <i class="bi bi-check2-all me-1"></i>
+                                                        Already Generated
+
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="billing-status status-not-generated">
+
+                                                        <i class="bi bi-clock me-1"></i>
+                                                        Not Generated
+
+                                                    </span>
+                                                }
+
+                                            </td>
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+        }
+        else
+        {
+            <!-- NO TENANTS -->
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body text-center py-5">
+
+                    <div class="empty-state-icon mb-3">
+
+                        <i class="bi bi-people"></i>
+
+                    </div>
+
+                    <h5 class="fw-bold"
+                        style="color:#0A2D4F;">
+
+                        No Active Tenants Found
+
+                    </h5>
+
+                    <p class="text-muted mb-0">
+
+                        No active tenants were found for the selected billing period.
+
+                    </p>
+
+                </div>
+
+            </div>
+        }
+    }
+    else
+    {
+        <!-- NO PERIOD SELECTED -->
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body text-center py-5">
+
+                <div class="empty-state-icon mb-3">
+
+                    <i class="bi bi-calendar3"></i>
+
+                </div>
+
+                <h5 class="fw-bold"
+                    style="color:#0A2D4F;">
+
+                    Select a Billing Period
+
+                </h5>
+
+                <p class="text-muted mb-0">
+
+                    Select a month and year above, then click
+                    <strong>Load Billing</strong>
+                    to preview the billing records.
+
+                </p>
+
+            </div>
+
+        </div>
+    }
+
+</div>
+
+
+<!-- BILLING GENERATION PAGE UI -->
+<style>
+
+    .billing-period-card,
+    .billing-preview-card {
+        border-radius: 14px;
+    }
+
+    .period-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eaf7f5;
+        color: #17B6A7;
+        font-size: 1.1rem;
+    }
+
+    .billing-preview-table {
+        min-width: 900px;
+    }
+
+        .billing-preview-table thead th {
+            background: #0A2D4F;
+            color: white;
+            border: none;
+            padding: 14px 15px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .billing-preview-table tbody td {
+            padding: 14px 15px;
+            border-bottom: 1px solid #edf0f3;
+            font-size: 0.88rem;
+        }
+
+        .billing-preview-table tbody tr {
+            transition: background-color 0.15s ease;
+        }
+
+            .billing-preview-table tbody tr:hover {
+                background: #f7fbfa;
+            }
+
+    .unit-label {
+        color: #0A2D4F;
+    }
+
+    .total-preview {
+        color: #0A2D4F;
+        font-size: 0.95rem;
+    }
+
+    .billing-status {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 0.74rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .status-ready {
+        background: #e9f7ef;
+        color: #198754;
+    }
+
+    .status-missing {
+        background: #fdecec;
+        color: #dc3545;
+    }
+
+    .status-generated {
+        background: #eef1f5;
+        color: #5f6b78;
+    }
+
+    .status-not-generated {
+        background: #fff4d6;
+        color: #9a6700;
+    }
+
+    .empty-state-icon {
+        width: 54px;
+        height: 54px;
+        margin: 0 auto;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eaf7f5;
+        color: #17B6A7;
+        font-size: 1.4rem;
+    }
+
+    .billing-period-card .form-select:focus {
+        border-color: #17B6A7;
+        box-shadow: 0 0 0 0.2rem rgba(23, 182, 167, 0.12);
+    }
+
+    @@media (max-width: 768px) {
+
+        .billing-preview-table {
+            min-width: 900px;
+        }
+
+        .billing-period-card,
+        .billing-preview-card {
+            border-radius: 10px;
+        }
+    }
+
+</style>
 
 <div class="modal fade"
      id="utilityModal"

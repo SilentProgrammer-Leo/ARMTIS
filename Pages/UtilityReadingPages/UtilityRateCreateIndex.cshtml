@@ -1,67 +1,142 @@
 ﻿@page
 @model ARMTIS_Capstone_Project.Pages.UtilityReadingPages.UtilityRateCreateIndexModel
+
 @{
     ViewData["Title"] = "Add Utility Rate";
 }
 
-<div class="container mt-4">
+<div class="container-fluid px-0">
 
-    <div class="card shadow-sm">
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-        <div class="card-header">
-            <h4 class="mb-0">
-                Add New Utility Rate
-            </h4>
+        <div>
+            <h2 class="fw-bold mb-1" style="color:#0A2D4F;">
+                Add Utility Rate
+            </h2>
+
+            <p class="text-muted mb-0">
+                Create a new utility rate for electricity, water, or internet.
+            </p>
         </div>
 
-        <div class="card-body">
+        <a asp-page="./UtilityRateIndex"
+           class="btn btn-outline-secondary px-3 py-2">
+
+            <i class="bi bi-arrow-left me-1"></i>
+            Back to Utility Rates
+
+        </a>
+
+    </div>
+
+
+    <!-- MAIN CARD -->
+    <div class="card border-0 shadow-sm utility-rate-create-card">
+
+        <!-- HEADER -->
+        <div class="card-header text-white py-3 utility-rate-create-header">
+
+            <div class="d-flex align-items-center">
+
+                <div class="utility-rate-create-icon me-3">
+
+                    <i class="bi bi-plus-circle"></i>
+
+                </div>
+
+                <div>
+
+                    <h5 class="mb-1 fw-semibold" style="color:white">
+                        New Utility Rate
+                    </h5>
+
+                    <small class="text-white-50">
+                        Enter the details for the new rate below.
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- BODY -->
+        <div class="card-body p-4">
 
             <form method="post">
 
                 <div asp-validation-summary="ModelOnly"
-                     class="text-danger mb-3">
+                     class="alert alert-danger"
+                     role="alert">
                 </div>
 
-                <div class="mb-3">
+
+                <!-- UTILITY TYPE -->
+                <div class="mb-4">
 
                     <label asp-for="UtilityRate.UtilityType"
-                           class="form-label">
+                           class="form-label fw-semibold">
+
                         Utility Type
+
+                        <span class="text-danger">*</span>
+
                     </label>
 
-                    <select asp-for="UtilityRate.UtilityType"
-                            class="form-select">
+                    <div class="input-group">
 
-                        <option value="">
-                            -- Select Utility --
-                        </option>
+                        <span class="input-group-text utility-create-input-icon">
 
-                        <option value="Electricity">
-                            Electricity
-                        </option>
+                            <i class="bi bi-lightning-charge"></i>
 
-                        <option value="Water">
-                            Water
-                        </option>
+                        </span>
 
-                        <option value="Internet">
-                            Internet
-                        </option>
+                        <select asp-for="UtilityRate.UtilityType"
+                                class="form-select">
 
-                    </select>
+                            <option value="">
+                                -- Select Utility --
+                            </option>
+
+                            <option value="Electricity">
+                                Electricity
+                            </option>
+
+                            <option value="Water">
+                                Water
+                            </option>
+
+                            <option value="Internet">
+                                Internet
+                            </option>
+
+                        </select>
+
+                    </div>
 
                     <span asp-validation-for="UtilityRate.UtilityType"
-                          class="text-danger">
+                          class="text-danger small">
                     </span>
+
+                    <small class="text-muted d-block mt-1">
+                        Select the utility this rate applies to.
+                    </small>
 
                 </div>
 
 
-                <div class="mb-3">
+                <!-- RATE -->
+                <div class="mb-4">
 
                     <label asp-for="UtilityRate.Rate"
-                           class="form-label">
+                           class="form-label fw-semibold">
+
                         Rate
+
+                        <span class="text-danger">*</span>
+
                     </label>
 
                     <div class="input-group">
@@ -74,49 +149,142 @@
                                type="number"
                                step="0.01"
                                min="0.01"
-                               class="form-control" />
+                               class="form-control"
+                               placeholder="Enter rate amount" />
 
                     </div>
 
                     <span asp-validation-for="UtilityRate.Rate"
-                          class="text-danger">
+                          class="text-danger small">
                     </span>
+
+                    <small class="text-muted d-block mt-1">
+                        Enter the amount used for utility billing calculations.
+                    </small>
 
                 </div>
 
 
-                <div class="mb-3">
+                <!-- EFFECTIVE PERIOD -->
+                <div class="section-header mb-4">
 
-                    <label asp-for="UtilityRate.EffectiveFrom"
-                           class="form-label">
-                        Effective From
-                    </label>
+                    <div class="d-flex align-items-center">
 
-                    <input asp-for="UtilityRate.EffectiveFrom"
-                           type="date"
-                           class="form-control" />
+                        <div class="effective-period-create-icon me-3">
 
-                    <span asp-validation-for="UtilityRate.EffectiveFrom"
-                          class="text-danger">
-                    </span>
+                            <i class="bi bi-calendar-check"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h6 class="fw-bold mb-1"
+                                style="color:#0A2D4F;">
+
+                                Effective Period
+
+                            </h6>
+
+                            <small class="text-muted">
+                                Set the date when this rate becomes active.
+                            </small>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
 
-                <button type="submit"
-                        class="btn btn-success">
+                <div class="row g-4 mb-4">
 
-                    <i class="bi bi-check-circle"></i>
-                    Save Rate
+                    <!-- EFFECTIVE FROM -->
+                    <div class="col-md-6">
 
-                </button>
+                        <label asp-for="UtilityRate.EffectiveFrom"
+                               class="form-label fw-semibold">
 
-                <a asp-page="./UtilityRateIndex"
-                   class="btn btn-secondary">
+                            Effective From
 
-                    Cancel
+                            <span class="text-danger">*</span>
 
-                </a>
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+
+                                <i class="bi bi-calendar3"></i>
+
+                            </span>
+
+                            <input asp-for="UtilityRate.EffectiveFrom"
+                                   type="date"
+                                   class="form-control" />
+
+                        </div>
+
+                        <span asp-validation-for="UtilityRate.EffectiveFrom"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- INFO -->
+                    <div class="col-md-6">
+
+                        <div class="rate-create-info h-100">
+
+                            <div class="d-flex align-items-start">
+
+                                <i class="bi bi-info-circle-fill me-2 mt-1"></i>
+
+                                <div>
+
+                                    <strong>
+                                        Rate activation
+                                    </strong>
+
+                                    <p class="small mb-0 mt-1">
+                                        The rate will be used for utility
+                                        calculations starting from the
+                                        selected effective date.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+                <div class="d-flex justify-content-end gap-2
+                    pt-4 border-top">
+
+                    <a asp-page="./UtilityRateIndex"
+                       class="btn btn-light border px-4">
+
+                        <i class="bi bi-x-circle me-1"></i>
+                        Cancel
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn text-white px-4"
+                            style="background:#0A2D4F;">
+
+                        <i class="bi bi-check-circle me-1"></i>
+                        Save Rate
+
+                    </button>
+
+                </div>
 
             </form>
 
@@ -125,6 +293,89 @@
     </div>
 
 </div>
+
+
+<style>
+
+    .utility-rate-create-card {
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .utility-rate-create-header {
+        background: #0A2D4F;
+        border-bottom: 3px solid #17B6A7;
+    }
+
+    .utility-rate-create-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(23, 182, 167, 0.16);
+        color: #17B6A7;
+        font-size: 1.1rem;
+    }
+
+    .utility-create-input-icon {
+        background: #eaf7f5;
+        color: #17B6A7;
+        border-color: #dfe5ea;
+    }
+
+    .effective-period-create-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eaf7f5;
+        color: #17B6A7;
+    }
+
+    .section-header {
+        padding-bottom: 12px;
+        border-bottom: 1px solid #edf0f3;
+    }
+
+    .rate-create-info {
+        padding: 14px 16px;
+        border-radius: 10px;
+        background: #f3f9ff;
+        border: 1px solid #d7e9f7;
+        color: #315d77;
+        display: flex;
+        align-items: center;
+    }
+
+        .rate-create-info i {
+            color: #1473a3;
+        }
+
+    .form-control,
+    .form-select,
+    .input-group-text {
+        border-color: #dfe5ea;
+    }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #17B6A7;
+            box-shadow: 0 0 0 0.2rem rgba(23, 182, 167, 0.12);
+        }
+
+    @@media (max-width: 768px) {
+
+        .utility-rate-create-card {
+            border-radius: 10px;
+        }
+    }
+
+</style>
+
 
 @section Scripts {
     @{

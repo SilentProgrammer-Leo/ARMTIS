@@ -1,86 +1,555 @@
 ﻿@page
 @model ARMTIS_Capstone_Project.Pages.UtilityReadingPages.UtilityRateIndexModel
+
 @{
     ViewData["Title"] = "Utility Rates";
 }
 
-<h1>Utility Rates</h1>
+<div class="container-fluid px-0">
 
-<p>
-    <a asp-page="./UtilityRateCreateIndex"
-       class="btn btn-success">
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-        <i class="bi bi-plus-circle"></i>
-        Add New Rate
+        <div>
+            <h2 class="fw-bold mb-1" style="color:#0A2D4F;">
+                Utility Rates
+            </h2>
 
-    </a>
-</p>
+            <p class="text-muted mb-0">
+                Manage electricity, water, and internet rates used for utility calculations.
+            </p>
+        </div>
 
-<table class="table table-striped table-hover">
+        <div class="d-flex gap-2">
 
-    <thead class="table-dark">
-        <tr>
-            <th>Utility</th>
-            <th>Rate</th>
-            <th>Effective From</th>
-            <th>Effective To</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
+            <a asp-page="./Index"
+               class="btn btn-outline-secondary px-3 py-2">
 
-    <tbody>
+                <i class="bi bi-arrow-left me-1"></i>
+                Back to Utility Readings
 
-        @foreach (var item in Model.UtilityRates)
-        {
-            <tr>
+            </a>
 
-                <td>
-                    @item.UtilityType
-                </td>
+            <a asp-page="./UtilityRateCreateIndex"
+               class="btn text-white px-3 py-2"
+               style="background:#0A2D4F;">
 
-                <td>
-                    ₱@item.Rate.ToString("N2")
-                </td>
+                <i class="bi bi-plus-circle me-1"></i>
+                Add New Rate
 
-                <td>
-                    @item.EffectiveFrom.ToString("MMMM dd, yyyy")
-                </td>
+            </a>
 
-                <td>
-                    @(item.EffectiveTo.HasValue
-                        ? item.EffectiveTo.Value.ToString("MMMM dd, yyyy")
-                        : "Current")
-                </td>
+        </div>
 
-                <td>
-                    @if (item.IsActive)
-                    {
-                        <span class="badge bg-success">
-                            Active
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-secondary">
-                            Historical
-                        </span>
-                    }
-                </td>
-                <td>
-                    <a asp-page="./UtilityRateEditIndex"
-                       asp-route-id="@item.UtilityRateID"
-                       class="btn btn-outline-primary btn-sm">
+    </div>
 
-                        <i class="bi bi-pencil-square"></i>
-                        Edit
 
-                    </a>
-                </td>
+    <!-- INFORMATION CARD -->
+    <div class="card border-0 shadow-sm mb-4 utility-rate-info-card">
 
-            </tr>
+        <div class="card-body p-4">
+
+            <div class="d-flex align-items-center">
+
+                <div class="utility-rate-main-icon me-3">
+
+                    <i class="bi bi-gear-wide-connected"></i>
+
+                </div>
+
+                <div>
+
+                    <h6 class="fw-bold mb-1"
+                        style="color:#0A2D4F;">
+
+                        Utility Rate Management
+
+                    </h6>
+
+                    <small class="text-muted">
+                        Active rates are used when calculating tenant utility charges.
+                        Historical rates are retained for reference.
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TABLE HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <div>
+
+            <h5 class="fw-bold mb-1"
+                style="color:#0A2D4F;">
+
+                <i class="bi bi-list-check me-2"
+                   style="color:#17B6A7;">
+                </i>
+
+                Rate Records
+
+            </h5>
+
+            <small class="text-muted">
+                Review current and historical utility rates.
+            </small>
+
+        </div>
+
+        <span class="utility-rate-count">
+
+            <i class="bi bi-bar-chart-line me-1"></i>
+
+            @Model.UtilityRates.Count Rate(s)
+
+        </span>
+
+    </div>
+
+
+    <!-- RATE TABLE -->
+    <div class="card border-0 shadow-sm utility-rate-table-card">
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table align-middle mb-0 utility-rate-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Utility</th>
+
+                            <th>Rate</th>
+
+                            <th>Effective From</th>
+
+                            <th>Effective To</th>
+
+                            <th>Status</th>
+
+                            <th class="text-center">
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @if (Model.UtilityRates.Any())
+                        {
+                            @foreach (var item in Model.UtilityRates)
+                            {
+                                <tr>
+
+                                    <!-- UTILITY -->
+                                    <td>
+
+                                        @if (item.UtilityType == "Electricity")
+                                        {
+                                            <span class="utility-type electricity-type">
+
+                                                <span class="utility-type-icon">
+                                                    <i class="bi bi-lightning-charge-fill"></i>
+                                                </span>
+
+                                                Electricity
+
+                                            </span>
+                                        }
+                                        else if (item.UtilityType == "Water")
+                                        {
+                                            <span class="utility-type water-type">
+
+                                                <span class="utility-type-icon">
+                                                    <i class="bi bi-droplet-fill"></i>
+                                                </span>
+
+                                                Water
+
+                                            </span>
+                                        }
+                                        else if (item.UtilityType == "Internet")
+                                        {
+                                            <span class="utility-type internet-type">
+
+                                                <span class="utility-type-icon">
+                                                    <i class="bi bi-wifi"></i>
+                                                </span>
+
+                                                Internet
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="utility-type other-type">
+
+                                                <span class="utility-type-icon">
+                                                    <i class="bi bi-sliders"></i>
+                                                </span>
+
+                                                @item.UtilityType
+
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- RATE -->
+                                    <td>
+
+                                        <strong class="rate-amount">
+                                            ₱@item.Rate.ToString("N2")
+                                        </strong>
+
+                                        <small class="text-muted">
+
+                                            @if (item.UtilityType == "Electricity")
+                                            {
+                                                <span>/ kWh</span>
+                                            }
+                                            else if (item.UtilityType == "Water")
+                                            {
+                                                <span>/ m³</span>
+                                            }
+                                            else if (item.UtilityType == "Internet")
+                                            {
+                                                <span>/ month</span>
+                                            }
+
+                                        </small>
+
+                                    </td>
+
+
+                                    <!-- EFFECTIVE FROM -->
+                                    <td class="text-nowrap">
+
+                                        <div class="d-flex align-items-center">
+
+                                            <i class="bi bi-calendar-check me-2 text-muted"></i>
+
+                                            @item.EffectiveFrom.ToString("MMMM dd, yyyy")
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- EFFECTIVE TO -->
+                                    <td class="text-nowrap">
+
+                                        @if (item.EffectiveTo.HasValue)
+                                        {
+                                            <div class="d-flex align-items-center">
+
+                                                <i class="bi bi-calendar-event me-2 text-muted"></i>
+
+                                                @item.EffectiveTo.Value.ToString("MMMM dd, yyyy")
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="current-rate-label">
+
+                                                <i class="bi bi-dot me-1"></i>
+                                                Current
+
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- STATUS -->
+                                    <td>
+
+                                        @if (item.IsActive)
+                                        {
+                                            <span class="utility-rate-status status-active">
+
+                                                <i class="bi bi-check-circle me-1"></i>
+                                                Active
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="utility-rate-status status-history">
+
+                                                <i class="bi bi-clock-history me-1"></i>
+                                                Historical
+
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- ACTIONS -->
+                                    <td>
+
+                                        <div class="text-center">
+
+                                            <a asp-page="./UtilityRateEditIndex"
+                                               asp-route-id="@item.UtilityRateID"
+                                               class="btn btn-sm btn-outline-primary utility-rate-action">
+
+                                                <i class="bi bi-pencil-square me-1"></i>
+                                                Edit
+
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+
+                                <td colspan="6"
+                                    class="text-center py-5">
+
+                                    <div class="utility-rate-empty-icon mb-3">
+
+                                        <i class="bi bi-bar-chart-line"></i>
+
+                                    </div>
+
+                                    <h6 class="fw-bold"
+                                        style="color:#0A2D4F;">
+
+                                        No Utility Rates Found
+
+                                    </h6>
+
+                                    <p class="text-muted mb-3">
+                                        No utility rates have been configured yet.
+                                    </p>
+
+                                    <a asp-page="./UtilityRateCreateIndex"
+                                       class="btn text-white px-3"
+                                       style="background:#0A2D4F;">
+
+                                        <i class="bi bi-plus-circle me-1"></i>
+                                        Add New Rate
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- UTILITY RATE PAGE UI -->
+<style>
+
+    .utility-rate-info-card,
+    .utility-rate-table-card {
+        border-radius: 14px;
+    }
+
+    .utility-rate-main-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eaf7f5;
+        color: #17B6A7;
+        font-size: 1.15rem;
+    }
+
+    .utility-rate-count {
+        display: inline-flex;
+        align-items: center;
+        background: #eaf7f5;
+        color: #087f73;
+        padding: 7px 11px;
+        border-radius: 999px;
+        font-size: 0.76rem;
+        font-weight: 600;
+    }
+
+    .utility-rate-table {
+        min-width: 950px;
+    }
+
+        .utility-rate-table thead th {
+            background: #0A2D4F;
+            color: white;
+            border: none;
+            padding: 14px 16px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            white-space: nowrap;
         }
 
-    </tbody>
+        .utility-rate-table tbody td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #edf0f3;
+            font-size: 0.88rem;
+        }
 
-</table>
+        .utility-rate-table tbody tr {
+            transition: background-color 0.15s ease;
+        }
+
+            .utility-rate-table tbody tr:hover {
+                background: #f7fbfa;
+            }
+
+    .utility-type {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .utility-type-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .electricity-type {
+        color: #8a6500;
+    }
+
+        .electricity-type .utility-type-icon {
+            background: #fff4d6;
+            color: #9a6700;
+        }
+
+    .water-type {
+        color: #1473a3;
+    }
+
+        .water-type .utility-type-icon {
+            background: #e7f4ff;
+            color: #1473a3;
+        }
+
+    .internet-type {
+        color: #6750a4;
+    }
+
+        .internet-type .utility-type-icon {
+            background: #efeafd;
+            color: #6750a4;
+        }
+
+    .other-type {
+        color: #495057;
+    }
+
+        .other-type .utility-type-icon {
+            background: #eef1f5;
+            color: #5f6b78;
+        }
+
+    .rate-amount {
+        color: #0A2D4F;
+        font-size: 0.95rem;
+    }
+
+    .current-rate-label {
+        display: inline-flex;
+        align-items: center;
+        background: #eaf7f5;
+        color: #087f73;
+        padding: 5px 9px;
+        border-radius: 999px;
+        font-size: 0.74rem;
+        font-weight: 600;
+    }
+
+    .utility-rate-status {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 0.74rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .status-active {
+        background: #e9f7ef;
+        color: #198754;
+    }
+
+    .status-history {
+        background: #eef1f5;
+        color: #5f6b78;
+    }
+
+    .utility-rate-action {
+        min-height: 32px;
+        padding: 4px 10px;
+        font-size: 0.76rem;
+        border-radius: 6px;
+    }
+
+    .utility-rate-empty-icon {
+        width: 54px;
+        height: 54px;
+        margin: 0 auto;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eaf7f5;
+        color: #17B6A7;
+        font-size: 1.4rem;
+    }
+
+    @@media (max-width: 768px) {
+
+        .utility-rate-table {
+            min-width: 950px;
+        }
+
+        .utility-rate-info-card,
+        .utility-rate-table-card {
+            border-radius: 10px;
+        }
+    }
+
+</style>
