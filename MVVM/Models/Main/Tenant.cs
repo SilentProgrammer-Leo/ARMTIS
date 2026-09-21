@@ -39,6 +39,8 @@ namespace ARMTIS_Capstone_Project.MVVM.Models.Main
 
         public string? ProfileImagePath { get; set; }
 
+        public string? RentalAgreementImagePath { get; set; }
+
 
         // Foreign Key
         public int UnitID { get; set; }

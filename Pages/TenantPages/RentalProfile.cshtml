@@ -5,13 +5,25 @@
     ViewData["Title"] = "Rental Profile";
 
     var fullName = $"{Model.Tenant.FirstName} {Model.Tenant.LastName}";
+
+    var initials = "";
+
+    if (!string.IsNullOrWhiteSpace(Model.Tenant.FirstName))
+    {
+        initials += Model.Tenant.FirstName.Substring(0, 1).ToUpper();
+    }
+
+    if (!string.IsNullOrWhiteSpace(Model.Tenant.LastName))
+    {
+        initials += Model.Tenant.LastName.Substring(0, 1).ToUpper();
+    }
 }
 
 <div class="rental-profile-page">
 
-    <!-- ========================================= -->
-    <!-- PAGE HEADER -->
-    <!-- ========================================= -->
+    <!-- =========================================================
+         PAGE HEADER
+         ========================================================= -->
 
     <div class="profile-page-header">
 
@@ -22,7 +34,7 @@
             </h2>
 
             <p class="profile-subtitle">
-                Tenant rental and personal information
+                Tenant personal, rental, and assigned unit information
             </p>
         </div>
 
@@ -30,7 +42,7 @@
 
             <a asp-page="./Edit"
                asp-route-id="@Model.Tenant.TenantID"
-               class="btn btn-primary">
+               class="btn profile-edit-btn">
 
                 <i class="bi bi-pencil-square me-1"></i>
                 Edit Profile
@@ -38,7 +50,7 @@
             </a>
 
             <a asp-page="./Index"
-               class="btn btn-outline-secondary">
+               class="btn profile-back-btn">
 
                 <i class="bi bi-arrow-left me-1"></i>
                 Back
@@ -50,17 +62,43 @@
     </div>
 
 
-    <!-- ========================================= -->
-    <!-- TENANT PROFILE CARD -->
-    <!-- ========================================= -->
+    <!-- =========================================================
+         PROFILE HERO
+         ========================================================= -->
 
     <div class="profile-main-card">
 
-        <div class="profile-avatar">
-            <i class="bi bi-person-fill"></i>
+        <!-- PROFILE PHOTO -->
+
+        <div class="profile-avatar-wrapper">
+
+            <div class="profile-avatar">
+
+                @if (!string.IsNullOrWhiteSpace(Model.Tenant.ProfileImagePath))
+                {
+                    <img src="@Model.Tenant.ProfileImagePath"
+                         alt="@fullName"
+                         class="profile-avatar-image" />
+                }
+                else
+                {
+                    <span class="profile-initials">
+                        @initials
+                    </span>
+                }
+
+            </div>
+
         </div>
 
+
+        <!-- PROFILE INFORMATION -->
+
         <div class="profile-main-info">
+
+            <div class="profile-eyebrow">
+                TENANT PROFILE
+            </div>
 
             <div class="profile-name-row">
 
@@ -86,18 +124,31 @@
 
             </div>
 
+
             <p class="profile-role">
-                Tenant
+
+                Tenant ID:
+                <strong>
+                    @Model.Tenant.TenantID
+                </strong>
+
                 <span class="profile-separator">•</span>
 
-                Unit @(Model.Tenant.Unit?.UnitNumber ?? "N/A")
+                Unit
+                <strong>
+                    @(Model.Tenant.Unit?.UnitNumber ?? "N/A")
+                </strong>
+
             </p>
+
+
+            <!-- CONTACT INFORMATION -->
 
             <div class="profile-contact-row">
 
                 <div class="profile-contact-item">
 
-                    <i class="bi bi-telephone"></i>
+                    <i class="bi bi-telephone-fill"></i>
 
                     <span>
                         @(string.IsNullOrWhiteSpace(Model.Tenant.ContactNo)
@@ -110,7 +161,7 @@
 
                 <div class="profile-contact-item">
 
-                    <i class="bi bi-envelope"></i>
+                    <i class="bi bi-envelope-fill"></i>
 
                     <span>
                         @(string.IsNullOrWhiteSpace(Model.Tenant.Email)
@@ -127,9 +178,9 @@
     </div>
 
 
-    <!-- ========================================= -->
-    <!-- PERSONAL INFORMATION -->
-    <!-- ========================================= -->
+    <!-- =========================================================
+         PERSONAL INFORMATION
+         ========================================================= -->
 
     <div class="profile-card">
 
@@ -148,9 +199,12 @@
 
         </div>
 
+
         <div class="profile-card-body">
 
             <div class="info-grid">
+
+                <!-- FIRST NAME -->
 
                 <div class="info-item">
 
@@ -165,6 +219,8 @@
                 </div>
 
 
+                <!-- LAST NAME -->
+
                 <div class="info-item">
 
                     <span class="info-label">
@@ -177,6 +233,8 @@
 
                 </div>
 
+
+                <!-- CONTACT -->
 
                 <div class="info-item">
 
@@ -195,6 +253,8 @@
                 </div>
 
 
+                <!-- EMAIL -->
+
                 <div class="info-item">
 
                     <span class="info-label">
@@ -211,6 +271,8 @@
 
                 </div>
 
+
+                <!-- ADDRESS -->
 
                 <div class="info-item info-full">
 
@@ -235,9 +297,9 @@
     </div>
 
 
-    <!-- ========================================= -->
-    <!-- RENTAL INFORMATION -->
-    <!-- ========================================= -->
+    <!-- =========================================================
+         RENTAL INFORMATION
+         ========================================================= -->
 
     <div class="profile-card">
 
@@ -254,6 +316,11 @@
                 </small>
             </div>
 
+            <span class="readonly-badge">
+                <i class="bi bi-lock-fill me-1"></i>
+                Admin Record
+            </span>
+
         </div>
 
 
@@ -262,10 +329,13 @@
             <div class="rental-summary-grid">
 
                 <!-- UNIT -->
+
                 <div class="rental-summary-item">
 
                     <div class="rental-icon">
+
                         <i class="bi bi-house"></i>
+
                     </div>
 
                     <div>
@@ -284,10 +354,13 @@
 
 
                 <!-- MONTHLY RENT -->
+
                 <div class="rental-summary-item">
 
                     <div class="rental-icon">
+
                         <i class="bi bi-cash-stack"></i>
+
                     </div>
 
                     <div>
@@ -315,10 +388,13 @@
 
 
                 <!-- LEASE START -->
+
                 <div class="rental-summary-item">
 
                     <div class="rental-icon">
+
                         <i class="bi bi-calendar-check"></i>
+
                     </div>
 
                     <div>
@@ -328,8 +404,10 @@
                         </span>
 
                         <strong>
+
                             @Model.Tenant.LeaseStartDate.ToString(
                                 "MMM dd, yyyy")
+
                         </strong>
 
                     </div>
@@ -338,10 +416,13 @@
 
 
                 <!-- LEASE END -->
+
                 <div class="rental-summary-item">
 
                     <div class="rental-icon">
+
                         <i class="bi bi-calendar-x"></i>
+
                     </div>
 
                     <div>
@@ -351,8 +432,10 @@
                         </span>
 
                         <strong>
+
                             @Model.Tenant.LeaseEndDate.ToString(
                                 "MMM dd, yyyy")
+
                         </strong>
 
                     </div>
@@ -366,9 +449,9 @@
     </div>
 
 
-    <!-- ========================================= -->
-    <!-- ASSIGNED UNIT -->
-    <!-- ========================================= -->
+    <!-- =========================================================
+         ASSIGNED UNIT
+         ========================================================= -->
     @if (Model.Tenant.Unit != null)
     {
         <div class="profile-card">
@@ -376,6 +459,7 @@
             <div class="profile-card-header">
 
                 <div>
+
                     <h5>
                         <i class="bi bi-building me-2"></i>
                         Assigned Unit
@@ -384,6 +468,7 @@
                     <small>
                         Information about the tenant's assigned unit
                     </small>
+
                 </div>
 
             </div>
@@ -392,6 +477,8 @@
             <div class="profile-card-body">
 
                 <div class="unit-details-grid">
+
+                    <!-- UNIT NUMBER -->
 
                     <div class="info-item">
 
@@ -405,6 +492,8 @@
 
                     </div>
 
+
+                    <!-- UNIT STATUS -->
 
                     <div class="info-item">
 
@@ -431,6 +520,8 @@
                     </div>
 
 
+                    <!-- CAPACITY -->
+
                     <div class="info-item">
 
                         <span class="info-label">
@@ -444,6 +535,8 @@
                     </div>
 
 
+                    <!-- DESCRIPTION -->
+
                     <div class="info-item info-full">
 
                         <span class="info-label">
@@ -454,7 +547,9 @@
 
                             @(string.IsNullOrWhiteSpace(
                                 Model.Tenant.Unit.Description)
+
                                 ? "No description available."
+
                                 : Model.Tenant.Unit.Description)
 
                         </span>
@@ -468,15 +563,100 @@
         </div>
     }
 
+    <!-- =========================================================
+     RENTAL AGREEMENT
+     ========================================================= -->
 
-    <!-- ========================================= -->
-    <!-- INFORMATION NOTE -->
-    <!-- ========================================= -->
+    <div class="profile-card">
+
+        <div class="profile-card-header">
+
+            <div>
+                <h5>
+                    <i class="bi bi-file-earmark-text me-2"></i>
+                    Rental Agreement
+                </h5>
+
+                <small>
+                    Upload and view the tenant's rental agreement
+                </small>
+            </div>
+
+            <!-- UPLOAD / REPLACE -->
+            <form method="post"
+                  enctype="multipart/form-data"
+                  asp-page-handler="UploadAgreement"
+                  asp-route-id="@Model.Tenant.TenantID"
+                  class="rental-agreement-upload-form">
+
+                <label class="rental-agreement-upload-btn">
+
+                    <i class="bi bi-upload me-1"></i>
+
+                    @(string.IsNullOrWhiteSpace(Model.Tenant.RentalAgreementImagePath)
+                        ? "Upload Agreement"
+                        : "Replace Agreement")
+
+                    <input type="file"
+                           asp-for="RentalAgreementImage"
+                           accept=".jpg,.jpeg,.png"
+                           onchange="this.form.submit();"
+                           hidden />
+
+                </label>
+
+            </form>
+
+        </div>
+
+
+        <div class="profile-card-body">
+
+            @if (!string.IsNullOrWhiteSpace(
+                Model.Tenant.RentalAgreementImagePath))
+            {
+                <div class="rental-agreement-preview">
+
+                    <img src="@Model.Tenant.RentalAgreementImagePath"
+                         alt="Rental Agreement"
+                         class="rental-agreement-image" />
+
+                </div>
+            }
+            else
+            {
+                <div class="rental-agreement-empty">
+
+                    <div class="rental-agreement-empty-icon">
+                        <i class="bi bi-file-earmark-x"></i>
+                    </div>
+
+                    <h6>
+                        No Rental Agreement Uploaded
+                    </h6>
+
+                    <p>
+                        Upload an image of the tenant's rental agreement
+                        using the button above.
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+    <!-- =========================================================
+         PROFILE INFORMATION NOTE
+         ========================================================= -->
 
     <div class="profile-note">
 
         <div class="profile-note-icon">
+
             <i class="bi bi-info-circle-fill"></i>
+
         </div>
 
         <div>
@@ -486,9 +666,9 @@
             </strong>
 
             <p>
-                This page displays the tenant's personal information,
-                assigned unit, rental information, and lease details
-                currently recorded in the system.
+                This profile reflects the tenant's current personal,
+                rental, lease, and assigned unit information recorded
+                in the ARMTIS system.
             </p>
 
         </div>
@@ -502,17 +682,20 @@
 
     :root {
         --armtis-primary: #0A2D4F;
+        --armtis-primary-light: #123F68;
         --armtis-accent: #17B6A7;
+        --armtis-accent-light: #E7F7F5;
         --armtis-bg: #F5F7FA;
-        --armtis-border: #E3E8EE;
+        --armtis-card: #FFFFFF;
+        --armtis-border: #E1E8EE;
         --armtis-text: #1F2937;
         --armtis-muted: #6B7280;
     }
 
 
-    /* ========================================= */
-    /* PAGE */
-    /* ========================================= */
+    /* =========================================================
+           PAGE
+           ========================================================= */
 
     .rental-profile-page {
         background: var(--armtis-bg);
@@ -521,9 +704,9 @@
     }
 
 
-    /* ========================================= */
-    /* HEADER */
-    /* ========================================= */
+    /* =========================================================
+           PAGE HEADER
+           ========================================================= */
 
     .profile-page-header {
         display: flex;
@@ -541,6 +724,11 @@
     }
 
 
+        .profile-title i {
+            color: var(--armtis-accent);
+        }
+
+
     .profile-subtitle {
         color: var(--armtis-muted);
         margin: 0;
@@ -554,38 +742,117 @@
     }
 
 
-    /* ========================================= */
-    /* MAIN PROFILE */
-    /* ========================================= */
+    /* =========================================================
+           BUTTONS
+           ========================================================= */
+
+    .profile-edit-btn {
+        background: var(--armtis-primary);
+        border: 1px solid var(--armtis-primary);
+        color: white;
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-size: .82rem;
+        font-weight: 600;
+    }
+
+
+        .profile-edit-btn:hover {
+            background: var(--armtis-primary-light);
+            border-color: var(--armtis-primary-light);
+            color: white;
+        }
+
+
+    .profile-back-btn {
+        background: white;
+        border: 1px solid #CBD5DE;
+        color: var(--armtis-primary);
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-size: .82rem;
+        font-weight: 600;
+    }
+
+
+        .profile-back-btn:hover {
+            background: #F3F7FA;
+            color: var(--armtis-primary);
+        }
+
+
+    /* =========================================================
+           MAIN PROFILE HERO
+           ========================================================= */
 
     .profile-main-card {
         background: var(--armtis-primary);
         color: white;
         border-radius: 16px;
-        padding: 24px;
+        padding: 28px 30px;
         display: flex;
         align-items: center;
-        gap: 18px;
+        gap: 22px;
         margin-bottom: 18px;
-        box-shadow: 0 5px 15px rgba(10,45,79,.12);
+        border-left: 4px solid var(--armtis-accent);
+        box-shadow: 0 6px 18px rgba(10,45,79,.12);
+    }
+
+
+    /* =========================================================
+           PROFILE PHOTO
+           ========================================================= */
+
+    .profile-avatar-wrapper {
+        flex-shrink: 0;
     }
 
 
     .profile-avatar {
-        width: 72px;
-        height: 72px;
-        min-width: 72px;
+        width: 110px;
+        height: 110px;
         border-radius: 50%;
-        background: rgba(255,255,255,.13);
-        border: 1px solid rgba(255,255,255,.25);
-        display: grid;
-        place-items: center;
-        font-size: 2rem;
+        background: var(--armtis-accent);
+        border: 4px solid rgba(255,255,255,.88);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,.12);
     }
 
 
+    .profile-avatar-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+
+    .profile-initials {
+        color: white;
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+
+    /* =========================================================
+           PROFILE INFORMATION
+           ========================================================= */
+
     .profile-main-info {
         min-width: 0;
+        flex: 1;
+    }
+
+
+    .profile-eyebrow {
+        color: var(--armtis-accent);
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: 1.3px;
+        margin-bottom: 5px;
     }
 
 
@@ -599,26 +866,38 @@
 
         .profile-name-row h3 {
             margin: 0;
+            color: white;
+            font-size: 1.7rem;
             font-weight: 700;
         }
 
 
     .profile-role {
-        margin: 4px 0 12px;
-        opacity: .78;
-        font-size: .9rem;
+        margin: 6px 0 13px;
+        color: rgba(255,255,255,.75);
+        font-size: .86rem;
     }
+
+
+        .profile-role strong {
+            color: white;
+            font-weight: 600;
+        }
 
 
     .profile-separator {
-        margin: 0 5px;
+        margin: 0 6px;
     }
 
+
+    /* =========================================================
+           STATUS
+           ========================================================= */
 
     .profile-status {
         display: inline-flex;
         align-items: center;
-        padding: 5px 10px;
+        padding: 5px 11px;
         border-radius: 999px;
         font-size: .72rem;
         font-weight: 600;
@@ -626,21 +905,27 @@
 
 
         .profile-status.active {
-            background: rgba(23,182,167,.2);
-            color: #BDF7F0;
+            background: rgba(23,182,167,.18);
+            color: #BFF7F1;
+            border: 1px solid rgba(23,182,167,.20);
         }
 
 
         .profile-status.inactive {
-            background: rgba(255,255,255,.14);
+            background: rgba(255,255,255,.10);
             color: white;
+            border: 1px solid rgba(255,255,255,.12);
         }
 
+
+    /* =========================================================
+           CONTACT
+           ========================================================= */
 
     .profile-contact-row {
         display: flex;
         flex-wrap: wrap;
-        gap: 16px;
+        gap: 18px;
     }
 
 
@@ -648,31 +933,38 @@
         display: flex;
         align-items: center;
         gap: 7px;
+        color: rgba(255,255,255,.84);
         font-size: .82rem;
-        opacity: .9;
     }
 
 
-    /* ========================================= */
-    /* STANDARD CARDS */
-    /* ========================================= */
+        .profile-contact-item i {
+            color: var(--armtis-accent);
+        }
+
+
+    /* =========================================================
+           STANDARD CARD
+           ========================================================= */
 
     .profile-card {
-        background: white;
+        background: var(--armtis-card);
         border: 1px solid var(--armtis-border);
         border-radius: 14px;
         overflow: hidden;
         margin-bottom: 18px;
-        box-shadow: 0 2px 8px rgba(10,45,79,.04);
+        box-shadow: 0 3px 10px rgba(10,45,79,.045);
     }
 
 
     .profile-card-header {
         padding: 16px 20px;
+        background: #F7F9FB;
         border-bottom: 1px solid var(--armtis-border);
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 10px;
     }
 
 
@@ -683,20 +975,43 @@
         }
 
 
+            .profile-card-header h5 i {
+                color: var(--armtis-accent);
+            }
+
+
         .profile-card-header small {
             color: var(--armtis-muted);
-            font-size: .78rem;
+            font-size: .76rem;
         }
 
 
     .profile-card-body {
-        padding: 20px;
+        padding: 21px;
     }
 
 
-    /* ========================================= */
-    /* PERSONAL INFORMATION */
-    /* ========================================= */
+    /* =========================================================
+           READ ONLY BADGE
+           ========================================================= */
+
+    .readonly-badge {
+        display: inline-flex;
+        align-items: center;
+        background: #EAF1F7;
+        color: var(--armtis-primary);
+        border: 1px solid #D3E0EA;
+        border-radius: 20px;
+        padding: 5px 9px;
+        font-size: .68rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+           INFORMATION GRID
+           ========================================================= */
 
     .info-grid {
         display: grid;
@@ -719,22 +1034,24 @@
 
     .info-label {
         color: var(--armtis-muted);
-        font-size: .75rem;
-        font-weight: 500;
+        font-size: .74rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .3px;
     }
 
 
     .info-value {
         color: var(--armtis-text);
-        font-size: .92rem;
+        font-size: .91rem;
         font-weight: 600;
         word-break: break-word;
     }
 
 
-    /* ========================================= */
-    /* RENTAL SUMMARY */
-    /* ========================================= */
+    /* =========================================================
+           RENTAL SUMMARY
+           ========================================================= */
 
     .rental-summary-grid {
         display: grid;
@@ -758,7 +1075,7 @@
         width: 40px;
         height: 40px;
         border-radius: 10px;
-        background: #EAF7F5;
+        background: var(--armtis-accent-light);
         color: var(--armtis-accent);
         display: grid;
         place-items: center;
@@ -774,13 +1091,13 @@
 
 
     .rent-value {
-        color: #137A49 !important;
+        color: var(--armtis-accent) !important;
     }
 
 
-    /* ========================================= */
-    /* UNIT DETAILS */
-    /* ========================================= */
+    /* =========================================================
+           UNIT
+           ========================================================= */
 
     .unit-details-grid {
         display: grid;
@@ -819,14 +1136,15 @@
         }
 
 
-    /* ========================================= */
-    /* INFORMATION NOTE */
-    /* ========================================= */
+    /* =========================================================
+           NOTE
+           ========================================================= */
 
     .profile-note {
-        background: #EAF7F5;
-        border: 1px solid #BEE8E3;
-        border-radius: 12px;
+        background: var(--armtis-accent-light);
+        border: 1px solid #BFE8E2;
+        border-left: 4px solid var(--armtis-accent);
+        border-radius: 10px;
         padding: 14px 16px;
         display: flex;
         align-items: flex-start;
@@ -836,41 +1154,105 @@
 
 
     .profile-note-icon {
+        color: var(--armtis-accent);
         font-size: 1.1rem;
         margin-top: 1px;
     }
 
 
     .profile-note strong {
-        font-size: .85rem;
+        font-size: .84rem;
     }
 
 
     .profile-note p {
         margin: 2px 0 0;
-        font-size: .78rem;
+        font-size: .77rem;
+    }
+    /* =========================================================
+       RENTAL AGREEMENT
+       ========================================================= */
+
+    .rental-agreement-upload-form {
+        margin: 0;
     }
 
-
-    /* ========================================= */
-    /* BUTTONS */
-    /* ========================================= */
-
-    .profile-header-actions .btn-primary {
+    .rental-agreement-upload-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 12px;
         background: var(--armtis-primary);
-        border-color: var(--armtis-primary);
+        color: white;
+        border: 1px solid var(--armtis-primary);
+        border-radius: 7px;
+        font-size: .76rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all .18s ease;
     }
 
-
-        .profile-header-actions .btn-primary:hover {
-            background: #071F36;
-            border-color: #071F36;
+        .rental-agreement-upload-btn:hover {
+            background: var(--armtis-primary-light);
+            border-color: var(--armtis-primary-light);
         }
 
+    .rental-agreement-preview {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 18px;
+        background: #F5F7FA;
+        border: 1px solid var(--armtis-border);
+        border-radius: 12px;
+        min-height: 220px;
+    }
 
-    /* ========================================= */
-    /* RESPONSIVE */
-    /* ========================================= */
+    .rental-agreement-image {
+        display: block;
+        max-width: 100%;
+        max-height: 750px;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(10,45,79,.10);
+    }
+
+    .rental-agreement-empty {
+        text-align: center;
+        padding: 45px 20px;
+        background: #F8FAFC;
+        border: 1px dashed #CBD8E2;
+        border-radius: 12px;
+    }
+
+    .rental-agreement-empty-icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 12px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: var(--armtis-accent-light);
+        color: var(--armtis-accent);
+        font-size: 1.6rem;
+    }
+
+    .rental-agreement-empty h6 {
+        color: var(--armtis-primary);
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .rental-agreement-empty p {
+        color: var(--armtis-muted);
+        font-size: .78rem;
+        margin: 0;
+    }
+
+    /* =========================================================
+           RESPONSIVE
+           ========================================================= */
 
     @@media (max-width: 991.98px) {
 
@@ -891,21 +1273,38 @@
             align-items: flex-start;
         }
 
+
         .profile-header-actions {
             width: 100%;
         }
+
 
             .profile-header-actions .btn {
                 flex: 1;
             }
 
+
         .profile-main-card {
             align-items: flex-start;
+            padding: 22px 20px;
         }
+
+
+        .profile-avatar {
+            width: 88px;
+            height: 88px;
+        }
+
+
+        .profile-name-row h3 {
+            font-size: 1.4rem;
+        }
+
 
         .info-grid {
             grid-template-columns: 1fr;
         }
+
 
         .info-full {
             grid-column: auto;
@@ -920,28 +1319,38 @@
             padding-right: 0;
         }
 
+
         .profile-main-card {
-            padding: 18px;
+            flex-direction: column;
+            text-align: center;
+            align-items: center;
         }
 
-        .profile-avatar {
-            width: 58px;
-            height: 58px;
-            min-width: 58px;
-            font-size: 1.6rem;
+
+        .profile-name-row {
+            justify-content: center;
         }
 
-        .profile-name-row h3 {
-            font-size: 1.25rem;
+
+        .profile-role {
+            text-align: center;
         }
+
+
+        .profile-contact-row {
+            justify-content: center;
+        }
+
 
         .rental-summary-grid {
             grid-template-columns: 1fr;
         }
 
+
         .unit-details-grid {
             grid-template-columns: 1fr;
         }
+      
     }
 
 </style>

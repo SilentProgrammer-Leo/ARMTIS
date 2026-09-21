@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Folder Include="MVVM\Views\" />
+    <Folder Include="wwwroot\uploads\tenants\Agreements\" />
   </ItemGroup>
 
   <ItemGroup>
