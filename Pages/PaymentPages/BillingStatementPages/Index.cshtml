@@ -19,7 +19,6 @@
                 Manage tenant billing statements, payments, and balances.
             </p>
         </div>
-
         <a asp-page="/PaymentPages/BillingStatementPages/Generate"
            class="btn text-white px-3 py-2"
            style="background:#0A2D4F;">
@@ -28,8 +27,8 @@
             Generate Billing
 
         </a>
-
     </div>
+
     <!-- BILLING SEARCH & FILTER -->
     <div class="card border-0 shadow-sm mb-4">
 
@@ -60,7 +59,6 @@
 
             </div>
 
-
             <form method="get">
 
                 <div class="row g-3 align-items-end">
@@ -68,11 +66,8 @@
                     <!-- SEARCH -->
                     <div class="col-lg-5">
 
-                        <label asp-for="SearchTerm"
-                               class="form-label fw-semibold">
-
+                        <label asp-for="SearchTerm" class="form-label fw-semibold">
                             Search
-
                         </label>
 
                         <div class="input-group">
@@ -84,20 +79,15 @@
                             <input asp-for="SearchTerm"
                                    class="form-control"
                                    placeholder="Tenant, unit, or billing number..." />
-
                         </div>
-
                     </div>
-
 
                     <!-- STATUS -->
                     <div class="col-lg-3">
 
                         <label asp-for="StatusFilter"
                                class="form-label fw-semibold">
-
                             Status
-
                         </label>
 
                         <select asp-for="StatusFilter"
@@ -131,23 +121,17 @@
 
                     </div>
 
-
                     <!-- MONTH -->
                     <div class="col-lg-2">
-
                         <label asp-for="BillingMonthFilter"
                                class="form-label fw-semibold">
-
                             Billing Month
-
                         </label>
 
                         <input asp-for="BillingMonthFilter"
                                type="month"
                                class="form-control" />
-
                     </div>
-
 
                     <!-- BUTTONS -->
                     <div class="col-lg-2">
@@ -166,21 +150,13 @@
                             <a asp-page="./Index"
                                class="btn btn-light border"
                                title="Reset filters">
-
                                 <i class="bi bi-arrow-counterclockwise"></i>
-
                             </a>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </form>
-
         </div>
-
     </div>
 
     <!-- ALERT MESSAGES -->
@@ -188,16 +164,13 @@
     {
         <div class="alert alert-success alert-dismissible fade show shadow-sm"
              role="alert">
-
             <i class="bi bi-check-circle me-2"></i>
-
             @TempData["SuccessMessage"]
 
             <button type="button"
                     class="btn-close"
                     data-bs-dismiss="alert">
             </button>
-
         </div>
     }
 
@@ -207,17 +180,14 @@
              role="alert">
 
             <i class="bi bi-exclamation-triangle me-2"></i>
-
             @TempData["ErrorMessage"]
 
             <button type="button"
                     class="btn-close"
                     data-bs-dismiss="alert">
             </button>
-
         </div>
     }
-
 
     <form id="antiForgeryForm" class="d-none">
         @Html.AntiForgeryToken()
@@ -252,67 +222,43 @@
 
             </span>
         }
-
     </div>
+
     <!-- BILLING TABLE CARD -->
     <div class="card border-0 shadow-sm billing-table-card">
-
         <div class="card-header bg-white border-0 pt-4 px-4">
-
             <div class="d-flex justify-content-between align-items-center">
-
                 <div>
-
                     <h5 class="fw-semibold mb-1"
                         style="color:#0A2D4F;">
 
                         <i class="bi bi-receipt me-2"
                            style="color:#17B6A7;">
                         </i>
-
                         Billing Records
-
                     </h5>
 
                     <small class="text-muted">
                         Review billing statements and payment activity.
                     </small>
-
                 </div>
-
             </div>
-
         </div>
 
-
         <div class="card-body px-0 pt-3">
-
             <div class="table-responsive">
-
                 <table class="table align-middle mb-0 billing-table">
-
                     <thead>
                         <tr>
-
                             <th>Unit</th>
-
                             <th>Tenant</th>
-
                             <th>Billing Month</th>
-
                             <th>Due Date</th>
-
                             <th>Status</th>
-
                             <th>Billing Statement</th>
-
-                            <th class="text-center">
-                                Actions
-                            </th>
-
+                            <th class="text-center">Actions</th>
                         </tr>
                     </thead>
-
 
                      <tbody>
                            
@@ -324,9 +270,7 @@
                                     Model.UtilityReadingsByBillingId
                                     .GetValueOrDefault(item.BillingStatementID);
 
-                                <tr class="@(item.BillingStatus == "Overdue"
-                                                                ? "billing-overdue-row"
-                                                                : "")">
+                                <tr class="@(item.BillingStatus == "Overdue" ? "billing-overdue-row": "")">
 
                                     <!-- UNIT -->
                                     <td class="fw-semibold text-nowrap">
@@ -338,10 +282,8 @@
 
                                     </td>
 
-
                                     <!-- TENANT -->
                                     <td>
-
                                         @if (item.Tenant != null)
                                         {
                                             <div class="fw-semibold">
@@ -352,9 +294,7 @@
                                         {
                                             <span class="text-muted">N/A </span>
                                         }
-
                                     </td>
-
 
                                     <!-- BILLING MONTH -->
                                     <td>
@@ -377,14 +317,11 @@
                                                 @item.DueDate.ToString("MMMM dd, yyyy")
                                             </span>
 
-                                        </div>
-
+                                        </div
                                     </td>
-
 
                                     <!-- STATUS -->
                                     <td>
-
                                         @if (item.BillingStatus == "Paid")
                                         {
                                             <span class="billing-status status-paid">
@@ -420,7 +357,6 @@
                                                 Pending
                                             </span>
                                         }
-
                                     </td>
 
 
