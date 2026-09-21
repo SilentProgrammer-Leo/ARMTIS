@@ -586,20 +586,17 @@
             <form method="post"
                   enctype="multipart/form-data"
                   asp-page-handler="UploadAgreement"
-                  asp-route-id="@Model.Tenant.TenantID"
-                  class="rental-agreement-upload-form">
+                  asp-route-id="@Model.Tenant.TenantID">
 
                 <label class="rental-agreement-upload-btn">
 
                     <i class="bi bi-upload me-1"></i>
-
-                    @(string.IsNullOrWhiteSpace(Model.Tenant.RentalAgreementImagePath)
-                        ? "Upload Agreement"
-                        : "Replace Agreement")
+                    Upload Agreement Pages
 
                     <input type="file"
-                           asp-for="RentalAgreementImage"
+                           asp-for="RentalAgreementImages"
                            accept=".jpg,.jpeg,.png"
+                           multiple
                            onchange="this.form.submit();"
                            hidden />
 
@@ -612,14 +609,25 @@
 
         <div class="profile-card-body">
 
-            @if (!string.IsNullOrWhiteSpace(
-                Model.Tenant.RentalAgreementImagePath))
+            @if (Model.Tenant.RentalAgreementImages.Any())
             {
-                <div class="rental-agreement-preview">
+                <div class="rental-agreement-gallery">
 
-                    <img src="@Model.Tenant.RentalAgreementImagePath"
-                         alt="Rental Agreement"
-                         class="rental-agreement-image" />
+                    @foreach (var image in Model.Tenant.RentalAgreementImages
+                        .OrderBy(x => x.UploadDate))
+                    {
+                        <div class="rental-agreement-item">
+
+                            <img src="@image.ImagePath"
+                                 alt="Rental Agreement"
+                                 class="rental-agreement-image" />
+
+                            <div class="rental-agreement-page-label">
+                                @image.FileName
+                            </div>
+
+                        </div>
+                    }
 
                 </div>
             }
@@ -631,13 +639,10 @@
                         <i class="bi bi-file-earmark-x"></i>
                     </div>
 
-                    <h6>
-                        No Rental Agreement Uploaded
-                    </h6>
+                    <h6>No Rental Agreement Uploaded</h6>
 
                     <p>
-                        Upload an image of the tenant's rental agreement
-                        using the button above.
+                        Upload one or more agreement pages.
                     </p>
 
                 </div>

@@ -33,7 +33,7 @@ namespace ARMTIS_Capstone_Project.Data
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<SystemSetting> SystemSettings { get; set; }
         public DbSet<AuditLog> AuditLogs { get; set; }
-
+        public DbSet<RentalAgreementImage> RentalAgreementImages { get; set; }
         public override int SaveChanges()
         {
             if (_isWritingAuditLog)
