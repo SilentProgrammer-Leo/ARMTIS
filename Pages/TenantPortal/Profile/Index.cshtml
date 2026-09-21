@@ -450,7 +450,102 @@
             </div>
 
         </form>
+        <!-- =========================================================
+     RENTAL AGREEMENT
+     ========================================================= -->
 
+        <div class="tenant-profile-card mb-4">
+
+            <div class="tenant-profile-card-header">
+
+                <div>
+                    <h5>
+                        <i class="bi bi-file-earmark-text me-2"></i>
+                        Rental Agreement
+                    </h5>
+
+                    <small>
+                        Your uploaded rental agreement pages
+                    </small>
+                </div>
+
+                <span class="tenant-readonly-badge">
+                    <i class="bi bi-lock-fill me-1"></i>
+                    Read Only
+                </span>
+
+            </div>
+
+
+            <div class="tenant-profile-card-body">
+
+                @if (Model.Tenant.RentalAgreementImages != null &&
+                     Model.Tenant.RentalAgreementImages.Any())
+                {
+                    <div class="tenant-agreement-gallery">
+
+                        @foreach (var agreement in Model.Tenant.RentalAgreementImages
+                            .OrderBy(x => x.UploadDate))
+                        {
+                            <div class="tenant-agreement-item">
+
+                                <a href="@agreement.ImagePath"
+                                   target="_blank"
+                                   rel="noopener noreferrer">
+
+                                    <img src="@agreement.ImagePath"
+                                         alt="Rental Agreement"
+                                         class="tenant-agreement-image" />
+
+                                </a>
+
+                                <div class="tenant-agreement-caption">
+
+                                    <span>
+                                        <i class="bi bi-file-earmark-image me-1"></i>
+                                        @(agreement.FileName ?? "Agreement Page")
+                                    </span>
+
+                                    <a href="@agreement.ImagePath"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="tenant-agreement-view">
+
+                                        <i class="bi bi-arrows-fullscreen"></i>
+                                        View
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+                }
+                else
+                {
+                    <div class="tenant-agreement-empty">
+
+                        <div class="tenant-agreement-empty-icon">
+                            <i class="bi bi-file-earmark-x"></i>
+                        </div>
+
+                        <h6>
+                            No Rental Agreement Uploaded
+                        </h6>
+
+                        <p>
+                            No rental agreement pages are currently available.
+                            Please contact the administrator if you need a copy.
+                        </p>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
 
         <!-- =========================================================
              PROFILE NOTICE

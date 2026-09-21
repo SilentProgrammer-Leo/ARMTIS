@@ -1385,4 +1385,145 @@
     .tenant-profile-cancel-btn {
         width: 100%;
     }
+
+    /* =========================================================
+   TENANT RENTAL AGREEMENT
+   ========================================================= */
+
+    .tenant-agreement-gallery {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+
+    /* AGREEMENT CARD */
+
+    .tenant-agreement-item {
+        background: #F8FAFC;
+        border: 1px solid #E1E8EE;
+        border-radius: 11px;
+        overflow: hidden;
+        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+
+        .tenant-agreement-item:hover {
+            transform: translateY(-2px);
+            border-color: #17B6A7;
+            box-shadow: 0 5px 14px rgba(10,45,79,.08);
+        }
+
+
+    /* IMAGE */
+
+    .tenant-agreement-image {
+        display: block;
+        width: 100%;
+        height: 360px;
+        object-fit: contain;
+        background: white;
+    }
+
+
+    /* CAPTION */
+
+    .tenant-agreement-caption {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 9px 11px;
+        border-top: 1px solid #E1E8EE;
+        background: #fff;
+    }
+
+        .tenant-agreement-caption span {
+            color: #6B7280;
+            font-size: .72rem;
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+            .tenant-agreement-caption span i {
+                color: #17B6A7;
+            }
+
+
+    /* VIEW BUTTON */
+
+    .tenant-agreement-view {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        color: #0A2D4F;
+        font-size: .72rem;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+        .tenant-agreement-view:hover {
+            color: #17B6A7;
+        }
+
+
+    /* EMPTY STATE */
+
+    .tenant-agreement-empty {
+        text-align: center;
+        padding: 42px 20px;
+        background: #F8FAFC;
+        border: 1px dashed #CBD8E2;
+        border-radius: 11px;
+    }
+
+    .tenant-agreement-empty-icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 12px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: #E7F7F5;
+        color: #17B6A7;
+        font-size: 1.5rem;
+    }
+
+    .tenant-agreement-empty h6 {
+        color: #0A2D4F;
+        font-size: .9rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .tenant-agreement-empty p {
+        color: #6B7280;
+        font-size: .76rem;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+
+    /* RESPONSIVE */
+
+    @media (max-width: 991.98px) {
+
+        .tenant-agreement-gallery {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+
+    @media (max-width: 575.98px) {
+
+        .tenant-agreement-gallery {
+            grid-template-columns: 1fr;
+        }
+
+        .tenant-agreement-image {
+            height: 420px;
+        }
+    }
 }

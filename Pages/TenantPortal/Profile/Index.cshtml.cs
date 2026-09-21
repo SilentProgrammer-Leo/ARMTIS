@@ -89,10 +89,10 @@ namespace ARMTIS_Capstone_Project.Pages.TenantPortal.Profile
             UserAccount = user;
 
             Tenant = await _context.Tenants
-                .Include(t => t.Unit)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(
-                    t => t.TenantID == user.TenantID.Value);
+               .Include(t => t.Unit)
+               .Include(t => t.RentalAgreementImages)
+               .AsNoTracking()
+               .FirstOrDefaultAsync( t => t.TenantID == user.TenantID.Value);
 
             if (Tenant == null)
             {
