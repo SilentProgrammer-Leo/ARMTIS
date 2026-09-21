@@ -6,12 +6,13 @@
     Layout = "/Pages/TenantPortal/_TenantLayout.cshtml";
 }
 
-<div class="container-fluid">
+<div class="container-fluid tenant-billing-page">
 
-    <!-- PAGE HEADER -->
+    <!-- =========================================================
+         PAGE HEADER
+         ========================================================= -->
     <div class="mb-4">
-
-        <h2 class="fw-bold">
+        <h2 class="fw-bold mb-1">
             <i class="bi bi-receipt me-2"></i>
             My Bills
         </h2>
@@ -19,63 +20,50 @@
         <p class="text-muted mb-0">
             View your billing statements and outstanding balances.
         </p>
-
     </div>
 
 
-    <!-- SUMMARY CARDS -->
-
+    <!-- =========================================================
+         SUMMARY CARDS
+         ========================================================= -->
     <div class="row g-4 mb-4">
 
         <!-- TOTAL OUTSTANDING -->
-
         <div class="col-md-4">
-
-            <div class="card shadow-sm border-0 h-100">
+            <div class="card shadow-sm h-100 summary-outstanding">
 
                 <div class="card-body">
-
                     <div class="d-flex justify-content-between align-items-center">
 
                         <div>
-
                             <p class="text-muted mb-1">
                                 Total Outstanding
                             </p>
 
-                            <h3 class="fw-bold text-danger mb-0">
+                            <h3 class="fw-bold mb-0">
                                 ₱@Model.TotalOutstanding.ToString("N2")
                             </h3>
-
                         </div>
 
-                        <div class="bg-danger-subtle rounded-circle p-3">
-
-                            <i class="bi bi-exclamation-circle text-danger fs-3"></i>
-
+                        <div class="summary-icon rounded-circle p-3">
+                            <i class="bi bi-exclamation-circle fs-3"></i>
                         </div>
 
                     </div>
-
                 </div>
 
             </div>
-
         </div>
 
 
         <!-- UNPAID BILLS -->
-
         <div class="col-md-4">
-
-            <div class="card shadow-sm border-0 h-100">
+            <div class="card shadow-sm h-100 summary-unpaid">
 
                 <div class="card-body">
-
                     <div class="d-flex justify-content-between align-items-center">
 
                         <div>
-
                             <p class="text-muted mb-1">
                                 Unpaid Bills
                             </p>
@@ -83,74 +71,59 @@
                             <h3 class="fw-bold mb-0">
                                 @Model.UnpaidBills
                             </h3>
-
                         </div>
 
-                        <div class="bg-warning-subtle rounded-circle p-3">
-
-                            <i class="bi bi-clock-history text-warning fs-3"></i>
-
+                        <div class="summary-icon rounded-circle p-3">
+                            <i class="bi bi-clock-history fs-3"></i>
                         </div>
 
                     </div>
-
                 </div>
 
             </div>
-
         </div>
 
 
         <!-- PAID BILLS -->
-
         <div class="col-md-4">
-
-            <div class="card shadow-sm border-0 h-100">
+            <div class="card shadow-sm h-100 summary-paid">
 
                 <div class="card-body">
-
                     <div class="d-flex justify-content-between align-items-center">
 
                         <div>
-
                             <p class="text-muted mb-1">
                                 Paid Bills
                             </p>
 
-                            <h3 class="fw-bold text-success mb-0">
+                            <h3 class="fw-bold mb-0">
                                 @Model.PaidBills
                             </h3>
-
                         </div>
 
-                        <div class="bg-success-subtle rounded-circle p-3">
-
-                            <i class="bi bi-check-circle text-success fs-3"></i>
-
+                        <div class="summary-icon rounded-circle p-3">
+                            <i class="bi bi-check-circle fs-3"></i>
                         </div>
 
                     </div>
-
                 </div>
 
             </div>
-
         </div>
 
     </div>
 
 
-    <!-- BILLING STATEMENTS -->
+    <!-- =========================================================
+         BILLING STATEMENTS
+         ========================================================= -->
+    <div class="card shadow-sm billing-statements-card">
 
-    <div class="card shadow-sm border-0">
-
-        <div class="card-header bg-white py-3">
-
+        <div class="card-header py-3">
             <h5 class="fw-bold mb-0">
                 <i class="bi bi-file-earmark-text me-2"></i>
                 Billing Statements
             </h5>
-
         </div>
 
 
@@ -158,11 +131,12 @@
 
             @if (Model.BillingStatements.Count == 0)
             {
-                <!-- NO BILL -->
-
+                <!-- =================================================
+                     NO BILLING STATEMENTS
+                     ================================================= -->
                 <div class="text-center py-5">
 
-                    <i class="bi bi-receipt text-muted"
+                    <i class="bi bi-receipt empty-state-icon"
                        style="font-size: 4rem;"></i>
 
                     <h4 class="fw-bold mt-3">
@@ -177,32 +151,26 @@
             }
             else
             {
+                <!-- =================================================
+                     BILLING TABLE
+                     ================================================= -->
                 <div class="table-responsive">
 
                     <table class="table table-hover align-middle">
 
-                        <thead class="table-light">
-
+                        <thead>
                             <tr>
 
                                 <th>Billing No.</th>
-
                                 <th>Billing Month</th>
-
                                 <th>Unit</th>
-
                                 <th>Due Date</th>
-
                                 <th>Total Amount</th>
-
                                 <th>Balance</th>
-
                                 <th>Status</th>
-
                                 <th>Action</th>
 
                             </tr>
-
                         </thead>
 
 
@@ -210,10 +178,13 @@
 
                             @foreach (var bill in Model.BillingStatements)
                             {
-                                decimal paidAmount = Model.PaidAmounts
-                                    .GetValueOrDefault(bill.BillingStatementID, 0);
+                                decimal paidAmount =
+                                    Model.PaidAmounts.GetValueOrDefault(
+                                        bill.BillingStatementID,
+                                        0);
 
-                                decimal balance = bill.TotalAmountDue - paidAmount;
+                                decimal balance =
+                                    bill.TotalAmountDue - paidAmount;
 
                                 if (balance < 0)
                                 {
@@ -221,64 +192,104 @@
                                 }
 
                                 <tr>
-                                    <td>@bill.BillingNo</td>
 
+                                    <!-- BILLING NUMBER -->
+                                    <td>
+                                        <span class="fw-semibold">
+                                            @bill.BillingNo
+                                        </span>
+                                    </td>
+
+
+                                    <!-- BILLING MONTH -->
                                     <td>
                                         @bill.BillingMonth.ToString("MMMM yyyy")
                                     </td>
 
+
+                                    <!-- UNIT -->
                                     <td>
                                         @(bill.Unit?.UnitNumber ?? "N/A")
                                     </td>
 
+
+                                    <!-- DUE DATE -->
                                     <td>
                                         @bill.DueDate.ToString("MMMM dd, yyyy")
                                     </td>
 
+
+                                    <!-- TOTAL -->
                                     <td>
-                                        ₱@bill.TotalAmountDue.ToString("N2")
+                                        <span class="fw-semibold">
+                                            ₱@bill.TotalAmountDue.ToString("N2")
+                                        </span>
                                     </td>
 
+
+                                    <!-- BALANCE -->
                                     <td>
                                         @if (balance > 0)
                                         {
-                                            <span class="text-danger fw-bold">
+                                            <span class="balance-due">
                                                 ₱@balance.ToString("N2")
                                             </span>
                                         }
                                         else
                                         {
-                                            <span class="text-success fw-bold">
+                                            <span class="balance-zero">
                                                 ₱0.00
                                             </span>
                                         }
                                     </td>
 
+
+                                    <!-- STATUS -->
                                     <td>
+
                                         @if (balance <= 0)
                                         {
-                                            <span class="badge bg-success">Paid</span>
+                                            <span class="badge badge-paid">
+                                                Paid
+                                            </span>
                                         }
                                         else if (bill.BillingStatus == "Overdue")
                                         {
-                                            <span class="badge bg-danger">Overdue</span>
+                                            <span class="badge badge-overdue">
+                                                Overdue
+                                            </span>
+                                        }
+                                        else if (bill.BillingStatus == "Partially Paid")
+                                        {
+                                            <span class="badge badge-partial">
+                                                Partially Paid
+                                            </span>
                                         }
                                         else
                                         {
-                                            <span class="badge bg-warning text-dark">
+                                            <span class="badge badge-pending">
                                                 @bill.BillingStatus
                                             </span>
                                         }
+
                                     </td>
 
+
+                                    <!-- ACTION -->
                                     <td>
+
                                         <button type="button"
-                                                class="btn btn-outline-primary btn-sm"
+                                                class="btn btn-view-bill"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#billModal-@bill.BillingStatementID">
-                                            <i class="bi bi-eye"></i> View
+
+                                            <i class="bi bi-eye me-1"></i>
+                                            View
+
                                         </button>
+
                                     </td>
+
                                 </tr>
                             }
 
@@ -290,13 +301,14 @@
             }
 
         </div>
-
     </div>
 
 </div>
 
 
-<!-- BILL DETAILS MODALS -->
+<!-- =============================================================
+     BILL DETAILS MODALS
+     ============================================================= -->
 @if (Model.BillingStatements.Count > 0)
 {
     @foreach (var bill in Model.BillingStatements)
@@ -310,41 +322,40 @@
 
                 <div class="modal-content">
 
-
-                    <!-- HEADER -->
-
+                    <!-- =================================================
+                         MODAL HEADER
+                         ================================================= -->
                     <div class="modal-header">
 
                         <div>
-
                             <h5 class="modal-title fw-bold">
-
                                 <i class="bi bi-receipt me-2"></i>
-
                                 Billing Statement
-
                             </h5>
 
                             <small class="text-muted">
                                 @bill.BillingNo
                             </small>
-
                         </div>
 
                         <button type="button"
-                                class="btn-close"
-                                data-bs-dismiss="modal">
+                                class="btn-close btn-close-white"
+                                data-bs-dismiss="modal"
+                                aria-label="Close">
                         </button>
 
                     </div>
 
 
-                    <!-- BODY -->
-
+                    <!-- =================================================
+                         MODAL BODY
+                         ================================================= -->
                     <div class="modal-body">
 
-                        <!-- BASIC INFORMATION -->
 
+                        <!-- =================================================
+                             BASIC INFORMATION
+                             ================================================= -->
                         <div class="card border-0 bg-light mb-4">
 
                             <div class="card-body">
@@ -352,7 +363,6 @@
                                 <div class="row g-3">
 
                                     <div class="col-md-6">
-
                                         <small class="text-muted">
                                             Billing Month
                                         </small>
@@ -360,12 +370,10 @@
                                         <div class="fw-semibold">
                                             @bill.BillingMonth.ToString("MMMM yyyy")
                                         </div>
-
                                     </div>
 
 
                                     <div class="col-md-6">
-
                                         <small class="text-muted">
                                             Due Date
                                         </small>
@@ -373,12 +381,10 @@
                                         <div class="fw-semibold">
                                             @bill.DueDate.ToString("MMMM dd, yyyy")
                                         </div>
-
                                     </div>
 
 
                                     <div class="col-md-6">
-
                                         <small class="text-muted">
                                             Unit
                                         </small>
@@ -386,12 +392,10 @@
                                         <div class="fw-semibold">
                                             @(bill.Unit?.UnitNumber ?? "N/A")
                                         </div>
-
                                     </div>
 
 
                                     <div class="col-md-6">
-
                                         <small class="text-muted">
                                             Date Generated
                                         </small>
@@ -399,7 +403,6 @@
                                         <div class="fw-semibold">
                                             @bill.DateGenerated.ToString("MMMM dd, yyyy")
                                         </div>
-
                                     </div>
 
                                 </div>
@@ -409,15 +412,14 @@
                         </div>
 
 
-                        <!-- RENT -->
-
+                        <!-- =================================================
+                             RENTAL CHARGE
+                             ================================================= -->
                         <div class="card mb-3">
 
                             <div class="card-header fw-bold">
-
                                 <i class="bi bi-house me-2"></i>
                                 Rental Charge
-
                             </div>
 
                             <div class="card-body">
@@ -435,19 +437,17 @@
                                 </div>
 
                             </div>
-
                         </div>
 
 
-                        <!-- UTILITIES -->
-
+                        <!-- =================================================
+                             UTILITY CHARGES
+                             ================================================= -->
                         <div class="card mb-3">
 
                             <div class="card-header fw-bold">
-
                                 <i class="bi bi-lightning-charge me-2"></i>
                                 Utility Charges
-
                             </div>
 
                             <div class="card-body">
@@ -507,30 +507,29 @@
                                 </div>
 
                             </div>
-
                         </div>
 
 
-                        <!-- PENALTY -->
+                        <!-- =================================================
+                             PENALTY
+                             ================================================= -->
                         @if (bill.PenaltyAmount > 0)
                         {
-                            <div class="card mb-3 border-danger">
+                            <div class="card mb-3 penalty-card">
 
                                 <div class="card-body">
 
                                     <div class="d-flex justify-content-between">
 
-                                        <span class="text-danger fw-semibold">
+                                        <span class="penalty-text fw-semibold">
 
                                             <i class="bi bi-exclamation-triangle me-1"></i>
                                             Penalty
 
                                         </span>
 
-                                        <span class="text-danger fw-bold">
-
+                                        <span class="penalty-text fw-bold">
                                             ₱@bill.PenaltyAmount.ToString("N2")
-
                                         </span>
 
                                     </div>
@@ -541,26 +540,26 @@
                         }
 
 
-                        <!-- CREDIT -->
+                        <!-- =================================================
+                             CREDIT
+                             ================================================= -->
                         @if (bill.CreditApplied > 0)
                         {
-                            <div class="card mb-3 border-success">
+                            <div class="card mb-3 credit-card">
 
                                 <div class="card-body">
 
                                     <div class="d-flex justify-content-between">
 
-                                        <span class="text-success fw-semibold">
+                                        <span class="credit-text fw-semibold">
 
                                             <i class="bi bi-wallet2 me-1"></i>
                                             Credit Applied
 
                                         </span>
 
-                                        <span class="text-success fw-bold">
-
+                                        <span class="credit-text fw-bold">
                                             -₱@bill.CreditApplied.ToString("N2")
-
                                         </span>
 
                                     </div>
@@ -571,9 +570,10 @@
                         }
 
 
-                        <!-- TOTAL -->
-
-                        <div class="card bg-light border-0 mt-4">
+                        <!-- =================================================
+                             TOTAL AMOUNT DUE
+                             ================================================= -->
+                        <div class="card total-due-card border-0 mt-4">
 
                             <div class="card-body">
 
@@ -583,7 +583,7 @@
                                         Total Amount Due
                                     </span>
 
-                                    <span class="fs-4 fw-bold text-primary">
+                                    <span class="fs-4 fw-bold total-amount">
                                         ₱@bill.TotalAmountDue.ToString("N2")
                                     </span>
 
@@ -594,13 +594,14 @@
                         </div>
 
 
-                        <!-- STATUS -->
-
+                        <!-- =================================================
+                             STATUS
+                             ================================================= -->
                         <div class="text-center mt-4">
 
                             @if (bill.BillingStatus == "Paid")
                             {
-                                <span class="badge bg-success fs-6 px-3 py-2">
+                                <span class="badge badge-paid fs-6 px-3 py-2">
 
                                     <i class="bi bi-check-circle me-1"></i>
                                     PAID
@@ -609,7 +610,7 @@
                             }
                             else if (bill.BillingStatus == "Overdue")
                             {
-                                <span class="badge bg-danger fs-6 px-3 py-2">
+                                <span class="badge badge-overdue fs-6 px-3 py-2">
 
                                     <i class="bi bi-exclamation-circle me-1"></i>
                                     OVERDUE
@@ -618,7 +619,7 @@
                             }
                             else if (bill.BillingStatus == "Partially Paid")
                             {
-                                <span class="badge bg-info text-dark fs-6 px-3 py-2">
+                                <span class="badge badge-partial fs-6 px-3 py-2">
 
                                     <i class="bi bi-hourglass-split me-1"></i>
                                     PARTIALLY PAID
@@ -627,7 +628,7 @@
                             }
                             else
                             {
-                                <span class="badge bg-warning text-dark fs-6 px-3 py-2">
+                                <span class="badge badge-pending fs-6 px-3 py-2">
 
                                     <i class="bi bi-clock me-1"></i>
                                     @bill.BillingStatus.ToUpper()
@@ -638,7 +639,9 @@
                         </div>
 
 
-                        <!-- REMARKS -->
+                        <!-- =================================================
+                             REMARKS
+                             ================================================= -->
                         @if (!string.IsNullOrWhiteSpace(bill.Remarks))
                         {
                             <div class="alert alert-secondary mt-4">
@@ -658,12 +661,13 @@
                     </div>
 
 
-                    <!-- FOOTER -->
-
+                    <!-- =================================================
+                         MODAL FOOTER
+                         ================================================= -->
                     <div class="modal-footer">
 
                         <button type="button"
-                                class="btn btn-secondary"
+                                class="btn btn-close-modal"
                                 data-bs-dismiss="modal">
 
                             Close

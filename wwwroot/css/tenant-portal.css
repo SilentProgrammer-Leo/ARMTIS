@@ -25,91 +25,225 @@
 }
 
 
-/* SIDEBAR */
+/* =========================================================
+   TENANT PORTAL - SIDEBAR
+   ========================================================= */
 
 .tenant-sidebar {
-    width: 260px;
+    width: 255px;
     min-height: 100vh;
-    background: var(--tenant-primary);
-    color: white;
-    padding: 22px 15px;
+    background: var(--tenant-primary, #0A2D4F);
+    color: #fff;
+    padding: 18px 14px;
     flex-shrink: 0;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, .08);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 3px 0 12px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
 }
 
 
-/* SIDEBAR BRAND */
+/* =========================================================
+   SIDEBAR BRAND
+   ========================================================= */
 
 .tenant-sidebar-brand {
-    text-align: center;
-    padding: 6px 5px 18px;
+    padding: 7px 8px 20px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
 }
 
     .tenant-sidebar-brand h4 {
         margin: 0;
-        color: white;
+        color: #fff;
+        font-size: 1.08rem;
         font-weight: 700;
-        font-size: 1.2rem;
+        letter-spacing: 0.2px;
     }
 
     .tenant-sidebar-brand i {
-        color: var(--tenant-accent);
-        margin-right: 5px;
+        width: 38px;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(23, 182, 167, 0.14);
+        color: var(--tenant-accent, #17B6A7);
+        border-radius: 10px;
+        font-size: 1.15rem;
+        flex-shrink: 0;
     }
 
+
+/* =========================================================
+   SIDEBAR DIVIDER
+   ========================================================= */
+
 .tenant-sidebar-divider {
-    border-color: rgba(255,255,255,.15);
-    margin: 0 0 18px;
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.10);
+    margin: 0 4px 18px;
 }
 
 
-/* SIDEBAR NAVIGATION */
+/* =========================================================
+   SIDEBAR NAVIGATION
+   ========================================================= */
 
 .tenant-nav {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 4px;
 }
+
+
+/* =========================================================
+   NAVIGATION LINK
+   ========================================================= */
 
 .tenant-nav-link {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 11px;
-    padding: 10px 12px;
-    color: rgba(255,255,255,.88);
-    border-radius: 8px;
+    gap: 12px;
+    min-height: 43px;
+    padding: 10px 13px;
+    color: rgba(255, 255, 255, 0.82);
+    background: transparent;
+    border-radius: 9px;
+    border: 1px solid transparent;
     text-decoration: none;
-    font-size: .86rem;
+    font-size: 0.86rem;
     font-weight: 500;
-    transition: background .15s ease, color .15s ease, transform .15s ease;
+    transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
 }
 
+
+    /* ICON */
+
     .tenant-nav-link i {
-        width: 20px;
+        width: 21px;
+        min-width: 21px;
         text-align: center;
+        color: rgba(255, 255, 255, 0.72);
         font-size: 1rem;
+        transition: color 0.18s ease;
     }
 
+
+    /* TEXT */
+
+    .tenant-nav-link span {
+        line-height: 1.2;
+    }
+
+
+    /* =========================================================
+   HOVER
+   ========================================================= */
+
     .tenant-nav-link:hover {
-        color: white;
-        background: rgba(255,255,255,.09);
+        color: #fff;
+        background: rgba(255, 255, 255, 0.07);
+        border-color: rgba(255, 255, 255, 0.06);
         transform: translateX(2px);
     }
 
-
-    /*  ACTIVE NAVIGATION */
-
-    .tenant-nav-link.active {
-        background: var(--tenant-accent);
-        color: white;
-        font-weight: 600;
-        box-shadow: 0 3px 8px rgba(23,182,167,.18);
-    }
-
-        .tenant-nav-link.active i {
-            color: white;
+        .tenant-nav-link:hover i {
+            color: var(--tenant-accent, #17B6A7);
         }
 
+
+    /* =========================================================
+   ACTIVE NAVIGATION
+   ========================================================= */
+
+    .tenant-nav-link.active {
+        color: #fff;
+        background: rgba(23, 182, 167, 0.14);
+        border-color: rgba(23, 182, 167, 0.20);
+        font-weight: 600;
+        box-shadow: inset 3px 0 0 var(--tenant-accent, #17B6A7);
+    }
+
+
+        /* ACTIVE ICON */
+
+        .tenant-nav-link.active i {
+            color: var(--tenant-accent, #17B6A7);
+        }
+
+
+        /* =========================================================
+   OPTIONAL ACTIVE TEXT
+   ========================================================= */
+
+        .tenant-nav-link.active span {
+            color: #fff;
+        }
+
+
+    /* =========================================================
+   FOCUS / ACCESSIBILITY
+   ========================================================= */
+
+    .tenant-nav-link:focus-visible {
+        outline: 2px solid var(--tenant-accent, #17B6A7);
+        outline-offset: 2px;
+    }
+
+
+/* =========================================================
+   SIDEBAR BOTTOM AREA
+   ========================================================= */
+
+.tenant-sidebar-footer {
+    margin-top: auto;
+    padding: 15px 5px 3px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .tenant-sidebar {
+        width: 230px;
+    }
+
+    .tenant-nav-link {
+        padding: 9px 11px;
+        font-size: 0.84rem;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .tenant-sidebar {
+        width: 100%;
+        min-height: auto;
+        padding: 12px;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .tenant-sidebar-brand {
+        padding-bottom: 12px;
+    }
+
+    .tenant-nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 5px;
+    }
+
+    .tenant-nav-link {
+        min-height: 40px;
+    }
+}
 
 /* MAIN AREA */
 
@@ -501,5 +635,754 @@
 
     .tenant-header-user span {
         display: none;
+    }
+}
+
+
+/* =========================================================
+   TENANT BILLING / MY BILLS
+   ARMTIS NAVY + TEAL THEME
+   ========================================================= */
+
+.tenant-billing-page {
+    color: #1F2937;
+}
+
+
+    /* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+    .tenant-billing-page h2 {
+        color: #0A2D4F;
+        font-weight: 700;
+    }
+
+        .tenant-billing-page h2 i {
+            color: #17B6A7;
+        }
+
+    .tenant-billing-page .text-muted {
+        color: #6B7280 !important;
+    }
+
+
+    /* =========================================================
+   SUMMARY CARDS
+   ========================================================= */
+
+    .tenant-billing-page .card {
+        border: 1px solid #E3EAF0 !important;
+        border-radius: 12px;
+        box-shadow: 0 3px 12px rgba(10, 45, 79, 0.06) !important;
+    }
+
+    .tenant-billing-page .card-body {
+        padding: 20px;
+    }
+
+
+    /* TOTAL OUTSTANDING */
+
+    .tenant-billing-page .summary-outstanding {
+        border-left: 4px solid #17B6A7 !important;
+    }
+
+        .tenant-billing-page .summary-outstanding h3 {
+            color: #0A2D4F !important;
+        }
+
+        .tenant-billing-page .summary-outstanding .summary-icon {
+            background: #E7F7F5;
+            color: #17B6A7;
+        }
+
+
+    /* UNPAID */
+
+    .tenant-billing-page .summary-unpaid {
+        border-left: 4px solid #0A2D4F !important;
+    }
+
+        .tenant-billing-page .summary-unpaid h3 {
+            color: #0A2D4F !important;
+        }
+
+        .tenant-billing-page .summary-unpaid .summary-icon {
+            background: #EAF1F7;
+            color: #0A2D4F;
+        }
+
+
+    /* PAID */
+
+    .tenant-billing-page .summary-paid {
+        border-left: 4px solid #17B6A7 !important;
+    }
+
+        .tenant-billing-page .summary-paid h3 {
+            color: #17B6A7 !important;
+        }
+
+        .tenant-billing-page .summary-paid .summary-icon {
+            background: #E7F7F5;
+            color: #17B6A7;
+        }
+
+
+    /* =========================================================
+   BILLING STATEMENTS CARD
+   ========================================================= */
+
+    .tenant-billing-page .billing-statements-card {
+        overflow: hidden;
+    }
+
+        .tenant-billing-page .billing-statements-card > .card-header {
+            background: #0A2D4F !important;
+            color: #fff;
+            border: none;
+            padding: 15px 20px;
+        }
+
+            .tenant-billing-page .billing-statements-card > .card-header h5 {
+                margin: 0;
+                color: #fff;
+                font-weight: 600;
+            }
+
+            .tenant-billing-page .billing-statements-card > .card-header i {
+                color: #17B6A7;
+            }
+
+
+    /* =========================================================
+   TABLE
+   ========================================================= */
+
+    .tenant-billing-page table {
+        margin-bottom: 0;
+    }
+
+    .tenant-billing-page thead {
+        background: #EAF1F7 !important;
+    }
+
+        .tenant-billing-page thead th {
+            color: #0A2D4F;
+            font-weight: 600;
+            font-size: 0.84rem;
+            border-bottom: 2px solid #17B6A7;
+            white-space: nowrap;
+        }
+
+    .tenant-billing-page tbody td {
+        color: #374151;
+        font-size: 0.88rem;
+        vertical-align: middle;
+    }
+
+    .tenant-billing-page tbody tr {
+        border-bottom: 1px solid #EEF2F5;
+    }
+
+        .tenant-billing-page tbody tr:hover {
+            background: #F5FAFA;
+        }
+
+
+    /* =========================================================
+   BALANCE
+   ========================================================= */
+
+    .tenant-billing-page .balance-due {
+        color: #0A2D4F !important;
+        font-weight: 700;
+    }
+
+    .tenant-billing-page .balance-zero {
+        color: #17B6A7 !important;
+        font-weight: 700;
+    }
+
+
+    /* =========================================================
+   BUTTON
+   ========================================================= */
+
+    .tenant-billing-page .btn-view-bill {
+        color: #0A2D4F;
+        border: 1px solid #0A2D4F;
+        background: transparent;
+        border-radius: 7px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 6px 11px;
+        transition: all .18s ease;
+    }
+
+        .tenant-billing-page .btn-view-bill:hover {
+            background: #0A2D4F;
+            color: #fff;
+        }
+
+
+    /* =========================================================
+   STATUS BADGES
+   ========================================================= */
+
+    .tenant-billing-page .badge-paid {
+        background: #17B6A7 !important;
+        color: #fff !important;
+    }
+
+    .tenant-billing-page .badge-overdue {
+        background: #0A2D4F !important;
+        color: #fff !important;
+    }
+
+    .tenant-billing-page .badge-partial {
+        background: #EAF1F7 !important;
+        color: #0A2D4F !important;
+        border: 1px solid #C9D8E5;
+    }
+
+    .tenant-billing-page .badge-pending {
+        background: #E7F7F5 !important;
+        color: #0A2D4F !important;
+        border: 1px solid #BFE8E2;
+    }
+
+
+    /* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+    .tenant-billing-page .empty-state-icon {
+        color: #17B6A7 !important;
+    }
+
+
+    /* =========================================================
+   MODAL
+   ========================================================= */
+
+    .tenant-billing-page + .modal .modal-content,
+    .tenant-billing-page ~ .modal .modal-content {
+        border: none;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 10px 35px rgba(10, 45, 79, 0.18);
+    }
+
+.modal .modal-header {
+    background: #0A2D4F;
+    color: #fff;
+    border-bottom: 3px solid #17B6A7;
+}
+
+.modal .modal-title {
+    color: #fff;
+}
+
+    .modal .modal-title i {
+        color: #17B6A7;
+    }
+
+.modal .modal-header .text-muted {
+    color: rgba(255,255,255,.70) !important;
+}
+
+
+/* =========================================================
+   MODAL INFORMATION CARDS
+   ========================================================= */
+
+.modal .bg-light {
+    background: #F5F8FA !important;
+}
+
+.modal .card-header {
+    background: #EAF1F7;
+    color: #0A2D4F;
+    border-bottom: 1px solid #DCE5EC;
+}
+
+    .modal .card-header i {
+        color: #17B6A7;
+    }
+
+
+/* TOTAL */
+
+.modal .total-due-card {
+    background: #0A2D4F !important;
+    color: #fff;
+}
+
+    .modal .total-due-card .total-amount {
+        color: #17B6A7 !important;
+    }
+
+
+/* =========================================================
+   PENALTY / CREDIT
+   ========================================================= */
+
+.modal .penalty-card {
+    background: #F7FAFC;
+    border-left: 4px solid #0A2D4F !important;
+}
+
+.modal .penalty-text {
+    color: #0A2D4F !important;
+}
+
+.modal .credit-card {
+    background: #F5FBFA;
+    border-left: 4px solid #17B6A7 !important;
+}
+
+.modal .credit-text {
+    color: #17B6A7 !important;
+}
+
+
+/* =========================================================
+   MODAL FOOTER
+   ========================================================= */
+
+.modal .modal-footer {
+    background: #F8FAFC;
+    border-top: 1px solid #E3EAF0;
+}
+
+.modal .btn-close-modal {
+    background: #0A2D4F;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 8px 18px;
+    font-weight: 600;
+}
+
+    .modal .btn-close-modal:hover {
+        background: #123F68;
+    }
+
+/* =========================================================
+   TENANT PROFILE PAGE
+   ARMTIS NAVY + TEAL DESIGN
+   ========================================================= */
+
+.tenant-profile-page {
+    color: #1f2937;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.tenant-profile-page-header h2 {
+    color: #0A2D4F;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+    .tenant-profile-page-header h2 i {
+        color: #17B6A7;
+    }
+
+.tenant-profile-page-header p {
+    color: #6B7280;
+    margin: 0;
+}
+
+
+/* =========================================================
+   PROFILE HERO
+   ========================================================= */
+
+.tenant-profile-hero {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 28px 30px;
+    background: #0A2D4F;
+    border-radius: 16px;
+    border-left: 4px solid #17B6A7;
+    box-shadow: 0 5px 18px rgba(10, 45, 79, 0.12);
+}
+
+
+/* =========================================================
+   AVATAR
+   ========================================================= */
+
+.tenant-profile-avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.tenant-profile-avatar {
+    width: 108px;
+    height: 108px;
+    border-radius: 50%;
+    background: #17B6A7;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    border: 4px solid rgba(255,255,255,.85);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.tenant-profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+/* =========================================================
+   PHOTO BUTTON
+   ========================================================= */
+
+.tenant-profile-photo-button {
+    color: white;
+    background: rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.20);
+    padding: 6px 11px;
+    border-radius: 7px;
+    font-size: .78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .18s ease;
+}
+
+    .tenant-profile-photo-button:hover {
+        background: #17B6A7;
+        border-color: #17B6A7;
+    }
+
+
+/* =========================================================
+   HERO INFORMATION
+   ========================================================= */
+
+.tenant-profile-hero-info {
+    flex: 1;
+}
+
+.tenant-profile-eyebrow {
+    color: #17B6A7;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: 1.3px;
+    margin-bottom: 6px;
+}
+
+.tenant-profile-hero-info h1 {
+    color: white;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.tenant-profile-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    color: rgba(255,255,255,.76);
+    font-size: .86rem;
+}
+
+    .tenant-profile-meta i {
+        color: #17B6A7;
+    }
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.tenant-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 11px;
+    border-radius: 20px;
+    background: rgba(255,255,255,.10);
+    color: white;
+    font-size: .76rem;
+    font-weight: 600;
+}
+
+    .tenant-status-badge.active {
+        background: #17B6A7;
+    }
+
+
+/* =========================================================
+   PROFILE CARD
+   ========================================================= */
+
+.tenant-profile-card {
+    background: white;
+    border: 1px solid #E1E8EE;
+    border-radius: 13px;
+    box-shadow: 0 3px 12px rgba(10,45,79,.06);
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   CARD HEADER
+   ========================================================= */
+
+.tenant-profile-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 17px 21px;
+    background: #F5F8FA;
+    border-bottom: 1px solid #E0E7ED;
+}
+
+    .tenant-profile-card-header h5 {
+        margin: 0;
+        color: #0A2D4F;
+        font-weight: 700;
+        font-size: 1rem;
+    }
+
+        .tenant-profile-card-header h5 i {
+            color: #17B6A7;
+        }
+
+    .tenant-profile-card-header small {
+        display: block;
+        color: #6B7280;
+        margin-top: 3px;
+        font-size: .76rem;
+    }
+
+
+/* =========================================================
+   CARD BODY
+   ========================================================= */
+
+.tenant-profile-card-body {
+    padding: 22px;
+}
+
+
+/* =========================================================
+   LABEL
+   ========================================================= */
+
+.tenant-profile-label {
+    display: block;
+    margin-bottom: 7px;
+    color: #6B7280;
+    font-size: .76rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .35px;
+}
+
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+.tenant-profile-input {
+    border: 1px solid #D6E0E7;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: .88rem;
+    color: #1F2937;
+    transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+    .tenant-profile-input:focus {
+        border-color: #17B6A7;
+        box-shadow: 0 0 0 3px rgba(23,182,167,.12);
+    }
+
+
+/* =========================================================
+   READ ONLY INFORMATION
+   ========================================================= */
+
+.tenant-profile-readonly {
+    min-height: 43px;
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    background: #F7F9FB;
+    border: 1px solid #E1E8EE;
+    border-radius: 8px;
+    color: #1F2937;
+    font-size: .88rem;
+    font-weight: 600;
+}
+
+    .tenant-profile-readonly i {
+        color: #17B6A7;
+    }
+
+
+/* =========================================================
+   READ ONLY BADGE
+   ========================================================= */
+
+.tenant-readonly-badge {
+    background: #EAF1F7;
+    color: #0A2D4F;
+    border: 1px solid #D4E0EA;
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: .7rem;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   ACCOUNT BADGE
+   ========================================================= */
+
+.tenant-account-badge {
+    display: inline-flex;
+    align-items: center;
+    background: #E7F7F5;
+    color: #0A2D4F;
+    border: 1px solid #BFE8E2;
+    border-radius: 20px;
+    padding: 7px 12px;
+    font-size: .78rem;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+   ========================================================= */
+
+.tenant-profile-actions {
+    display: flex;
+    gap: 9px;
+    justify-content: flex-end;
+    margin-top: 5px;
+}
+
+.tenant-profile-save-btn {
+    border: none;
+    background: #0A2D4F;
+    color: white;
+    border-radius: 8px;
+    padding: 10px 17px;
+    font-size: .84rem;
+    font-weight: 600;
+    transition: all .18s ease;
+}
+
+    .tenant-profile-save-btn:hover {
+        background: #123F68;
+    }
+
+
+.tenant-profile-cancel-btn {
+    background: white;
+    color: #0A2D4F;
+    border: 1px solid #CBD8E2;
+    border-radius: 8px;
+    padding: 10px 17px;
+    font-size: .84rem;
+    font-weight: 600;
+    transition: all .18s ease;
+}
+
+    .tenant-profile-cancel-btn:hover {
+        background: #F3F7FA;
+    }
+
+
+/* =========================================================
+   NOTICE
+   ========================================================= */
+
+.tenant-profile-notice {
+    display: flex;
+    gap: 12px;
+    padding: 15px 17px;
+    background: #EAF1F7;
+    border-left: 4px solid #17B6A7;
+    border-radius: 9px;
+    color: #0A2D4F;
+}
+
+    .tenant-profile-notice > i {
+        color: #17B6A7;
+        font-size: 1.1rem;
+    }
+
+    .tenant-profile-notice strong {
+        font-size: .85rem;
+    }
+
+    .tenant-profile-notice p {
+        margin: 3px 0 0;
+        color: #5B6773;
+        font-size: .78rem;
+    }
+
+
+/* =========================================================
+   ALERTS
+   ========================================================= */
+
+.tenant-profile-success {
+    background: #E7F7F5;
+    color: #0A2D4F;
+    border: 1px solid #BFE8E2;
+}
+
+.tenant-profile-error {
+    background: #F7F4F4;
+    color: #0A2D4F;
+    border-left: 4px solid #0A2D4F;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .tenant-profile-hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px 18px;
+    }
+
+    .tenant-profile-meta {
+        justify-content: center;
+    }
+
+    .tenant-profile-actions {
+        justify-content: stretch;
+        flex-direction: column;
+    }
+
+    .tenant-profile-save-btn,
+    .tenant-profile-cancel-btn {
+        width: 100%;
     }
 }

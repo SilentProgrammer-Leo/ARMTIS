@@ -1,201 +1,593 @@
 ﻿@page
 @model ARMTIS_Capstone_Project.Pages.TenantPortal.Dashboard.IndexModel
+
 @{
     ViewData["Title"] = "Tenant Dashboard";
     Layout = "/Pages/TenantPortal/_TenantLayout.cshtml";
 }
 
-<div class="container-fluid">
+<div class="tenant-dashboard-page">
 
-    <!-- Welcome Header -->
-    <div class="mb-4">
-        <h2 class="fw-bold">
-            Welcome, @Model.Tenant?.FirstName!
-        </h2>
+    <!-- WELCOME HEADER -->
+    <div class="dashboard-welcome mb-4">
 
-        <p class="text-muted">
-            Here's an overview of your rental information.
-        </p>
+        <div>
+            <span class="dashboard-eyebrow">
+                TENANT PORTAL
+            </span>
+
+            <h2 class="fw-bold mb-1">
+                Welcome, @Model.Tenant?.FirstName!
+            </h2>
+
+            <p class="text-muted mb-0">
+                Here's a quick overview of your rental information.
+            </p>
+        </div>
+
+        <div class="dashboard-welcome-icon">
+            <i class="bi bi-house-heart-fill"></i>
+        </div>
+
     </div>
 
 
-    <!-- Tenant Information -->
-    <div class="row g-4">
+    <!-- QUICK SUMMARY -->
+    <div class="row g-3 mb-4">
 
-        <!-- Tenant Profile -->
-        <div class="col-md-6 col-xl-4">
-            <div class="card shadow-sm border-0 h-100">
+        <!-- RENT -->
+        <div class="col-sm-6 col-xl-3">
 
-                <div class="card-body">
+            <div class="summary-card summary-rent">
 
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="bi bi-person-circle fs-2 me-3"></i>
+                <div class="summary-icon">
+                    <i class="bi bi-cash-stack"></i>
+                </div>
 
-                        <div>
-                            <h5 class="mb-0 fw-bold">
-                                My Profile
-                            </h5>
+                <div>
+                    <small class="summary-label">
+                        Monthly Rent
+                    </small>
 
-                            <small class="text-muted">
-                                Tenant Information
-                            </small>
-                        </div>
-                    </div>
+                    @if (Model.Tenant?.Unit != null)
+                    {
+                        <h4 class="summary-value mb-0">
+                            ₱@Model.Tenant.Unit.MonthlyRent.ToString("N2")
+                        </h4>
+                    }
+                    else
+                    {
+                        <h4 class="summary-value mb-0">
+                            ₱0.00
+                        </h4>
+                    }
+                </div>
 
-                    <p class="mb-1">
-                        <strong>Name:</strong>
-                        @Model.Tenant?.FirstName @Model.Tenant?.LastName
-                    </p>
+            </div>
 
-                    <p class="mb-1">
-                        <strong>Contact:</strong>
-                        @Model.Tenant?.ContactNo
-                    </p>
+        </div>
 
-                    <p class="mb-0">
-                        <strong>Email:</strong>
-                        @Model.Tenant?.Email
-                    </p>
+
+        <!-- UNIT -->
+        <div class="col-sm-6 col-xl-3">
+
+            <div class="summary-card summary-unit">
+
+                <div class="summary-icon">
+                    <i class="bi bi-door-open-fill"></i>
+                </div>
+
+                <div>
+                    <small class="summary-label">
+                        My Unit
+                    </small>
+
+                    <h4 class="summary-value mb-0">
+
+                        @(Model.Tenant?.Unit?.UnitNumber ?? "Unassigned")
+
+                    </h4>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TENANT STATUS -->
+        <div class="col-sm-6 col-xl-3">
+
+            <div class="summary-card summary-status">
+
+                <div class="summary-icon">
+                    <i class="bi bi-person-check-fill"></i>
+                </div>
+
+                <div>
+                    <small class="summary-label">
+                        Account Status
+                    </small>
+
+                    <h4 class="summary-value mb-0">
+                        @(Model.Tenant?.Status ?? "N/A")
+                    </h4>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- LEASE END -->
+        <div class="col-sm-6 col-xl-3">
+
+            <div class="summary-card summary-lease">
+
+                <div class="summary-icon">
+                    <i class="bi bi-calendar-check-fill"></i>
+                </div>
+
+                <div>
+
+                    <small class="summary-label">
+                        Lease Until
+                    </small>
+
+                    <h4 class="summary-value mb-0">
+
+                        @if (Model.Tenant != null)
+                        {
+                            @Model.Tenant.LeaseEndDate.ToString("MMM dd, yyyy")
+                        }
+                        else
+                        {
+                            <span>N/A</span>
+                        }
+
+                    </h4>
 
                 </div>
 
             </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAIN INFORMATION -->
+    <div class="row g-4">
+
+        <!-- PROFILE -->
+        <div class="col-lg-4">
+
+            <div class="tenant-info-card h-100">
+
+                <div class="card-top-line profile-line"></div>
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex align-items-center mb-4">
+
+                        <div class="info-card-icon profile-icon">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+
+                        <div>
+
+                            <h5 class="fw-bold mb-1">
+                                My Profile
+                            </h5>
+
+                            <small class="text-muted">
+                                Personal Information
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <div class="info-label">
+                            Full Name
+                        </div>
+
+                        <div class="info-value">
+                            @Model.Tenant?.FirstName
+                            @Model.Tenant?.LastName
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <div class="info-label">
+                            Contact Number
+                        </div>
+
+                        <div class="info-value">
+                            @(Model.Tenant?.ContactNo ?? "N/A")
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <div class="info-label">
+                            Email
+                        </div>
+
+                        <div class="info-value text-break">
+                            @(Model.Tenant?.Email ?? "N/A")
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-row mb-0">
+
+                        <div class="info-label">
+                            Address
+                        </div>
+
+                        <div class="info-value">
+                            @(Model.Tenant?.Address ?? "N/A")
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
 
 
-        <!-- Unit Information -->
-        <div class="col-md-6 col-xl-4">
-            <div class="card shadow-sm border-0 h-100">
+        <!-- UNIT -->
+        <div class="col-lg-4">
 
-                <div class="card-body">
+            <div class="tenant-info-card h-100">
 
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="bi bi-house-door fs-2 me-3"></i>
+                <div class="card-top-line unit-line"></div>
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex align-items-center mb-4">
+
+                        <div class="info-card-icon unit-icon">
+                            <i class="bi bi-house-door-fill"></i>
+                        </div>
 
                         <div>
-                            <h5 class="mb-0 fw-bold">
+
+                            <h5 class="fw-bold mb-1">
                                 My Unit
                             </h5>
 
                             <small class="text-muted">
                                 Rental Information
                             </small>
+
                         </div>
+
                     </div>
+
 
                     @if (Model.Tenant?.Unit != null)
                     {
-                        <p class="mb-1">
-                            <strong>Unit:</strong>
-                            @Model.Tenant.Unit.UnitNumber
-                        </p>
+                        <div class="unit-highlight">
 
-                        <p class="mb-1">
-                            <strong>Monthly Rent:</strong>
-                            ₱@Model.Tenant.Unit.MonthlyRent.ToString("N2")
-                        </p>
-
-                        <p class="mb-0">
-                            <strong>Status:</strong>
-                            <span class="badge bg-success">
-                                @Model.Tenant.Status
+                            <span class="unit-highlight-label">
+                                UNIT
                             </span>
-                        </p>
+
+                            <span class="unit-highlight-number">
+                                @Model.Tenant.Unit.UnitNumber
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <div class="info-label">
+                                Monthly Rent
+                            </div>
+
+                            <div class="info-value fw-bold">
+                                ₱@Model.Tenant.Unit.MonthlyRent.ToString("N2")
+                            </div>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <div class="info-label">
+                                Capacity
+                            </div>
+
+                            <div class="info-value">
+                                @Model.Tenant.Unit.Capacity tenant(s)
+                            </div>
+
+                        </div>
+
+
+                        <div class="info-row mb-0">
+
+                            <div class="info-label">
+                                Status
+                            </div>
+
+                            <div class="info-value">
+
+                                <span class="status-pill status-occupied">
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    @Model.Tenant.Unit.UnitStatus
+                                </span>
+
+                            </div>
+
+                        </div>
                     }
                     else
                     {
-                        <p class="text-muted mb-0">
-                            No unit assigned.
-                        </p>
+                        <div class="empty-info-state">
+
+                            <i class="bi bi-house-x"></i>
+
+                            <p class="mb-0 mt-2">
+                                No unit assigned.
+                            </p>
+
+                        </div>
                     }
 
                 </div>
 
             </div>
+
         </div>
+        
 
+        <!-- LEASE -->
+        <div class="col-lg-4">
 
-        <!-- Lease Information -->
-        <div class="col-md-6 col-xl-4">
-            <div class="card shadow-sm border-0 h-100">
+            <div class="tenant-info-card h-100">
 
-                <div class="card-body">
+                <div class="card-top-line lease-line"></div>
 
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="bi bi-calendar-check fs-2 me-3"></i>
+                <div class="card-body p-4">
+
+                    <div class="d-flex align-items-center mb-4">
+
+                        <div class="info-card-icon lease-icon">
+                            <i class="bi bi-calendar-check-fill"></i>
+                        </div>
 
                         <div>
-                            <h5 class="mb-0 fw-bold">
+
+                            <h5 class="fw-bold mb-1">
                                 My Lease
                             </h5>
 
                             <small class="text-muted">
                                 Lease Period
                             </small>
+
                         </div>
+
                     </div>
 
-                    <p class="mb-1">
-                        <strong>Start:</strong>
-                        @Model.Tenant?.LeaseStartDate.ToString("MMM dd, yyyy")
-                    </p>
 
-                    <p class="mb-0">
-                        <strong>End:</strong>
-                        @Model.Tenant?.LeaseEndDate.ToString("MMM dd, yyyy")
-                    </p>
+                    @if (Model.Tenant != null)
+                    {
+                        <div class="lease-date-box">
+
+                            <div>
+
+                                <small class="text-muted d-block">
+                                    Lease Start
+                                </small>
+
+                                <strong>
+                                    @Model.Tenant.LeaseStartDate.ToString("MMMM dd, yyyy")
+                                </strong>
+
+                            </div>
+
+                            <i class="bi bi-arrow-right"></i>
+
+                            <div class="text-end">
+
+                                <small class="text-muted d-block">
+                                    Lease End
+                                </small>
+
+                                <strong>
+                                    @Model.Tenant.LeaseEndDate.ToString("MMMM dd, yyyy")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="lease-note mt-3">
+
+                            <i class="bi bi-info-circle me-2"></i>
+
+                            Please keep track of your lease period
+                            and renewal schedule.
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-info-state">
+
+                            <i class="bi bi-calendar-x"></i>
+
+                            <p class="mb-0 mt-2">
+                                No lease information available.
+                            </p>
+
+                        </div>
+                    }
 
                 </div>
 
             </div>
+
         </div>
 
     </div>
 
 
-    <!-- Quick Access -->
-    <div class="card shadow-sm border-0 mt-4">
+    <!-- QUICK ACCESS -->
+    <div class="tenant-info-card mt-4">
 
-        <div class="card-header bg-white py-3">
-            <h5 class="mb-0 fw-bold">
-                Quick Access
-            </h5>
-        </div>
+        <div class="card-body p-4">
 
-        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <div>
+
+                    <h5 class="fw-bold mb-1">
+                        Quick Access
+                    </h5>
+
+                    <small class="text-muted">
+                        Quickly open your tenant services.
+                    </small>
+
+                </div>
+
+                <i class="bi bi-grid-fill quick-access-heading-icon"></i>
+
+            </div>
+
 
             <div class="row g-3">
 
-                <div class="col-md-3">
+                <!-- BILLS -->
+                <div class="col-6 col-md-3">
+
                     <a href="#"
-                       class="btn btn-outline-primary w-100 py-3">
-                        <i class="bi bi-receipt fs-4 d-block mb-1"></i>
-                        My Bills
+                       class="quick-access-card quick-bills">
+
+                        <div class="quick-icon">
+                            <i class="bi bi-receipt"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                My Bills
+                            </strong>
+
+                            <small>
+                                View billing
+                            </small>
+
+                        </div>
+
+                        <i class="bi bi-arrow-right quick-arrow"></i>
+
                     </a>
+
                 </div>
 
-                <div class="col-md-3">
+
+                <!-- PAYMENTS -->
+                <div class="col-6 col-md-3">
+
                     <a href="#"
-                       class="btn btn-outline-success w-100 py-3">
-                        <i class="bi bi-cash-stack fs-4 d-block mb-1"></i>
-                        My Payments
+                       class="quick-access-card quick-payments">
+
+                        <div class="quick-icon">
+                            <i class="bi bi-cash-stack"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                My Payments
+                            </strong>
+
+                            <small>
+                                Payment history
+                            </small>
+
+                        </div>
+
+                        <i class="bi bi-arrow-right quick-arrow"></i>
+
                     </a>
+
                 </div>
 
-                <div class="col-md-3">
+
+                <!-- UTILITIES -->
+                <div class="col-6 col-md-3">
+
                     <a href="#"
-                       class="btn btn-outline-warning w-100 py-3">
-                        <i class="bi bi-lightning-charge fs-4 d-block mb-1"></i>
-                        Utilities
+                       class="quick-access-card quick-utilities">
+
+                        <div class="quick-icon">
+                            <i class="bi bi-lightning-charge"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Utilities
+                            </strong>
+
+                            <small>
+                                View charges
+                            </small>
+
+                        </div>
+
+                        <i class="bi bi-arrow-right quick-arrow"></i>
+
                     </a>
+
                 </div>
 
-                <div class="col-md-3">
-                    <a href="#"
-                       class="btn btn-outline-danger w-100 py-3">
-                        <i class="bi bi-tools fs-4 d-block mb-1"></i>
-                        Maintenance
+
+                <!-- MAINTENANCE -->
+                <div class="col-6 col-md-3">
+
+                    <a asp-page="/TenantPortal/Maintenance/Index"
+                       class="quick-access-card quick-maintenance">
+
+                        <div class="quick-icon">
+                            <i class="bi bi-tools"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Maintenance
+                            </strong>
+
+                            <small>
+                                Requests & status
+                            </small>
+
+                        </div>
+
+                        <i class="bi bi-arrow-right quick-arrow"></i>
+
                     </a>
+
                 </div>
 
             </div>
@@ -205,3 +597,407 @@
     </div>
 
 </div>
+
+
+<style>
+
+    .tenant-dashboard-page {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+ 
+    /* WELCOME */
+   
+    .dashboard-welcome {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 22px 24px;
+        border-radius: 16px;
+        background: #0A2D4F;
+        color: white;
+        box-shadow: 0 6px 18px rgba(10, 45, 79, 0.12);
+        border-left: 4px solid #17B6A7;
+    }
+
+    .dashboard-eyebrow {
+        display: inline-block;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        color: #17B6A7;
+        margin-bottom: 5px;
+    }
+
+    .dashboard-welcome h2 {
+        color: white;
+    }
+
+    .dashboard-welcome p {
+        color: rgba(255, 255, 255, 0.7) !important;
+    }
+
+    .dashboard-welcome-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #17B6A7;
+        color: white;
+        font-size: 1.6rem;
+    }
+
+
+  
+    /* SUMMARY CARDS */
+   
+
+    .summary-card {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        min-height: 92px;
+        padding: 16px 17px;
+        border-radius: 13px;
+        background: white;
+        border: 1px solid #edf0f3;
+        box-shadow: 0 5px 18px rgba(15, 23, 42, 0.05);
+    }
+
+    .summary-icon {
+        width: 43px;
+        height: 43px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 1rem;
+    }
+
+    .summary-label {
+        display: block;
+        color: #6c757d;
+        font-size: 0.72rem;
+        margin-bottom: 2px;
+    }
+
+    .summary-value {
+        color: #0A2D4F;
+        font-size: 1rem;
+    }
+
+    .summary-rent .summary-icon {
+        background: #e9f7ef;
+        color: #198754;
+    }
+
+    .summary-unit .summary-icon {
+        background: #e7f4ff;
+        color: #1473a3;
+    }
+
+    .summary-status .summary-icon {
+        background: #eaf7f5;
+        color: #17B6A7;
+    }
+
+    .summary-lease .summary-icon {
+        background: #efeafd;
+        color: #6750a4;
+    }
+
+
+  
+    /* INFO CARDS */
+
+
+    .tenant-info-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 15px;
+        background: white;
+        border: 1px solid #edf0f3;
+        box-shadow: 0 5px 18px rgba(15, 23, 42, 0.05);
+    }
+
+    .card-top-line {
+        height: 4px;
+    }
+
+    .profile-line {
+        background: #17B6A7;
+    }
+
+    .unit-line {
+        background: #1473a3;
+    }
+
+    .lease-line {
+        background: #6750a4;
+    }
+
+    .info-card-icon {
+        width: 43px;
+        height: 43px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .profile-icon {
+        background: #eaf7f5;
+        color: #17B6A7;
+    }
+
+    .unit-icon {
+        background: #e7f4ff;
+        color: #1473a3;
+    }
+
+    .lease-icon {
+        background: #efeafd;
+        color: #6750a4;
+    }
+
+    .info-row {
+        padding: 12px 0;
+        border-bottom: 1px solid #edf0f3;
+    }
+
+    .info-label {
+        color: #7a8793;
+        font-size: 0.74rem;
+        margin-bottom: 2px;
+    }
+
+    .info-value {
+        color: #28323c;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+
+   
+    /* UNIT */
+ 
+
+    .unit-highlight {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 15px;
+        margin-bottom: 12px;
+        border-radius: 10px;
+        background: #f3f9ff;
+        border: 1px solid #d7e9f7;
+    }
+
+    .unit-highlight-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: #1473a3;
+        letter-spacing: 1px;
+    }
+
+    .unit-highlight-number {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #0A2D4F;
+    }
+
+    .status-pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 9px;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 600;
+    }
+
+    .status-occupied {
+        background: #e9f7ef;
+        color: #198754;
+    }
+
+
+  
+    /* LEASE */
+
+
+    .lease-date-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 15px;
+        border-radius: 10px;
+        background: #faf8ff;
+        border: 1px solid #e7def7;
+    }
+
+    .lease-date-box small {
+        font-size: 0.7rem;
+    }
+
+    .lease-date-box strong {
+        color: #0A2D4F;
+        font-size: 0.8rem;
+    }
+
+    .lease-date-box > i {
+        color: #6750a4;
+    }
+
+    .lease-note {
+        display: flex;
+        align-items: flex-start;
+        padding: 10px 12px;
+        border-radius: 9px;
+        background: #f8fafb;
+        color: #687580;
+        font-size: 0.73rem;
+    }
+
+
+    
+    /* EMPTY STATE */
+  
+
+    .empty-info-state {
+        min-height: 170px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #8b96a1;
+    }
+
+    .empty-info-state i {
+        font-size: 2rem;
+        color: #17B6A7;
+    }
+
+
+ 
+    /* QUICK ACCESS */
+ 
+
+    .quick-access-heading-icon {
+        color: #17B6A7;
+    }
+
+    .quick-access-card {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        min-height: 74px;
+        padding: 12px 13px;
+        border-radius: 11px;
+        text-decoration: none;
+        border: 1px solid #edf0f3;
+        background: #fafcfc;
+        transition: 0.2s ease;
+    }
+
+    .quick-access-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 7px 18px rgba(15, 23, 42, 0.07);
+    }
+
+    .quick-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .quick-access-card strong {
+        display: block;
+        font-size: 0.82rem;
+        color: #0A2D4F;
+    }
+
+    .quick-access-card small {
+        display: block;
+        margin-top: 1px;
+        color: #7a8793;
+        font-size: 0.68rem;
+    }
+
+    .quick-arrow {
+        margin-left: auto;
+        color: #9aa5ae;
+    }
+
+    .quick-bills .quick-icon {
+        background: #eaf7f5;
+        color: #17B6A7;
+    }
+
+    .quick-payments .quick-icon {
+        background: #e9f7ef;
+        color: #198754;
+    }
+
+    .quick-utilities .quick-icon {
+        background: #fff4d6;
+        color: #9a6700;
+    }
+
+    .quick-maintenance .quick-icon {
+        background: #fdecec;
+        color: #dc3545;
+    }
+
+
+    /* MOBILE */
+ 
+
+    @@media (max-width: 768px) {
+
+        .dashboard-welcome {
+            padding: 18px;
+        }
+
+        .dashboard-welcome-icon {
+            width: 48px;
+            height: 48px;
+            font-size: 1.3rem;
+        }
+
+        .dashboard-welcome h2 {
+            font-size: 1.25rem;
+        }
+
+        .tenant-info-card {
+            border-radius: 12px;
+        }
+
+        .lease-date-box {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .lease-date-box > i {
+            transform: rotate(90deg);
+            align-self: center;
+        }
+
+        .quick-access-card {
+            min-height: 68px;
+        }
+
+    }
+
+</style>

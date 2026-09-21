@@ -37,6 +37,8 @@ namespace ARMTIS_Capstone_Project.MVVM.Models.Main
 
         public DateTime LeaseEndDate { get; set; }
 
+        public string? ProfileImagePath { get; set; }
+
 
         // Foreign Key
         public int UnitID { get; set; }

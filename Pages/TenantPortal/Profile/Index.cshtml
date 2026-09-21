@@ -6,164 +6,415 @@
     Layout = "/Pages/TenantPortal/_TenantLayout.cshtml";
 }
 
-<div class="container-fluid">
+<div class="container-fluid tenant-profile-page">
 
-    <!-- PAGE HEADER -->
-    <div class="mb-4">
-        <h2 class="fw-bold">
-            <i class="bi bi-person-circle me-2"></i>
-            My Profile
-        </h2>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert tenant-profile-success shadow-sm">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            @TempData["SuccessMessage"]
+        </div>
+    }
 
-        <p class="text-muted mb-0">
-            View your personal and rental information.
-        </p>
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert tenant-profile-error shadow-sm">
+            <i class="bi bi-exclamation-circle-fill me-2"></i>
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+
+    <!-- =========================================================
+         PAGE HEADER
+         ========================================================= -->
+
+    <div class="tenant-profile-page-header mb-4">
+        <div>
+            <h2>
+                <i class="bi bi-person-circle me-2"></i>
+                My Profile
+            </h2>
+
+            <p>
+                Manage your personal information and view your rental details.
+            </p>
+        </div>
     </div>
+
 
     @if (Model.Tenant != null)
     {
-        <!-- PROFILE HEADER -->
-        <div class="card shadow-sm border-0 mb-4">
-            <div class="card-body p-4">
 
-                <div class="d-flex align-items-center">
+        <!-- =========================================================
+             PROFILE HERO
+             ========================================================= -->
 
-                    <div class="bg-primary text-white rounded-circle
-                        d-flex align-items-center justify-content-center me-3"
-                         style="width:70px; height:70px;">
+        <div class="tenant-profile-hero mb-4">
 
-                        <i class="bi bi-person-fill fs-2"></i>
+            <div class="tenant-profile-avatar-section">
 
-                    </div>
+                <div class="tenant-profile-avatar">
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Tenant.ProfileImagePath))
+                    {
+                        <img src="@Model.Tenant.ProfileImagePath"
+                             alt="Profile Photo"
+                             class="tenant-profile-image" />
+                    }
+                    else
+                    {
+                        <span>
+                            @Model.Tenant.FirstName?.Substring(0, 1).ToUpper()
+                            @Model.Tenant.LastName?.Substring(0, 1).ToUpper()
+                        </span>
+                    }
+
+                </div>
+
+                <label for="profileImageInput"
+                       class="tenant-profile-photo-button">
+
+                    <i class="bi bi-camera-fill me-1"></i>
+                    Change Photo
+
+                </label>
+
+            </div>
+
+
+            <div class="tenant-profile-hero-info">
+
+                <div class="tenant-profile-eyebrow">
+                    TENANT PROFILE
+                </div>
+
+                <h1>
+                    @Model.Tenant.FirstName @Model.Tenant.LastName
+                </h1>
+
+                <div class="tenant-profile-meta">
+
+                    <span>
+                        <i class="bi bi-person-badge me-1"></i>
+                        Tenant ID: @Model.Tenant.TenantID
+                    </span>
+
+                    <span>
+                        <i class="bi bi-house-door me-1"></i>
+                        @(Model.Tenant.Unit?.UnitNumber ?? "No Unit Assigned")
+                    </span>
+
+                </div>
+
+
+                <div class="mt-3">
+
+                    @if (Model.Tenant.Status == "Active")
+                    {
+                        <span class="tenant-status-badge active">
+                            <i class="bi bi-check-circle-fill me-1"></i>
+                            Active Tenant
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="tenant-status-badge">
+                            @Model.Tenant.Status
+                        </span>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================================================
+             PROFILE FORM
+             ========================================================= -->
+
+        <form method="post"
+              enctype="multipart/form-data">
+
+            @Html.AntiForgeryToken()
+
+            <!-- Hidden Image Input -->
+            <input type="file"
+                   id="profileImageInput"
+                   name="ProfileImage"
+                   accept="image/png,image/jpeg,image/jpg"
+                   hidden />
+
+
+            <!-- =====================================================
+                 PERSONAL INFORMATION
+                 ===================================================== -->
+
+            <div class="tenant-profile-card mb-4">
+
+                <div class="tenant-profile-card-header">
 
                     <div>
-                        <h4 class="fw-bold mb-1">
-                            @Model.Tenant.FirstName @Model.Tenant.LastName
-                        </h4>
+                        <h5>
+                            <i class="bi bi-person me-2"></i>
+                            Personal Information
+                        </h5>
 
-                        <p class="text-muted mb-0">
-                            Tenant ID:
-                            <strong>@Model.Tenant.TenantID</strong>
-                        </p>
+                        <small>
+                            Update the information shown on your tenant profile.
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="tenant-profile-card-body">
+
+                    <div class="row g-4">
+
+                        <!-- FIRST NAME -->
+                        <div class="col-md-6">
+
+                            <label class="tenant-profile-label">
+                                First Name
+                            </label>
+
+                            <input asp-for="FirstName"
+                                   class="form-control tenant-profile-input" />
+
+                        </div>
+
+
+                        <!-- LAST NAME -->
+                        <div class="col-md-6">
+
+                            <label class="tenant-profile-label">
+                                Last Name
+                            </label>
+
+                            <input asp-for="LastName"
+                                   class="form-control tenant-profile-input" />
+
+                        </div>
+
+
+                        <!-- ADDRESS -->
+                        <div class="col-md-6">
+
+                            <label class="tenant-profile-label">
+                                Address
+                            </label>
+
+                            <input asp-for="Address"
+                                   class="form-control tenant-profile-input" />
+
+                        </div>
+
+
+                        <!-- CONTACT NUMBER -->
+                        <div class="col-md-6">
+
+                            <label class="tenant-profile-label">
+                                Contact Number
+                            </label>
+
+                            <input asp-for="ContactNo"
+                                   class="form-control tenant-profile-input" />
+
+                        </div>
+
+
+                        <!-- EMAIL -->
+                        <div class="col-md-6">
+
+                            <label class="tenant-profile-label">
+                                Email Address
+                            </label>
+
+                            <input asp-for="Email"
+                                   type="email"
+                                   class="form-control tenant-profile-input" />
+
+                        </div>
+
                     </div>
 
                 </div>
 
             </div>
-        </div>
 
 
-        <!-- PERSONAL INFORMATION -->
-        <div class="card shadow-sm border-0 mb-4">
+            <!-- =====================================================
+                 RENTAL INFORMATION
+                 ===================================================== -->
 
-            <div class="card-header bg-white py-3">
-                <h5 class="fw-bold mb-0">
-                    <i class="bi bi-person me-2"></i>
-                    Personal Information
-                </h5>
+            <div class="tenant-profile-card mb-4">
+
+                <div class="tenant-profile-card-header">
+
+                    <div>
+                        <h5>
+                            <i class="bi bi-house-door me-2"></i>
+                            Rental Information
+                        </h5>
+
+                        <small>
+                            These details are managed by the administrator.
+                        </small>
+                    </div>
+
+                    <span class="tenant-readonly-badge">
+                        Read Only
+                    </span>
+
+                </div>
+
+
+                <div class="tenant-profile-card-body">
+
+                    <div class="row g-4">
+
+                        <!-- UNIT -->
+                        <div class="col-md-6">
+
+                            <label class="tenant-profile-label">
+                                Unit Number
+                            </label>
+
+                            <div class="tenant-profile-readonly">
+                                <i class="bi bi-door-open me-2"></i>
+                                @(Model.Tenant.Unit?.UnitNumber ?? "Not assigned")
+                            </div>
+
+                        </div>
+
+
+                        <!-- MONTHLY RENT -->
+                        <div class="col-md-6">
+
+                            <label class="tenant-profile-label">
+                                Monthly Rent
+                            </label>
+
+                            <div class="tenant-profile-readonly">
+                                <i class="bi bi-cash-stack me-2"></i>
+
+                                @if (Model.Tenant.Unit != null)
+                                {
+                                    <span>
+                                        ₱@Model.Tenant.Unit.MonthlyRent.ToString("N2")
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span>
+                                        Not available
+                                    </span>
+                                }
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- LEASE START -->
+                        <div class="col-md-6">
+
+                            <label class="tenant-profile-label">
+                                Lease Start Date
+                            </label>
+
+                            <div class="tenant-profile-readonly">
+                                <i class="bi bi-calendar-check me-2"></i>
+                                @Model.Tenant.LeaseStartDate.ToString("MMMM dd, yyyy")
+                            </div>
+
+                        </div>
+
+
+                        <!-- LEASE END -->
+                        <div class="col-md-6">
+
+                            <label class="tenant-profile-label">
+                                Lease End Date
+                            </label>
+
+                            <div class="tenant-profile-readonly">
+                                <i class="bi bi-calendar-x me-2"></i>
+                                @Model.Tenant.LeaseEndDate.ToString("MMMM dd, yyyy")
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
 
-            <div class="card-body">
 
-                <div class="row g-4">
+            <!-- =====================================================
+                 ACCOUNT INFORMATION
+                 ===================================================== -->
 
-                    <!-- FIRST NAME -->
-                    <div class="col-md-6">
+            <div class="tenant-profile-card mb-4">
 
-                        <label class="text-muted small">
-                            First Name
-                        </label>
+                <div class="tenant-profile-card-header">
 
-                        <div class="fw-semibold">
-                            @Model.Tenant.FirstName
-                        </div>
+                    <div>
+                        <h5>
+                            <i class="bi bi-shield-lock me-2"></i>
+                            Account Information
+                        </h5>
 
+                        <small>
+                            Your login account details.
+                        </small>
                     </div>
 
+                    <span class="tenant-readonly-badge">
+                        Read Only
+                    </span>
 
-                    <!-- LAST NAME -->
-                    <div class="col-md-6">
+                </div>
 
-                        <label class="text-muted small">
-                            Last Name
-                        </label>
 
-                        <div class="fw-semibold">
-                            @Model.Tenant.LastName
+                <div class="tenant-profile-card-body">
+
+                    <div class="row g-4">
+
+                        <!-- USERNAME -->
+                        <div class="col-md-6">
+
+                            <label class="tenant-profile-label">
+                                Username
+                            </label>
+
+                            <div class="tenant-profile-readonly">
+                                <i class="bi bi-person-lock me-2"></i>
+                                @Model.UserAccount?.UserName
+                            </div>
+
                         </div>
 
-                    </div>
 
+                        <!-- ACCOUNT TYPE -->
+                        <div class="col-md-6">
 
-                    <!-- ADDRESS -->
-                    <div class="col-md-6">
+                            <label class="tenant-profile-label">
+                                Account Type
+                            </label>
 
-                        <label class="text-muted small">
-                            Address
-                        </label>
+                            <div>
 
-                        <div class="fw-semibold">
-                            @(string.IsNullOrWhiteSpace(Model.Tenant.Address)
-                                ? "Not provided"
-                                : Model.Tenant.Address)
-                        </div>
-
-                    </div>
-
-
-                    <!-- CONTACT -->
-                    <div class="col-md-6">
-
-                        <label class="text-muted small">
-                            Contact Number
-                        </label>
-
-                        <div class="fw-semibold">
-                            @(string.IsNullOrWhiteSpace(Model.Tenant.ContactNo)
-                                ? "Not provided"
-                                : Model.Tenant.ContactNo)
-                        </div>
-
-                    </div>
-
-
-                    <!-- EMAIL -->
-                    <div class="col-md-6">
-
-                        <label class="text-muted small">
-                            Email Address
-                        </label>
-
-                        <div class="fw-semibold">
-                            @(string.IsNullOrWhiteSpace(Model.Tenant.Email)
-                                ? "Not provided"
-                                : Model.Tenant.Email)
-                        </div>
-
-                    </div>
-
-
-                    <!-- STATUS -->
-                    <div class="col-md-6">
-
-                        <label class="text-muted small">
-                            Tenant Status
-                        </label>
-
-                        <div>
-
-                            @if (Model.Tenant.Status == "Active")
-                            {
-                                <span class="badge bg-success">
-                                    Active
+                                <span class="tenant-account-badge">
+                                    <i class="bi bi-person-fill me-1"></i>
+                                    Tenant
                                 </span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-secondary">
-                                    @Model.Tenant.Status
-                                </span>
-                            }
+
+                            </div>
 
                         </div>
 
@@ -173,171 +424,116 @@
 
             </div>
 
-        </div>
 
+            <!-- =====================================================
+                 ACTION BUTTONS
+                 ===================================================== -->
 
-        <!-- ACCOUNT INFORMATION -->
-        <div class="card shadow-sm border-0 mb-4">
+            <div class="tenant-profile-actions">
 
-            <div class="card-header bg-white py-3">
+                <button type="submit"
+                        class="tenant-profile-save-btn">
 
-                <h5 class="fw-bold mb-0">
-                    <i class="bi bi-shield-lock me-2"></i>
-                    Account Information
-                </h5>
+                    <i class="bi bi-check-lg me-2"></i>
+                    Save Changes
+
+                </button>
+
+                <button type="reset"
+                        class="tenant-profile-cancel-btn">
+
+                    <i class="bi bi-arrow-counterclockwise me-2"></i>
+                    Reset
+
+                </button>
 
             </div>
 
-            <div class="card-body">
-
-                <div class="row g-4">
-
-                    <!-- USERNAME -->
-                    <div class="col-md-6">
-
-                        <label class="text-muted small">
-                            Username
-                        </label>
-
-                        <div class="fw-semibold">
-                            @Model.UserAccount?.UserName
-                        </div>
-
-                    </div>
+        </form>
 
 
-                    <!-- ACCOUNT ROLE -->
-                    <div class="col-md-6">
+        <!-- =========================================================
+             PROFILE NOTICE
+             ========================================================= -->
 
-                        <label class="text-muted small">
-                            Account Type
-                        </label>
+        <div class="tenant-profile-notice mt-4">
 
-                        <div>
-                            <span class="badge bg-primary">
-                                Tenant
-                            </span>
-                        </div>
+            <i class="bi bi-info-circle-fill"></i>
 
-                    </div>
+            <div>
+                <strong>Need to change your rental information?</strong>
 
-                </div>
-
+                <p>
+                    Unit assignment, monthly rent, and lease dates are managed
+                    by the administrator. Please contact the administrator
+                    for changes to these details.
+                </p>
             </div>
 
         </div>
 
-
-        <!-- UNIT & LEASE INFORMATION -->
-        <div class="card shadow-sm border-0 mb-4">
-
-            <div class="card-header bg-white py-3">
-
-                <h5 class="fw-bold mb-0">
-                    <i class="bi bi-house-door me-2"></i>
-                    Rental Information
-                </h5>
-
-            </div>
-
-            <div class="card-body">
-
-                <div class="row g-4">
-
-                    <!-- UNIT -->
-                    <div class="col-md-6">
-
-                        <label class="text-muted small">
-                            Unit Number
-                        </label>
-
-                        <div class="fw-semibold">
-
-                            @(Model.Tenant.Unit?.UnitNumber ?? "Not assigned")
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- MONTHLY RENT -->
-                    <div class="col-md-6">
-
-                        <label class="text-muted small">
-                            Monthly Rent
-                        </label>
-
-                        <div class="fw-semibold">
-
-                            @if (Model.Tenant.Unit != null)
-                            {
-                                <span>
-                                    ₱@Model.Tenant.Unit.MonthlyRent.ToString("N2")
-                                </span>
-                            }
-                            else
-                            {
-                                <span>Not available</span>
-                            }
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- LEASE START -->
-                    <div class="col-md-6">
-
-                        <label class="text-muted small">
-                            Lease Start Date
-                        </label>
-
-                        <div class="fw-semibold">
-
-                            @Model.Tenant.LeaseStartDate.ToString("MMMM dd, yyyy")
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- LEASE END -->
-                    <div class="col-md-6">
-
-                        <label class="text-muted small">
-                            Lease End Date
-                        </label>
-
-                        <div class="fw-semibold">
-
-                            @Model.Tenant.LeaseEndDate.ToString("MMMM dd, yyyy")
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- NOTICE -->
-        <div class="alert alert-info border-0 shadow-sm">
-
-            <i class="bi bi-info-circle me-2"></i>
-
-            If any of your personal or rental information is incorrect,
-            please contact the administrator.
-
-        </div>
     }
     else
     {
-        <div class="alert alert-warning">
+        <div class="tenant-profile-error alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
             Your tenant information could not be found.
         </div>
     }
 
 </div>
+
+
+@section Scripts {
+
+    <script>
+
+        // Open file picker when Change Photo is clicked
+        document
+            .querySelector('.tenant-profile-photo-button')
+            ?.addEventListener('click', function() {
+
+                document
+                    .getElementById('profileImageInput')
+                    .click();
+
+            });
+
+
+        // Preview selected image
+        document
+            .getElementById('profileImageInput')
+            ?.addEventListener('change', function(event) {
+
+                const file = event.target.files[0];
+
+                if (!file) {
+                    return;
+                }
+
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select a valid image file.');
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+
+                    const avatar =
+                        document.querySelector('.tenant-profile-avatar');
+
+                    avatar.innerHTML = `
+                                <img src="${e.target.result}"
+                                     alt="Profile Photo"
+                                     class="tenant-profile-image" />
+                            `;
+
+                };
+
+                reader.readAsDataURL(file);
+
+            });
+
+    </script>
+}
