@@ -88,7 +88,53 @@
            @*  <a asp-page="/AuditLogs/Index" class="nav-link">
                 <i class="bi bi-journal-text"></i><span>Activity Logs</span>
             </a> *@
+            <div class="nav-group notification-menu">
 
+                <button type="button"
+                        class="nav-link nav-toggle notification-toggle"
+                        aria-expanded="false">
+
+                    <span class="nav-link-label">
+
+                        <i class="bi bi-bell-fill"></i>
+
+                        <span>Notification Management</span>
+
+                    </span>
+
+                    <i class="bi bi-chevron-down arrow"></i>
+
+                </button>
+
+
+                <ul class="nav-submenu notification-submenu">
+
+                    <!-- NOTIFICATION INBOX -->
+                    <li>
+                        <a asp-page="/Notifications/Index">
+
+                            <i class="bi bi-inbox-fill"></i>
+
+                            <span>Notifications</span>
+
+                        </a>
+                    </li>
+
+
+                    <!-- CREATE REMINDER -->
+                    <li>
+                        <a asp-page="/Notifications/Create">
+
+                            <i class="bi bi-send-fill"></i>
+
+                            <span>Send Reminder</span>
+
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
             <!-- Settings Management -->
             <div class="nav-group settings-menu">
 

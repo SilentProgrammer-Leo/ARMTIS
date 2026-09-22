@@ -2,63 +2,87 @@
 @model ARMTIS_Capstone_Project.Pages.Notifications.CreateModel
 
 @{
-    ViewData["Title"] = "Create Notification";
+    ViewData["Title"] = "Send Notification";
 }
 
-<div class="container-fluid">
+<div class="notification-page">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- PAGE HEADER -->
+    <div class="page-header">
 
-        <div>
-            <h2 class="fw-bold mb-1">
-                Create Notification
-            </h2>
+        <div class="page-header-left">
 
-            <p class="text-muted mb-0">
-                Send a notification to a tenant.
-            </p>
+            <div class="page-icon">
+                <i class="bi bi-bell-fill"></i>
+            </div>
+
+            <div>
+                <h2 class="page-title">
+                    Create Notification
+                </h2>
+
+                <p class="page-subtitle">
+                    Send an important reminder, announcement, or update to a tenant.
+                </p>
+            </div>
+
         </div>
 
         <a asp-page="./Index"
-           class="btn btn-outline-secondary">
+           class="btn btn-back">
 
             <i class="bi bi-arrow-left"></i>
-            Back
+            Back to Notifications
 
         </a>
 
     </div>
 
 
-    <div class="card shadow-sm border-0">
+    <!-- MAIN CARD -->
+    <div class="notification-card">
 
-        <div class="card-header bg-white py-3">
+        <!-- CARD HEADER -->
+        <div class="notification-card-header">
 
-            <h5 class="fw-bold mb-0">
-                Notification Details
-            </h5>
+            <div class="header-icon">
+                <i class="bi bi-send-fill"></i>
+            </div>
+
+            <div>
+                <h5 class="header-title">
+                    Notification Details
+                </h5>
+
+                <p class="header-description">
+                    Fill in the details below before sending the notification.
+                </p>
+            </div>
 
         </div>
 
 
-        <div class="card-body">
+        <!-- CARD BODY -->
+        <div class="notification-card-body">
 
             <form method="post">
 
-                <div class="row g-3">
+                <div class="row g-4">
 
-                    <!-- Tenant -->
-
+                    <!-- TENANT -->
                     <div class="col-md-6">
 
                         <label asp-for="Notification.TenantID"
-                               class="form-label fw-semibold">
+                               class="form-label custom-label">
+
+                            <i class="bi bi-person-fill"></i>
                             Tenant
+
                         </label>
 
                         <select asp-for="Notification.TenantID"
                                 asp-items="Model.TenantList"
-                                class="form-select">
+                                class="form-select custom-input">
 
                             <option value="">
                                 -- Select Tenant --
@@ -66,24 +90,30 @@
 
                         </select>
 
+                        <div class="field-help">
+                            Select the tenant who will receive this notification.
+                        </div>
+
                         <span asp-validation-for="Notification.TenantID"
-                              class="text-danger">
+                              class="text-danger validation-message">
                         </span>
 
                     </div>
 
 
-                    <!-- Notification Type -->
-
+                    <!-- NOTIFICATION TYPE -->
                     <div class="col-md-6">
 
                         <label asp-for="Notification.NotificationType"
-                               class="form-label fw-semibold">
+                               class="form-label custom-label">
+
+                            <i class="bi bi-tag-fill"></i>
                             Notification Type
+
                         </label>
 
                         <select asp-for="Notification.NotificationType"
-                                class="form-select">
+                                class="form-select custom-input">
 
                             <option value="">
                                 -- Select Type --
@@ -107,75 +137,116 @@
 
                         </select>
 
+                        <div class="field-help">
+                            Choose the category that best describes the notification.
+                        </div>
+
                         <span asp-validation-for="Notification.NotificationType"
-                              class="text-danger">
+                              class="text-danger validation-message">
                         </span>
 
                     </div>
 
 
-                    <!-- Title -->
-
+                    <!-- TITLE -->
                     <div class="col-12">
 
                         <label asp-for="Notification.Title"
-                               class="form-label fw-semibold">
-                            Title
+                               class="form-label custom-label">
+
+                            <i class="bi bi-card-heading"></i>
+                            Notification Title
+
                         </label>
 
                         <input asp-for="Notification.Title"
-                               class="form-control"
-                               placeholder="Enter notification title" />
+                               class="form-control custom-input"
+                               placeholder="e.g. Payment Reminder" />
+
+                        <div class="field-help">
+                            Keep the title short and easy to understand.
+                        </div>
 
                         <span asp-validation-for="Notification.Title"
-                              class="text-danger">
+                              class="text-danger validation-message">
                         </span>
 
                     </div>
 
 
-                    <!-- Message -->
-
+                    <!-- MESSAGE -->
                     <div class="col-12">
 
                         <label asp-for="Notification.Message"
-                               class="form-label fw-semibold">
+                               class="form-label custom-label">
+
+                            <i class="bi bi-chat-left-text-fill"></i>
                             Message
+
                         </label>
 
                         <textarea asp-for="Notification.Message"
-                                  class="form-control"
-                                  rows="6"
-                                  placeholder="Enter notification message...">
-                        </textarea>
+                                  class="form-control custom-input notification-message"
+                                  rows="7"
+                                  placeholder="Write the notification message here..."></textarea>
+
+                        <div class="field-help">
+                            Provide the complete reminder or message that you want the tenant to receive.
+                        </div>
 
                         <span asp-validation-for="Notification.Message"
-                              class="text-danger">
+                              class="text-danger validation-message">
                         </span>
 
                     </div>
 
 
-                    <!-- Buttons -->
+                    <!-- INFORMATION BOX -->
+                    <div class="col-12">
 
-                    <div class="col-12 mt-4">
+                        <div class="notification-info">
 
-                        <div class="d-flex gap-2">
+                            <div class="notification-info-icon">
+                                <i class="bi bi-info-circle-fill"></i>
+                            </div>
 
-                            <button type="submit"
-                                    class="btn btn-primary">
+                            <div>
+                                <div class="notification-info-title">
+                                    Before sending
+                                </div>
 
-                                <i class="bi bi-send"></i>
-                                Send Notification
+                                <div class="notification-info-text">
+                                    Please make sure the selected tenant and notification details
+                                    are correct before sending. The notification will appear in
+                                    the tenant's notification section.
+                                </div>
+                            </div>
 
-                            </button>
+                        </div>
+
+                    </div>
+
+
+                    <!-- BUTTONS -->
+                    <div class="col-12">
+
+                        <div class="form-actions">
 
                             <a asp-page="./Index"
-                               class="btn btn-outline-secondary">
+                               class="btn btn-cancel">
 
+                                <i class="bi bi-x-circle"></i>
                                 Cancel
 
                             </a>
+
+                            <button type="submit"
+                                    class="btn btn-send">
+
+                                <i class="bi bi-send-fill"></i>
+                                Send Notification
+
+                            </button>
 
                         </div>
 
@@ -190,6 +261,331 @@
     </div>
 
 </div>
+
+
+<style>
+
+    /* ================================
+           PAGE
+           ================================ */
+
+    .notification-page {
+        padding: 4px 0 30px;
+    }
+
+
+    /* ================================
+           HEADER
+           ================================ */
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+
+    .page-header-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .page-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 12px;
+        background: #E7F7F5;
+        color: #17B6A7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 23px;
+        flex-shrink: 0;
+    }
+
+    .page-title {
+        margin: 0 0 3px;
+        color: #0A2D4F;
+        font-size: 25px;
+        font-weight: 700;
+    }
+
+    .page-subtitle {
+        margin: 0;
+        color: #718096;
+        font-size: 14px;
+    }
+
+    .btn-back {
+        background: #fff;
+        color: #0A2D4F;
+        border: 1px solid #D8E1E8;
+        border-radius: 8px;
+        padding: 9px 15px;
+        font-size: 14px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        transition: all .2s ease;
+    }
+
+        .btn-back:hover {
+            background: #F4F7FA;
+            color: #0A2D4F;
+            border-color: #BFCBD5;
+        }
+
+
+    /* ================================
+           MAIN CARD
+           ================================ */
+
+    .notification-card {
+        background: #fff;
+        border: 1px solid #E1E8EE;
+        border-radius: 13px;
+        overflow: hidden;
+        box-shadow: 0 4px 14px rgba(10, 45, 79, .06);
+    }
+
+    .notification-card-header {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 20px 24px;
+        border-bottom: 1px solid #E7EDF2;
+        background: #FBFCFD;
+    }
+
+    .header-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        background: #E7F7F5;
+        color: #17B6A7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+    .header-title {
+        margin: 0;
+        color: #0A2D4F;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .header-description {
+        margin: 3px 0 0;
+        color: #7A8794;
+        font-size: 13px;
+    }
+
+    .notification-card-body {
+        padding: 26px 24px 24px;
+    }
+
+
+    /* ================================
+           FORM
+           ================================ */
+
+    .custom-label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 8px;
+        color: #243B53;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+        .custom-label i {
+            color: #17B6A7;
+            font-size: 14px;
+        }
+
+    .custom-input {
+        min-height: 44px;
+        border: 1px solid #D5DEE6;
+        border-radius: 8px;
+        color: #243B53;
+        background: #fff;
+        font-size: 14px;
+        padding: 10px 12px;
+        box-shadow: none;
+        transition: all .2s ease;
+    }
+
+        .custom-input:focus {
+            border-color: #17B6A7;
+            box-shadow: 0 0 0 3px rgba(23, 182, 167, .10);
+        }
+
+    .notification-message {
+        min-height: 170px;
+        resize: vertical;
+        line-height: 1.6;
+    }
+
+    .field-help {
+        margin-top: 6px;
+        color: #8794A1;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .validation-message {
+        display: block;
+        margin-top: 5px;
+        font-size: 12px;
+    }
+
+
+    /* ================================
+           INFORMATION BOX
+           ================================ */
+
+    .notification-info {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 15px 16px;
+        background: #F4F8FB;
+        border: 1px solid #DCE7EF;
+        border-radius: 9px;
+    }
+
+    .notification-info-icon {
+        color: #0A2D4F;
+        font-size: 18px;
+        margin-top: 1px;
+    }
+
+    .notification-info-title {
+        color: #0A2D4F;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 2px;
+    }
+
+    .notification-info-text {
+        color: #657686;
+        font-size: 12px;
+        line-height: 1.55;
+    }
+
+
+    /* ================================
+           BUTTONS
+           ================================ */
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 10px;
+        padding-top: 8px;
+        border-top: 1px solid #E8EDF1;
+    }
+
+    .btn-cancel,
+    .btn-send {
+        min-height: 42px;
+        padding: 9px 17px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        transition: all .2s ease;
+    }
+
+    .btn-cancel {
+        color: #52616F;
+        background: #fff;
+        border: 1px solid #D5DEE6;
+    }
+
+        .btn-cancel:hover {
+            background: #F5F7F9;
+            color: #243B53;
+            border-color: #C5D0D9;
+        }
+
+    .btn-send {
+        background: #0A2D4F;
+        color: #fff;
+        border: 1px solid #0A2D4F;
+    }
+
+        .btn-send:hover {
+            background: #123E65;
+            color: #fff;
+            border-color: #123E65;
+        }
+
+
+    /* ================================
+           RESPONSIVE
+           ================================ */
+
+    @@media (max-width: 768px) {
+
+        .page-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .btn-back {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .notification-card-header {
+            padding: 18px;
+        }
+
+        .notification-card-body {
+            padding: 20px 18px;
+        }
+    }
+
+    @@media (max-width: 576px) {
+
+        .page-title {
+            font-size: 21px;
+        }
+
+        .page-subtitle {
+            font-size: 13px;
+        }
+
+        .page-icon {
+            width: 46px;
+            height: 46px;
+            font-size: 19px;
+        }
+
+        .form-actions {
+            flex-direction: column-reverse;
+        }
+
+        .btn-cancel,
+        .btn-send {
+            width: 100%;
+        }
+    }
+
+</style>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
