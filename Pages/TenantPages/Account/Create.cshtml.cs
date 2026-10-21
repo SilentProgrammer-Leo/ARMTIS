@@ -169,7 +169,7 @@ namespace ARMTIS_Capstone_Project.Pages.TenantPages.Account
             TempData["SuccessMessage"] =
                 $"Account successfully created for {tenant.FirstName} {tenant.LastName}.";
 
-            return RedirectToPage("/TenantPages/Accounts");
+            return RedirectToPage("/TenantPages/Account/Index");
         }
 
         private async Task LoadTenantListAsync()
